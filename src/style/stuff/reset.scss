@@ -1,0 +1,99 @@
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+html {
+	text-size-adjust: none;
+}
+
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+blockquote,
+dl,
+dd {
+	margin: 0;
+}
+
+body {
+	min-height: 100vh;
+	line-height: 1.5;
+
+	-webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4,
+button,
+input,
+label {
+	line-height: 1.1;
+}
+
+h1,
+h2,
+h3,
+h4 {
+	text-wrap: balance;
+}
+
+a {
+	color: inherit;
+	text-decoration: none;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+	display: block;
+	max-width: 100%;
+}
+
+img {
+	width: 100%;
+	height: 100%;
+
+	object-fit: cover;
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-size: cover;
+}
+
+input,
+button,
+textarea,
+select {
+	font: inherit;
+}
+
+button {
+	cursor: pointer;
+
+	padding: 0;
+
+	color: inherit;
+
+	background: none;
+	border: none;
+	outline: none;
+}
+
+textarea {
+	resize: none;
+}
+
+mark {
+	color: unset;
+	background-color: unset;
+}

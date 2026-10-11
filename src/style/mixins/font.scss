@@ -1,0 +1,49 @@
+@mixin textCrop($line-height: 1, $top-adjustment: 0px, $bottom-adjustment: 0px) {
+	$top-crop: 10;
+	$bottom-crop: 6;
+	$crop-font-size: 36;
+	$crop-line-height: 1.2;
+
+	$dynamic-top-crop: calc(max(($top-crop + ($line-height - $crop-line-height) * ($crop-font-size / 2)), 0) / $crop-font-size);
+	$dynamic-bottom-crop: calc(max(($bottom-crop + ($line-height - $crop-line-height) * ($crop-font-size / 2)), 0) / $crop-font-size);
+
+	line-height: $line-height;
+
+	&::before,
+	&::after {
+		content: "";
+		display: block;
+		height: 0;
+		width: 0;
+	}
+
+	&::before {
+		margin-bottom: calc(-#{$dynamic-top-crop}em + #{$top-adjustment});
+	}
+
+	&::after {
+		margin-top: calc(-#{$dynamic-bottom-crop}em + #{$bottom-adjustment});
+	}
+}
+
+@mixin font($size: body, $weight: 400, $height: 1, $space: 0) {
+	font-size: round(up, $size, 1px);
+
+	@if $weight {
+		font-weight: $weight;
+	}
+
+	@if $height {
+		line-height: round(up, calc($size * $height), 1px);
+	}
+
+	@if $space {
+		letter-spacing: round(up, calc(($size) * $space), 1px);
+	}
+}
+
+@mixin fontTODO($size: 1.8rem, $weight: 400, $height: 1, $space: 0) {
+	@include font($size, $weight, $height, $space);
+
+	font-family: TODO, sans-serif;
+}

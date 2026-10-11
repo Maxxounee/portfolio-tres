@@ -1,0 +1,120 @@
+@use "global" as *;
+
+:root {
+    --font-size: calc(((100vw / 1920) + (100vh / 1080)) * 5);
+}
+
+html {
+    font-size: var(--font-size);
+}
+
+body,
+.page {
+    @include div100;
+
+    overflow: hidden;
+    ///** TODO: #SETUP */
+    //font-family: _, Helvetica, sans-serif;
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: var(--BLACK);
+    text-transform: uppercase;
+}
+
+.page {
+    z-index: 0;
+    overscroll-behavior: none;
+}
+
+* {
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+
+    ::-webkit-scrollbar {
+        width: 0;
+    }
+
+    &::selection {
+        color: black;
+        background: white;
+    }
+}
+
+a {
+    &.underline {
+        text-decoration: underline;
+    }
+}
+
+.div100,
+.div_100,
+.div-100,
+[div100] {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+}
+
+/* ▼-▼-▼-▼ */
+/* 100ViewportRelative */
+.div100vr,
+.div_100vr,
+.div-100vr,
+[div100vr] {
+    position: relative;
+    top: 0;
+    left: 0;
+
+    width: 100vw;
+    height: 100dvh;
+}
+
+/* ▼-▼-▼-▼ */
+/* 100ViewportAbsolute */
+.div100va,
+.div_100va,
+.div-100va,
+[div100va] {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 100vw;
+    height: 100dvh;
+}
+
+sup {
+    display: inline-block;
+    font-size: .7em;
+    translate: 0 -.2em;
+    vertical-align: top;
+}
+
+.layout-default,
+.layout-mobile {
+    overflow: hidden;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+}
+
+.layout-default {
+    position: absolute;
+
+    br[mob]:not([desk]) {
+        display: none;
+    }
+}
+
+.layout-mobile {
+    position: fixed;
+
+    br[desk]:not([mob]) {
+        display: none;
+    }
+}

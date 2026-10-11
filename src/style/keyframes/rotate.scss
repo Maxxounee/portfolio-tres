@@ -1,0 +1,36 @@
+@keyframes rarelyRotate {
+	0%, 97% {
+		rotate: 0deg;
+	}
+	100% {
+		rotate: 360deg;
+	}
+}
+
+@keyframes rotate {
+	0% {
+		rotate: 0deg;
+	}
+	100% {
+		rotate: 360deg;
+	}
+}
+
+@keyframes rotateX {
+	0% {
+		rotate: x 0deg;
+	}
+	100% {
+		rotate: x 360deg;
+	}
+}
+
+@keyframes rotateY {
+	0% {
+		rotate: y 0deg;
+	}
+
+	100% {
+		rotate: y 360deg;
+	}
+}

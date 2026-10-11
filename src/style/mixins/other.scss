@@ -1,0 +1,40 @@
+@mixin pseudo($display: block, $content: '') {
+	content: $content;
+	display: $display;
+}
+
+@mixin cssTriangle($width: 10px, $height: 10px, $direction: down) {
+	width: 0;
+	height: 0;
+	border-style: solid;
+
+	@if $direction == down {
+		border-color: currentcolor transparent transparent;
+		border-width: $height calc($width / 2) 0 calc($width / 2);
+	}
+
+	@if $direction == up {
+		border-color: transparent transparent currentcolor;
+		border-width: 0 calc($width / 2) $height;
+	}
+
+	@if $direction == right {
+		border-color: transparent transparent transparent currentcolor;
+		border-width: calc($height / 2) 0 calc($height / 2) $width;
+	}
+
+	@if $direction == left {
+		border-color: transparent currentcolor transparent transparent;
+		border-width: calc($height / 2) $width calc($height / 2) 0;
+	}
+}
+
+@mixin bgInclude($src: null, $size: cover) {
+	@if $src {
+		background-image: url($src);
+	}
+
+	background-repeat: no-repeat;
+	background-position: 50% 50%;
+	background-size: $size;
+}

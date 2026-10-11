@@ -1,0 +1,46 @@
+$POPUP_OFFSET_DEFAULT_DURATION: 0.8s;
+
+@mixin popup($direction: top, $duration: $POPUP_OFFSET_DEFAULT_DURATION) {
+	will-change: transform;
+	overflow: hidden;
+	@if $direction == top {
+		translate: 0 -100%;
+	} @else if $direction == right {
+		translate: 100% 0;
+	} @else if $direction == left {
+		translate: -100% 0;
+	} @else if $direction == bottom {
+		translate: 0 100%;
+	}
+
+	transition-timing-function: var(--easeInOutQuart);
+	transition-duration: 0.8s;
+	transition-property: translate;
+
+	&.active {
+		translate: 0 0;
+	}
+}
+
+@mixin offset($direction: top, $duration: $POPUP_OFFSET_DEFAULT_DURATION, $easing: var(--easeInOutQuart), $delay: 0s) {
+	will-change: translate;
+	overflow: hidden;
+
+
+	transition-timing-function: $easing;
+	transition-duration: $duration;
+	transition-delay: $delay;
+	transition-property: translate;
+
+	&.offset {
+		@if $direction == top {
+			translate: 0 -30%;
+		} @else if $direction == right {
+			translate: 30% 0;
+		} @else if $direction == left {
+			translate: -30% 0;
+		} @else if $direction == bottom {
+			translate: 0 30%;
+		}
+	}
+}
