@@ -11,8 +11,9 @@ import { useGLTF } from '@tresjs/cientos';
 import { useLoop } from '@tresjs/core';
 import { shallowRef, watch } from 'vue';
 import * as THREE from 'three';
+import { getStaticLink } from "@/utils";
 
-const { state } = useGLTF('/3d/models/man.glb');
+const { state } = useGLTF(getStaticLink('/3d/models/man.glb'));
 
 const mixer = shallowRef<THREE.AnimationMixer | null>(null);
 

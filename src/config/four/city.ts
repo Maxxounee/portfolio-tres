@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { getStaticLink } from "@/utils";
 
 export type Html = {
     title: string;
@@ -67,7 +68,7 @@ export class CityViewForward extends CityView {
 export type CityViewStaticOrForward = CityViewStatic | CityViewForward;
 /* --------------------- configs --------------------- */
 export const files = {
-    city: '/3d/models/city.glb',
+    city: getStaticLink('/3d/models/city.glb'),
 };
 
 export const colors = {

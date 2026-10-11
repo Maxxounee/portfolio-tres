@@ -13,10 +13,11 @@ import { useGLTF, GLTFModel } from '@tresjs/cientos';
 import { computed, onMounted, shallowRef, watch, watchEffect } from "vue";
 import * as THREE from 'three';
 
-const { state, nodes } = useGLTF('/3d/models/button.glb');
+const { state, nodes } = useGLTF(getStaticLink('/3d/models/button.glb'));
 
 
 import { gsap } from 'gsap';
+import { getStaticLink } from "@/utils";
 
 const props = defineProps<{
     position?: [number, number, number]
