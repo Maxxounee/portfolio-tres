@@ -16,8 +16,8 @@
                 @loaded="({ cityNodes }) => init(cityNodes)"
             />
             <FourCityTest/>
-            <FourFog/>
             <FourBuildingTest/>
+            <FourFog/>
             <FourCharacter ref="character"/>
             <FourLights/>
             <FourFloor/>
