@@ -9,29 +9,29 @@ import path from 'node:path';
 
 // https://vite.dev/config/
 export default defineConfig({
-	base: '/portfolio-tres/',
-	plugins: [
-		vue({
-			...templateCompilerOptions,
-		}),
-		vueDevTools(),
-		tailwindcss(),
+    base: '/portfolio-tres/',
+    plugins: [
+        vue({
+            ...templateCompilerOptions,
+        }),
+        // vueDevTools(),
+        tailwindcss(),
 
-	],
-	css: {
-		preprocessorOptions: {
-			scss: {
-				additionalData: `@use "imports" as *;`,
-				loadPaths: [
-					path.resolve(process.cwd(), 'src/style'),
-				],
-				quietDeps: true,
-			},
-		},
-	},
-	resolve: {
-		alias: {
-			'@': fileURLToPath(new URL('./src', import.meta.url)),
-		},
-	},
+    ],
+    css: {
+        preprocessorOptions: {
+            scss: {
+                additionalData: `@use "imports" as *;`,
+                loadPaths: [
+                    path.resolve(process.cwd(), 'src/style'),
+                ],
+                quietDeps: true,
+            },
+        },
+    },
+    resolve: {
+        alias: {
+            '@': fileURLToPath(new URL('./src', import.meta.url)),
+        },
+    },
 });

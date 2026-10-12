@@ -1,14 +1,21 @@
 <template>
-	<primitive
-			v-for="(mesh, i) in instancedMeshes"
-			:key="i"
-			:object="mesh"
-	/>
+    <primitive
+        v-for="(mesh, i) in instancedMeshes"
+        :key="`inst-${i}`"
+        :object="mesh"
+    />
+    <primitive
+        v-for="(obj, i) in animatedModels"
+        :key="`anim-${i}`"
+        :object="obj"
+    />
 </template>
 <script setup lang="ts">
 import * as THREE from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { shallowRef, onMounted } from 'vue';
+import { GLTFLoader, type GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import * as SkeletonUtils from 'three/examples/jsm/utils/SkeletonUtils.js';
+import { shallowRef, onMounted, onBeforeUnmount } from 'vue';
+import { useLoop } from '@tresjs/core';
 import instancesData from '@/config/four/scene.json';
 
 type Vec3 = [number, number, number]
@@ -18,89 +25,133 @@ type SceneJson = Record<string, InstanceItem[]>
 const data = instancesData as SceneJson;
 
 const instancedMeshes = shallowRef<THREE.InstancedMesh[]>([]);
+const animatedModels = shallowRef<THREE.Object3D[]>([]);
 
 const loader = new GLTFLoader();
 
-/**
- * Загружает один .glb и возвращает его сцену.
- */
-function loadGLB(url: string): Promise<THREE.Group> {
-	return new Promise((resolve, reject) => {
-		loader.load(
-				url,
-				(gltf) => resolve(gltf.scene),
-				undefined,
-				(err) => reject(err),
-		);
-	});
+const mixers: THREE.AnimationMixer[] = [];
+
+
+function loadGLB(url: string): Promise<GLTF> {
+    return new Promise((resolve, reject) => {
+        loader.load(
+            url,
+            (gltf) => resolve(gltf),
+            undefined,
+            (err) => reject(err),
+        );
+    });
 }
 
-/**
- * Заполняет InstancedMesh матрицами.
- */
 function applyInstances(mesh: THREE.InstancedMesh, items: InstanceItem[]): void {
-	const matrix = new THREE.Matrix4();
-	const position = new THREE.Vector3();
-	const quaternion = new THREE.Quaternion();
-	const euler = new THREE.Euler();
-	const scale = new THREE.Vector3();
+    const matrix = new THREE.Matrix4();
+    const position = new THREE.Vector3();
+    const quaternion = new THREE.Quaternion();
+    const euler = new THREE.Euler();
+    const scale = new THREE.Vector3();
 
-	items.forEach((item, i) => {
+    items.forEach((item, i) => {
+        position.set(...item.position);
+        euler.set(...item.rotation);
+        quaternion.setFromEuler(euler);
+        scale.set(...item.scale);
+
+        matrix.compose(position, quaternion, scale);
+        mesh.setMatrixAt(i, matrix);
+    });
+
+    mesh.instanceMatrix.needsUpdate = true;
+    mesh.computeBoundingSphere();
+}
 
 
-		position.set(...item.position);
-		euler.set(...item.rotation);
-		quaternion.setFromEuler(euler);
-		scale.set(...item.scale);
+function createAnimatedClone(gltf: GLTF, item: InstanceItem,): THREE.Object3D {
+    const clone = SkeletonUtils.clone(gltf.scene);
 
-		matrix.compose(position, quaternion, scale);
-		mesh.setMatrixAt(i, matrix);
-	});
+    clone.position.set(...item.position);
+    clone.rotation.set(...item.rotation);
+    clone.scale.set(...item.scale);
 
-	mesh.instanceMatrix.needsUpdate = true;
-	mesh.computeBoundingSphere();
+    clone.traverse((obj) => {
+        if (obj instanceof THREE.Mesh) {
+            obj.castShadow = true;
+            obj.receiveShadow = true;
+        }
+    });
+
+    const mixer = new THREE.AnimationMixer(clone);
+
+    gltf.animations.forEach((clip) => {
+        const action = mixer.clipAction(clip);
+        action.setLoop(THREE.LoopRepeat, Infinity);
+        action.play();
+    });
+
+    mixers.push(mixer);
+
+    return clone;
 }
 
 onMounted(async () => {
-	const result: THREE.InstancedMesh[] = [];
+    const instancedResult: THREE.InstancedMesh[] = [];
+    const animatedResult: THREE.Object3D[] = [];
 
-	for (const [modelName, items] of Object.entries(data)) {
-		if (!items?.length) continue;
+    for (const [modelName, items] of Object.entries(data)) {
+        if (!items?.length) continue;
 
-		try {
-			const root = await loadGLB(`${import.meta.env.BASE_URL}/3d/glb/${modelName}.glb`);
+        try {
+            const gltf = await loadGLB(`${import.meta.env.BASE_URL}3d/glb/${modelName}.glb`);
 
-			const sourceMeshes: THREE.Mesh[] = [];
-			root.traverse((obj) => {
-				if (obj instanceof THREE.Mesh) {
-					sourceMeshes.push(obj);
-				}
-			});
+            if (gltf.animations.length > 0) {
+                for (const item of items) {
+                    animatedResult.push(createAnimatedClone(gltf, item));
+                }
+                continue;
+            }
 
-			if (sourceMeshes.length === 0) {
-				console.warn(`[City] No meshes in ${modelName}.glb`);
-				continue;
-			}
+            const sourceMeshes: THREE.Mesh[] = [];
+            gltf.scene.traverse((obj) => {
+                if (obj instanceof THREE.Mesh) {
+                    sourceMeshes.push(obj);
+                }
+            });
 
-			for (const sourceMesh of sourceMeshes) {
+            if (sourceMeshes.length === 0) {
+                console.warn(`[City] No meshes in ${modelName}.glb`);
+                continue;
+            }
 
-				const inst = new THREE.InstancedMesh(
-						sourceMesh.geometry,
-						sourceMesh.material as THREE.Material | THREE.Material[],
-						// mat,
-						items.length,
-				);
+            for (const sourceMesh of sourceMeshes) {
+                const inst = new THREE.InstancedMesh(
+                    sourceMesh.geometry,
+                    sourceMesh.material as THREE.Material | THREE.Material[],
+                    items.length,
+                );
 
+                applyInstances(inst, items);
+                instancedResult.push(inst);
+            }
+        } catch (err) {
+            console.error(`[City] Failed to load ${modelName}.glb`, err);
+        }
+    }
 
-				applyInstances(inst, items);
-				result.push(inst);
-			}
-		} catch (err) {
-			console.error(`[City] Failed to load ${modelName}.glb`, err);
-		}
-	}
+    instancedMeshes.value = instancedResult;
+    animatedModels.value = animatedResult;
+});
 
-	instancedMeshes.value = result;
+const { onBeforeRender } = useLoop();
 
+onBeforeRender((ctx) => {
+    for (const mixer of mixers) {
+        mixer.update(ctx.delta);
+    }
+});
+
+onBeforeUnmount(() => {
+    for (const mixer of mixers) {
+        mixer.stopAllAction();
+    }
+    mixers.length = 0;
 });
 </script>

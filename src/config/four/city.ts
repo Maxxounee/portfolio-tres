@@ -11,7 +11,7 @@ type CityViewArg = {
 
 export interface CityViewStaticArg extends CityViewArg {
     pos: THREE.Vector3;
-    lookAt: THREE.Vector3;
+    target: THREE.Vector3;
 }
 
 export interface CityViewForwardArg extends CityViewArg {
@@ -36,12 +36,12 @@ abstract class CityView {
 
 export class CityViewStatic extends CityView {
     public pos: THREE.Vector3;
-    public lookAt: THREE.Vector3;
+    public target: THREE.Vector3;
 
     constructor(arg: CityViewStaticArg) {
         super(arg);
         this.pos = arg.pos;
-        this.lookAt = arg.lookAt;
+        this.target = arg.target;
     }
 }
 
@@ -79,17 +79,17 @@ export const cameraMode = {
     static: {
         welcome: {
             pos: new THREE.Vector3(10, 10, 10),
-            lookAt: new THREE.Vector3(6, 3, 2),
+            target: new THREE.Vector3(6, 3, 2),
             html: { title: '' },
         },
         one: {
-            pos: new THREE.Vector3(15, 10, 10),
-            lookAt: new THREE.Vector3(6, 3, 2),
+            pos: new THREE.Vector3(-0.367, 3.378, -4.388),
+            target: new THREE.Vector3(0.335, 2.949, -4.648),
             html: { title: '' },
         },
         two: {
             pos: new THREE.Vector3(-10, 8, -5),
-            lookAt: new THREE.Vector3(6, 3, 2),
+            target: new THREE.Vector3(6, 3, 2),
             html: { title: '' },
         }
     },

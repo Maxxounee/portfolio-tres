@@ -25,7 +25,6 @@ watch(
         mixer.value = new THREE.AnimationMixer(gltf.scene);
 
         // console.log('Available animations:', gltf.animations.map(a => a.name));
-
         if (gltf.animations.length > 0) {
             playAnimation(gltf.animations[0].name);
         }
@@ -38,7 +37,7 @@ const playAnimation = (name: string): void => {
     const gltf = state.value;
     if (!m || !gltf) return;
 
-    const clip = THREE.AnimationClip.findByName(gltf.animations, 'Cheering');
+    const clip = THREE.AnimationClip.findByName(gltf.animations, name);
     if (!clip) return;
 
     m.stopAllAction();
