@@ -2,7 +2,6 @@
     <div class="FourWrapper">
         <TresCanvas
             class="FourWrapper__scene"
-            :clear-color="cityConfig.colors.background"
             window-size
             shadows
         >
@@ -37,7 +36,7 @@
 </template>
 <script setup lang="ts">
 import { ref, } from 'vue';
-import { TresCanvas } from '@tresjs/core';
+import { TresCanvas, useTres } from '@tresjs/core';
 import ThreePerspectiveCamera from "@/components/Four/FourPerspectiveCamera.vue";
 import FourCharacter from "@/components/Four/FourCharacter.vue";
 import FourLights from "@/components/Four/FourLights.vue";
@@ -58,6 +57,7 @@ import FourCityTest from "@/components/Four/FourCityTest.vue";
 const mainStore = useMainStore();
 const cityStore = useCityStore();
 const cameraRef = ref<InstanceType<typeof ThreePerspectiveCamera> | null>(null);
+
 
 function init(cityNodes) {
     if (!cityNodes || !Object.keys(cityNodes).length) {

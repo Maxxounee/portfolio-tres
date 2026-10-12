@@ -9,9 +9,9 @@
                 premultiply
                 :blend-function="BlendFunction.SCREEN"
             />
-            <ColorAveragePmndrs/>
+            <!--            <ColorAveragePmndrs/>-->
             <ScanlinePmndrs
-                :density="10"
+                :density="3"
                 :opacity="0.3"
                 :scroll-speed="0.01"
             />
