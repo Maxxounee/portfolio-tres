@@ -18,7 +18,7 @@
         v-for="(val, i) in buttons"
         :key="i"
         :position="val.pos"
-        @click="val.cb"
+        @click="() => val.apply()"
     />
 </template>
 <script setup lang="ts">
@@ -50,15 +50,33 @@ const bottomZ = computed(() =>
 
 const totalWidth = buttonCount * buttonWidth + (buttonCount - 1) * gap;
 
-const buttons = computed(() =>
-    Array.from({ length: cityStore.cityViewObjects.length }, (val, i) => {
-        const x = -totalWidth / 2 + buttonWidth / 2 + i * (buttonWidth + gap);
+const buttons = computed(() => {
 
-        return {
-            pos: [x, 0, bottomZ.value],
-            cb: () => emit('click', i),
-        };
-    }),
+        // Array.from({ length: cityStore.cityViewObjects.length }, (val, i) => {
+        //     const x = -totalWidth / 2 + buttonWidth / 2 + i * (buttonWidth + gap);
+        //
+        //     return {
+        //         pos: [x, 0, bottomZ.value],
+        //         cb: () => emit('click', i),
+        //     };
+        // }),
+        return cityStore.cityViewObjects.map((item, i) => {
+            const x = -totalWidth / 2 + buttonWidth / 2 + i * (buttonWidth + gap);
+
+            return {
+                ...item,
+                pos: [x, 0, bottomZ.value],
+            };
+        });
+        // Array.from({ length: cityStore.cityViewObjects.length }, (val, i) => {
+        //     const x = -totalWidth / 2 + buttonWidth / 2 + i * (buttonWidth + gap);
+        //
+        //     return {
+        //         pos: [x, 0, bottomZ.value],
+        //         cb: () => emit('click', i),
+        //     };
+        // });
+    }
 );
 
 

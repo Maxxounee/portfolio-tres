@@ -68,8 +68,12 @@ function init(cityNodes) {
     const staticConfig = cityConfig.cameraMode.static;
     const forwardConfig = cityConfig.cameraMode.forward;
 
+    const applySetter = (conf: cityConfig.CityViewStaticOrForward): void => {
+        conf.apply = () => cityStore.setView(conf);
+    };
 
     const getStaticValues = (conf): cityConfig.CityViewStaticArg => {
+        applySetter(conf);
         return { ...conf };
     };
 
@@ -98,11 +102,17 @@ function init(cityNodes) {
         }),
     ];
 
+    arr.forEach((item) => {
+        item.apply = () => cityStore.setView(item);
+    });
+
     cityStore.pushCityViewObjects(arr);
 
-    if (cameraRef.value) {
-        cameraRef.value.setView(arr[0]);
+    arr[0].apply();
 
+    if (cameraRef.value) {
+        // cameraRef.value.setView(arr[0]);
+        // cityStore.setView(cameraRef.value.setView(arr[0]));
     }
 }
 

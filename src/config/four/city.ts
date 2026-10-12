@@ -31,6 +31,9 @@ abstract class CityView {
     protected constructor(arg: CityViewArg) {
         this.html = arg.html;
     }
+
+    public apply() {
+    };
 }
 
 
@@ -67,37 +70,17 @@ export class CityViewForward extends CityView {
 
 export type CityViewStaticOrForward = CityViewStatic | CityViewForward;
 /* --------------------- configs --------------------- */
+
 export const files = {
     city: getStaticLink('/3d/models/city.glb'),
 };
 
-// function hexToRgb(hex: string): { r: number, g: number, b: number } {
-//     const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-//     return {
-//         r: parseInt(result[1], 16),
-//         g: parseInt(result[2], 16),
-//         b: parseInt(result[3], 16)
-//     };
-// }
 
 export const colors = {
-    // background: '#700e24',
-    // background: '#3f215b',
-    // backgroundStart: { hex: '#3F215B', r: 0, g: 0, b: 0, },
-    // backgroundEnd: { hex: '#5b212a', r: 0, g: 0, b: 0, },
     backgroundStart: '#1f0e2a',
     backgroundEnd: '#2f1114',
-    // backgroundEnd: '#5b212a',
 };
 
-// Object.values(colors).forEach((item) => {
-//     const { r, g, b } = hexToRgb(item.hex);
-//     item.r = r;
-//     item.g = g;
-//     item.b = b;
-// });
-
-console.log(colors);
 
 export const cameraMode = {
     static: {

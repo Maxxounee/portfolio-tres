@@ -29,8 +29,6 @@ let isTransitioning = false;
 let staticStartTime = 0;
 let hasPrev = false;
 
-const currentView = ref<cityConfig.CityViewStaticOrForward>();
-
 const carWorldPos = new THREE.Vector3();
 const prevPos = new THREE.Vector3();
 const movementDir = new THREE.Vector3(0, 0, -1);
@@ -43,19 +41,17 @@ const _tmpQuat = new THREE.Quaternion();
 const _tmpUp = new THREE.Vector3(0, 1, 0);
 
 
-function computeLookAtQuaternion(
-    fromPos: THREE.Vector3,
-    toPos: THREE.Vector3,
-    out: THREE.Quaternion,
-): void {
+function computeLookAtQuaternion(fromPos: THREE.Vector3, toPos: THREE.Vector3, out: THREE.Quaternion): void {
     _tmpMatrix.lookAt(fromPos, toPos, _tmpUp);
     out.setFromRotationMatrix(_tmpMatrix);
 }
 
+
 watch(
-    () => [cityStore.sceneIsReady, currentView.value],
+    () => [cityStore.sceneIsReady, cityStore.currentView],
     ([isReady, view]) => {
         if (!isReady) return;
+
         if (!view) {
             console.error('[FourPerspectiveCamera] Нет currentView');
             return;
@@ -64,10 +60,7 @@ watch(
     },
 );
 
-function renderForward(
-    cam: THREE.PerspectiveCamera,
-    conf: cityConfig.CityViewForward,
-): void {
+function renderForward(cam: THREE.PerspectiveCamera, conf: cityConfig.CityViewForward): void {
     const positionLerp = 0.05;
     const rotationLerp = 0.05;
     const obj = conf.obj;
@@ -168,7 +161,8 @@ function handleView(conf: cityConfig.CityViewStaticOrForward | undefined): void 
 }
 
 function setView(conf: cityConfig.CityViewStaticOrForward): void {
-    currentView.value = conf;
+    console.log('ФУНКЦИя депрекейтед. Работаем через стор.');
+    // currentView.value = conf;
 }
 
 onBeforeRender(() => {
@@ -177,10 +171,10 @@ onBeforeRender(() => {
     const cam = camera.value;
     if (!cam) return;
 
-    if (currentView.value instanceof cityConfig.CityViewForward) {
-        renderForward(cam, currentView.value);
-    } else if (currentView.value instanceof cityConfig.CityViewStatic) {
-        renderStatic(cam, currentView.value);
+    if (cityStore.currentView instanceof cityConfig.CityViewForward) {
+        renderForward(cam, cityStore.currentView);
+    } else if (cityStore.currentView instanceof cityConfig.CityViewStatic) {
+        renderStatic(cam, cityStore.currentView);
     }
 });
 

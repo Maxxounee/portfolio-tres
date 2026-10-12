@@ -6,6 +6,7 @@ export const useCityStore = defineStore('city', () => {
     // state
     const cityViewObjects = ref<cityConfig.CityViewStaticOrForward[]>([]);
     const sceneIsReady = ref(false);
+    const currentView = ref<cityConfig.CityViewStaticOrForward | null>(null);
 
     // actions
     function pushCityViewObjects(arr: cityConfig.CityViewStaticOrForward[]) {
@@ -21,9 +22,15 @@ export const useCityStore = defineStore('city', () => {
         sceneIsReady.value = true;
     }
 
+    function setView(view: cityConfig.CityViewStaticOrForward): void {
+        currentView.value = view;
+    }
+
     return {
         cityViewObjects,
         sceneIsReady,
+        currentView,
+        setView,
         pushCityViewObjects,
     };
 });
