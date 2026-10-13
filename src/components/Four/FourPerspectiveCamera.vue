@@ -40,6 +40,8 @@ const _tmpMatrix = new THREE.Matrix4();
 const _tmpQuat = new THREE.Quaternion();
 const _tmpUp = new THREE.Vector3(0, 1, 0);
 
+let currentTl: gsap.core.Timeline | null = null;
+
 
 function computeLookAtQuaternion(fromPos: THREE.Vector3, toPos: THREE.Vector3, out: THREE.Quaternion): void {
     _tmpMatrix.lookAt(fromPos, toPos, _tmpUp);
@@ -93,10 +95,9 @@ function renderForward(cam: THREE.PerspectiveCamera, conf: cityConfig.CityViewFo
     cam.quaternion.slerp(_tmpQuat, rotationLerp);
 }
 
-function renderStatic(cam: THREE.PerspectiveCamera, conf: cityConfig.CityViewStatic,): void {
+function renderStatic(cam: THREE.PerspectiveCamera, conf: cityConfig.CityViewStatic, elapsed): void {
     const positionLerp = 0.1;
 
-    const elapsed = (performance.now() - staticStartTime) / 1000;
     const fadeInDuration = 1.5;
     const fadeIn = Math.min(elapsed / fadeInDuration, 1);
 
@@ -112,7 +113,7 @@ function renderStatic(cam: THREE.PerspectiveCamera, conf: cityConfig.CityViewSta
     cam.position.lerp(desiredPosition, positionLerp);
 }
 
-function flyTo(targetPosition: THREE.Vector3, targetTarget: THREE.Vector3, onComplete?: () => void,): void {
+function flyTo(targetPosition: THREE.Vector3, targetTarget: THREE.Vector3, onComplete?: () => void): void {
     const cam = camera.value;
     if (!cam) return;
 
@@ -123,11 +124,13 @@ function flyTo(targetPosition: THREE.Vector3, targetTarget: THREE.Vector3, onCom
 
     const targetQuat = _tmpQuat.clone();
 
-    const tl = gsap.timeline({
+    currentTl?.kill();
+
+    currentTl = gsap.timeline({
         onComplete: () => onComplete?.(),
     });
 
-    tl.to(cam.position, {
+    currentTl.to(cam.position, {
         x: targetPosition.x,
         y: targetPosition.y,
         z: targetPosition.z,
@@ -135,7 +138,7 @@ function flyTo(targetPosition: THREE.Vector3, targetTarget: THREE.Vector3, onCom
         ease: transitionEase,
     }, 0);
 
-    tl.to(cam.quaternion, {
+    currentTl.to(cam.quaternion, {
         x: targetQuat.x,
         y: targetQuat.y,
         z: targetQuat.z,
@@ -157,6 +160,7 @@ function handleView(conf: cityConfig.CityViewStaticOrForward | undefined): void 
     } else if (conf instanceof cityConfig.CityViewForward) {
         hasPrev = false;
         isTransitioning = false;
+        movementDir.set(0, 0, -1);
     }
 }
 
@@ -165,7 +169,7 @@ function setView(conf: cityConfig.CityViewStaticOrForward): void {
     // currentView.value = conf;
 }
 
-onBeforeRender(() => {
+onBeforeRender((ctx) => {
     if (isTransitioning) return;
 
     const cam = camera.value;
@@ -174,7 +178,7 @@ onBeforeRender(() => {
     if (cityStore.currentView instanceof cityConfig.CityViewForward) {
         renderForward(cam, cityStore.currentView);
     } else if (cityStore.currentView instanceof cityConfig.CityViewStatic) {
-        renderStatic(cam, cityStore.currentView);
+        renderStatic(cam, cityStore.currentView, ctx.elapsed);
     }
 });
 

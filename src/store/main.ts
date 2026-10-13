@@ -1,9 +1,11 @@
 import { defineStore } from 'pinia';
 
 export const useMainStore = defineStore('main', () => {
-    const isDev = false;
+    const isDebug = false;
+    const isDev = true;
 
     return {
+        isDebug,
         isDev,
     };
 });

@@ -6,9 +6,18 @@ export const useCityStore = defineStore('city', () => {
     // state
     const cityViewObjects = ref<cityConfig.CityViewStaticOrForward[]>([]);
     const sceneIsReady = ref(false);
-    const currentView = ref<cityConfig.CityViewStaticOrForward | null>(null);
+    const currentView = shallowRef<cityConfig.CityViewStaticOrForward | null>(null);
+    const totalModelsCount = ref(1);
+    const totalModelsLoaded = ref(0);
 
-    // actions
+
+    // ----------------- get
+
+    const totalModelsLoadedPercent = computed<number>(() => {
+        return (totalModelsLoaded.value / totalModelsCount.value).toFixed(2);
+    });
+
+    // ----------------- actions
     function pushCityViewObjects(arr: cityConfig.CityViewStaticOrForward[]) {
         if (
             cityViewObjects.value.length
@@ -22,9 +31,20 @@ export const useCityStore = defineStore('city', () => {
         sceneIsReady.value = true;
     }
 
+    function incrementTotalModels() {
+        totalModelsLoaded.value++;
+    }
+
+    // ----------------- set
+
     function setView(view: cityConfig.CityViewStaticOrForward): void {
         currentView.value = view;
     }
+
+    function setTotalModelsCount(count: number) {
+        totalModelsCount.value = count;
+    }
+
 
     return {
         cityViewObjects,
@@ -32,5 +52,9 @@ export const useCityStore = defineStore('city', () => {
         currentView,
         setView,
         pushCityViewObjects,
+
+        incrementTotalModels,
+        setTotalModelsCount,
+        totalModelsLoadedPercent,
     };
 });

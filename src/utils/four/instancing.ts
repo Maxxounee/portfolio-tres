@@ -22,7 +22,7 @@ export function applyInstances(mesh: THREE.InstancedMesh, items: InstanceItem[])
     mesh.computeBoundingSphere();
 }
 
-export function buildInstancedMeshes(scene: THREE.Object3D, items: InstanceItem[],): THREE.InstancedMesh[] {
+export function buildInstancedMeshes(scene: THREE.Object3D, items: InstanceItem[]): THREE.InstancedMesh[] {
     const sourceMeshes: THREE.Mesh[] = [];
 
     scene.traverse((obj) => {
@@ -44,8 +44,17 @@ export function buildInstancedMeshes(scene: THREE.Object3D, items: InstanceItem[
             items.length,
         );
 
-        inst.castShadow = true;
-        inst.receiveShadow = true;
+        /* TODO: выбрать модели, которые будут отбрасывать тень */
+        /* TODO: 2. или просто запечь тени и свет */
+        if (typeof scene.custom_model_name === 'string') {
+            if (scene.custom_model_name.startsWith('building')) {
+                inst.castShadow = true;
+                inst.receiveShadow = true;
+            } else {
+                inst.castShadow = true;
+                inst.receiveShadow = true;
+            }
+        }
 
         applyInstances(inst, items);
         result.push(inst);

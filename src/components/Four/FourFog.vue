@@ -49,7 +49,6 @@ onBeforeRender((ctx) => {
 
     const heightFactor = camera.value.position.y;
     fog.far = baseFogFar + Math.sqrt(heightFactor) * 19;
-
 });
 
 onMounted(() => {

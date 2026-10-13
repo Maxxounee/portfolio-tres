@@ -6,7 +6,7 @@
             shadows
         >
             <FourDevCamera
-                v-if="mainStore.isDev"
+                v-if="mainStore.isDebug"
             />
             <FourPerspectiveCamera
                 ref="cameraRef"
@@ -22,17 +22,21 @@
             <FourFloor/>
             <FourEffectComposer v-if="true"/>
         </TresCanvas>
-        <TresCanvas
-            v-if="!mainStore.isDev"
-            alpha
-            :clear-alpha="0"
-            class="FourWrapper__ui"
-        >
-            <FourControls
-                @click="setCameraView"
-            />
-        </TresCanvas>
+        <!--        <TresCanvas-->
+        <!--            v-if="!mainStore.isDebug"-->
+        <!--            alpha-->
+        <!--            :clear-alpha="0"-->
+        <!--            class="FourWrapper__ui"-->
+        <!--        >-->
+        <!--            <FourControls-->
+        <!--                @click="setCameraView"-->
+        <!--            />-->
+        <!--        </TresCanvas>-->
+        <!-- interface -->
         <InterfaceWrapper/>
+        <InterfacePreloader
+            v-if="!isDev"
+        />
     </div>
 </template>
 <script setup lang="ts">
@@ -54,12 +58,13 @@ import { useCityStore } from "@/store/city";
 import { useMainStore } from "@/store/main";
 import FourCityTest from "@/components/Four/FourCityTest.vue";
 import InterfaceWrapper from "@/components/Interface/InterfaceWrapper.vue";
+import InterfacePreloader from "@/components/Interface/InterfacePreloader.vue";
 
 
 const mainStore = useMainStore();
 const cityStore = useCityStore();
 const cameraRef = ref<InstanceType<typeof ThreePerspectiveCamera> | null>(null);
-
+const isDev = import.meta.env.DEV;
 
 function init(cityNodes) {
     if (!cityNodes || !Object.keys(cityNodes).length) {

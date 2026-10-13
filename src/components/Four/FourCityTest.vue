@@ -25,6 +25,9 @@ import {
     type CityBuildResult,
 } from '@/utils/four';
 import { getStaticLink } from "@/utils";
+import { useCityStore } from "@/store/city.ts";
+
+const cityStore = useCityStore();
 
 const data = instancesData as SceneJson;
 
@@ -35,6 +38,8 @@ const mixers: THREE.AnimationMixer[] = [];
 async function buildModel(modelName: string, items: SceneJson[string], result: CityBuildResult): Promise<void> {
     const link = getStaticLink(`/3d/glb/${modelName}.glb`);
     const gltf = await loadCityModel(link);
+    /* Добавил, чтобы потом настроить тени в buildInstancedMeshes */
+    gltf.scene.custom_model_name = modelName;
 
     if (gltf.animations.length > 0) {
         for (const item of items) {
@@ -65,6 +70,7 @@ async function buildScene(): Promise<CityBuildResult> {
     const limit = pLimit(10);
 
     const entries = Object.entries(data).filter(([, items]) => items?.length);
+    cityStore.setTotalModelsCount(entries.length);
 
     await Promise.all(
         entries.map(([modelName, items]) => {
@@ -73,6 +79,8 @@ async function buildScene(): Promise<CityBuildResult> {
                     await buildModel(modelName, items, result);
                 } catch (err) {
                     console.error(`[City] ошибка загрузки ${modelName}`, err);
+                } finally {
+                    cityStore.incrementTotalModels();
                 }
             });
         }),
