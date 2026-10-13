@@ -19,10 +19,7 @@ export const useCityStore = defineStore('city', () => {
 
     // ----------------- actions
     function pushCityViewObjects(arr: cityConfig.CityViewStaticOrForward[]) {
-        if (
-            cityViewObjects.value.length
-            || !arr.length
-        ) {
+        if (cityViewObjects.value.length || !arr.length) {
             console.log('City store. cityViewObjects уже заполнен');
             return;
         }

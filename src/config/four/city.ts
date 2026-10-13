@@ -27,9 +27,14 @@ export interface CityViewForwardArg extends CityViewArg {
 
 abstract class CityView {
     public html: Html;
+    public id: number;
+    static counter: number = 0;
 
     protected constructor(arg: CityViewArg) {
         this.html = arg.html;
+        this.id = CityView.counter;
+        
+        CityView.counter++;
     }
 
     public apply() {

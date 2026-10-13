@@ -1,12 +1,16 @@
 <template>
     <button
         class="InterfaceButtonsItem"
-        v-html="props.text"
+        :class="{ active: props.active }"
     >
+        <span v-html="props.text"></span>
     </button>
 </template>
 <script setup lang="ts">
-const props = defineProps<{ text: string }>();
+const props = defineProps<{
+    text: string;
+    active: boolean;
+}>();
 </script>
 <style scoped lang="scss">
 @keyframes slide {
@@ -34,6 +38,7 @@ const props = defineProps<{ text: string }>();
     overflow: hidden;
     width: 25rem;
     white-space: nowrap;
+
 
     &::before {
         //content: "";
@@ -71,6 +76,26 @@ const props = defineProps<{ text: string }>();
         //background-color: var(--WHITE);
         //color: var(--BLACK);
         border-color: var(--BLACK);
+    }
+
+    span {
+        transition-property: transform;
+        transition-duration: 0.3s;
+        transition-timing-function: ease-in-out;
+    }
+
+    &.active {
+        opacity: 0.3;
+        pointer-events: none;
+        cursor: default;
+        transform: translate(0);
+        box-shadow: 6px 6px 0 var(--RED);
+
+        span {
+            transform: translateX(calc(21rem - 100%));
+        }
+
+        //background: red;
     }
 }
 </style>

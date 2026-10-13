@@ -4,6 +4,8 @@
             <InterfaceButtonsItem
                 v-for="(obj, i) in cityViewObjects"
                 :text="obj.html.button"
+                :active="obj.id === currentView.id"
+                :key="i"
                 @click="() => obj.apply()"
             />
         </div>
@@ -11,11 +13,11 @@
 </template>
 <script setup lang="ts">
 import { useCityStore } from "@/store/city.ts";
+import InterfaceButtonsItem from "@/components/Interface/InterfaceButtonsItem.vue";
+import { storeToRefs } from "pinia";
 
 const cityStore = useCityStore();
-const cityViewObjects = cityStore.cityViewObjects;
-
-import InterfaceButtonsItem from "@/components/Interface/InterfaceButtonsItem.vue";
+const { cityViewObjects, currentView } = storeToRefs(cityStore);
 </script>
 <style scoped lang="scss">
 .InterfaceButtons {

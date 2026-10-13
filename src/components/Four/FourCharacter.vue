@@ -26,7 +26,9 @@ watch(
 
         // console.log('Available animations:', gltf.animations.map(a => a.name));
         if (gltf.animations.length > 0) {
-            playAnimation(gltf.animations[0].name);
+            console.log(gltf.animations);
+            // playAnimation(gltf.animations[0].name);
+            playAnimation('Push_Ups');
         }
     },
     { immediate: true },
