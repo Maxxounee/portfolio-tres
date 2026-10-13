@@ -12,11 +12,13 @@
             v-html="str"
         >
         </p>
+        <InterfaceButtons/>
     </div>
 </template>
 <script setup lang="ts">
 import { Texter } from "@/utils/utils.ts";
 import { computed, ref } from "vue";
+import InterfaceButtons from "@/components/Interface/InterfaceButtons.vue";
 
 const text = `JavaScript, TypeScript, Vue, Nuxt — Options API / Composition API, архитектура приложений, разработка компонентов и модулей;`;
 const str = ref('');
