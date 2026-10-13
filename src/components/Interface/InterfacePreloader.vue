@@ -43,7 +43,7 @@ watch(isDone, (value) => {
 .InterfacePreloader {
     @include div100;
     @include flex(center, center);
-    background: var(--WHITE);
+    background: var(--DIALOGUE);
     text-align: right;
     pointer-events: auto;
     transition-property: opacity;
@@ -58,8 +58,7 @@ watch(isDone, (value) => {
         transition: clip-path 1s ease;
 
         .InterfacePreloader__message {
-            color: var(--WHITE);
-
+            color: var(--DIALOGUE);
         }
     }
 

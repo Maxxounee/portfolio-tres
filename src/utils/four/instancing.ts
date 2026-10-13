@@ -22,7 +22,9 @@ export function applyInstances(mesh: THREE.InstancedMesh, items: InstanceItem[])
     mesh.computeBoundingSphere();
 }
 
-export function buildInstancedMeshes(scene: THREE.Object3D, items: InstanceItem[]): THREE.InstancedMesh[] {
+export function buildInstancedMeshes(
+    scene: THREE.Object3D & { custom_model_name?: string }, items: InstanceItem[]
+): THREE.InstancedMesh[] {
     const sourceMeshes: THREE.Mesh[] = [];
 
     scene.traverse((obj) => {

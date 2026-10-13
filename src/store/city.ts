@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia';
 import { ref, computed, shallowRef } from 'vue';
 import * as cityConfig from "@/config/four/city";
+import { increment } from "@/utils/utils.ts";
+import type { CityViewStaticOrForward } from "@/config/four/city";
 
 export const useCityStore = defineStore('city', () => {
     // state
@@ -13,8 +15,12 @@ export const useCityStore = defineStore('city', () => {
 
     // ----------------- get
 
-    const totalModelsLoadedPercent = computed<number>(() => {
-        return (totalModelsLoaded.value / totalModelsCount.value).toFixed(2);
+    const totalModelsLoadedPercent = computed<number>((): number => {
+        return Number((totalModelsLoaded.value / totalModelsCount.value).toFixed(2));
+    });
+
+    const isLoaded = computed(() => {
+        return totalModelsLoadedPercent.value > 0.99;
     });
 
     // ----------------- actions
@@ -38,6 +44,23 @@ export const useCityStore = defineStore('city', () => {
         currentView.value = view;
     }
 
+    function nextView() {
+        const curIndex = cityViewObjects.value.findIndex((item) => {
+            if (!currentView.value) {
+                return;
+            }
+
+            return item.id === currentView.value.id;
+        });
+        const nextIndex = increment(curIndex + 1, 0, cityViewObjects.value.length - 1);
+
+        if (cityViewObjects.value[nextIndex]) {
+            setView(cityViewObjects.value[nextIndex]);
+        }
+
+        // console.log(curIndex);
+    }
+
     function setTotalModelsCount(count: number) {
         totalModelsCount.value = count;
     }
@@ -53,5 +76,7 @@ export const useCityStore = defineStore('city', () => {
         incrementTotalModels,
         setTotalModelsCount,
         totalModelsLoadedPercent,
+        isLoaded,
+        nextView,
     };
 });

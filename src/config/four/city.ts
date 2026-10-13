@@ -33,7 +33,7 @@ abstract class CityView {
     protected constructor(arg: CityViewArg) {
         this.html = arg.html;
         this.id = CityView.counter;
-        
+
         CityView.counter++;
     }
 
@@ -86,38 +86,83 @@ export const colors = {
     backgroundEnd: '#2f1114',
 };
 
+export const links = {
+    resume: getStaticLink('/documents/Resume_Vladimirov.pdf'),
+};
 
 export const cameraMode = {
     static: {
         welcome: {
             pos: new THREE.Vector3(10, 10, 10),
             target: new THREE.Vector3(6, 3, 2),
-            html: { title: '', button: 'HELLO WORLD!' },
+            html: {
+                button: 'HELLO WORLD!',
+                title: '',
+                // text: `Привет! Меня зовут Максим.<br/>
+                // Frontend + Backend разработчик.<br/>
+                // <a href="${links.resume}" target="_blank">Скачать резюме.PDF</a>`
+                text: `Привет! Меня зовут Максим.<br/>
+                Frontend + Backend разработчик.<br/>`
+            },
         },
         tech: {
             pos: new THREE.Vector3(-0.367, 3.378, -4.388),
             target: new THREE.Vector3(0.335, 2.949, -4.648),
-            html: { title: '', button: 'TECHNOLOGY' },
+            html: {
+                button: 'TECHNOLOGY',
+                title: '',
+                text: `Мой основной стек:<br/>
+                <br/>
+                Frontend:<br/>
+                <br/>
+                * JavaScript/TypeScript<br/>
+                * Vue/Nuxt (options/composition)<br/>
+                <br/>
+                Backend:<br/>
+                <br/>
+                * php 8+<br/>
+                * Laravel 12/13`,
+            },
         },
         works: {
             pos: new THREE.Vector3(-0.877, 1.735, 0.017),
             target: new THREE.Vector3(-0.037, 0.842, -0.877),
-            html: { title: '', button: 'РАБОТЫ' },
+            html: {
+                button: 'РАБОТЫ',
+                title: '',
+                text: `Привет! Меня зовут Максим.<br/>
+                Frontend + Backend разработчик.<br/>`
+            },
         },
         repo: {
             pos: new THREE.Vector3(-2.605, 2.849, -13.412),
             target: new THREE.Vector3(-2.408, 2.855, -13.198),
-            html: { title: '', button: 'GITHUB' },
+            html: {
+                button: 'GITHUB',
+                title: '',
+                text: `Привет! Меня зовут Максим.<br/>
+                Frontend + Backend разработчик.<br/>`
+            },
         },
         contacts: {
             pos: new THREE.Vector3(4.099, 3.749, 0.322),
             target: new THREE.Vector3(1.814, 4.861, -2.008),
-            html: { title: '', button: 'КОНТАКТЫ' },
+            html: {
+                button: 'КОНТАКТЫ',
+                title: '',
+                text: `Привет! Меня зовут Максим.<br/>
+                Frontend + Backend разработчик.<br/>`
+            },
         },
     },
     forward: {
         about: {
-            html: { title: '', button: 'О САЙТЕ' },
+            html: {
+                button: 'О САЙТЕ',
+                title: '',
+                text: `Привет! Меня зовут Максим.<br/>
+                Frontend + Backend разработчик.<br/>`
+            },
             modelName: 'Empty',
             obj: undefined,
             followDistance: 0.3,

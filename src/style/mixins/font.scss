@@ -77,7 +77,7 @@
 }
 
 /** igra_sans — современный гротеск, только 500 */
-@mixin fontIgra($size: 1.8rem, $weight: 500, $height: 1, $space: 0) {
+@mixin fontIgra($size: 1.8rem, $weight: 500, $height: 1.2, $space: 0) {
     @include font($size, $weight, $height, $space);
     font-family: 'igra_sans', sans-serif;
 }

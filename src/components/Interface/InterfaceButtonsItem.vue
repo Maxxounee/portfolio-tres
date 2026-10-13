@@ -32,9 +32,9 @@ const props = defineProps<{
     color: var(--WHITE);
     border: 3px solid var(--WHITE);
     outline: 3px solid Var(--BLACK);
-    box-shadow: 6px 6px 0 var(--ACCENT);
+    box-shadow: 6px 6px 0 var(--DIALOGUE);
     transition: all 0.1s ease-out;
-    padding: 0 15px;
+    padding: 0 2rem;
     overflow: hidden;
     width: 25rem;
     white-space: nowrap;
@@ -89,7 +89,7 @@ const props = defineProps<{
         pointer-events: none;
         cursor: default;
         transform: translate(0);
-        box-shadow: 6px 6px 0 var(--RED);
+        //box-shadow: 6px 6px 0 var(--RED);
 
         span {
             transform: translateX(calc(21rem - 100%));

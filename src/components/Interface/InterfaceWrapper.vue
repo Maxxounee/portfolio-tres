@@ -1,30 +1,27 @@
 <template>
     <div class="InterfaceWrapper">
         <h1 class="InterfaceWrapper__title">
-            Hello! My name is Maksim
+            <!--            Hello! My name is Maksim-->
         </h1>
         <!--        <p class="InterfaceWrapper__text">-->
         <!--            - JavaScript, TypeScript, Vue, Nuxt — Options API / Composition API, архитектура приложений,-->
         <!--            разработка компонентов и модулей;-->
         <!--        </p>-->
-        <p
-            class="InterfaceWrapper__text"
-            v-html="str"
-        >
-        </p>
+        <!--        <p-->
+        <!--            class="InterfaceWrapper__text"-->
+        <!--            v-html="str"-->
+        <!--        >-->
+        <!--        </p>-->
+        <InterfaceTextWindow
+            :position="[90, 90]"
+            ref="textWindow"
+        />
         <InterfaceButtons/>
     </div>
 </template>
 <script setup lang="ts">
-import { Texter } from "@/utils/utils.ts";
-import { computed, ref } from "vue";
 import InterfaceButtons from "@/components/Interface/InterfaceButtons.vue";
-
-const text = `JavaScript, TypeScript, Vue, Nuxt — Options API / Composition API, архитектура приложений, разработка компонентов и модулей;`;
-const str = ref('');
-
-const texter = new Texter({ str: text });
-texter.play((value) => str.value = value);
+import InterfaceTextWindow from "@/components/Interface/InterfaceTextWindow.vue";
 </script>
 <style lang="scss">
 .InterfaceWrapper {

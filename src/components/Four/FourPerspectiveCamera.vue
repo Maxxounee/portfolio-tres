@@ -42,6 +42,8 @@ const _tmpUp = new THREE.Vector3(0, 1, 0);
 
 let currentTl: gsap.core.Timeline | null = null;
 
+const emit = defineEmits(['flyEnd']);
+let isFirstPosition = true;
 
 function computeLookAtQuaternion(fromPos: THREE.Vector3, toPos: THREE.Vector3, out: THREE.Quaternion): void {
     _tmpMatrix.lookAt(fromPos, toPos, _tmpUp);
@@ -58,7 +60,10 @@ watch(
             console.error('[FourPerspectiveCamera] Нет currentView');
             return;
         }
-        handleView(view);
+
+        handleView(view, isFirstPosition);
+
+        isFirstPosition = false;
     },
 );
 
@@ -113,7 +118,7 @@ function renderStatic(cam: THREE.PerspectiveCamera, conf: cityConfig.CityViewSta
     cam.position.lerp(desiredPosition, positionLerp);
 }
 
-function flyTo(targetPosition: THREE.Vector3, targetTarget: THREE.Vector3, onComplete?: () => void): void {
+function flyTo(targetPosition: THREE.Vector3, targetTarget: THREE.Vector3, onComplete?: () => void, immediate: boolean = false): void {
     const cam = camera.value;
     if (!cam) return;
 
@@ -124,10 +129,21 @@ function flyTo(targetPosition: THREE.Vector3, targetTarget: THREE.Vector3, onCom
 
     const targetQuat = _tmpQuat.clone();
 
+    if (immediate) {
+        cam.position.set(targetPosition.x, targetPosition.y, targetPosition.z);
+        cam.quaternion.set(targetQuat.x, targetQuat.y, targetQuat.z, targetQuat.w);
+
+        onComplete?.();
+        return;
+    }
+
     currentTl?.kill();
 
     currentTl = gsap.timeline({
-        onComplete: () => onComplete?.(),
+        onComplete: () => {
+            emit('flyEnd');
+            onComplete?.();
+        },
     });
 
     currentTl.to(cam.position, {
@@ -148,7 +164,7 @@ function flyTo(targetPosition: THREE.Vector3, targetTarget: THREE.Vector3, onCom
     }, 0);
 }
 
-function handleView(conf: cityConfig.CityViewStaticOrForward | undefined): void {
+function handleView(conf: cityConfig.CityViewStaticOrForward | undefined, immediate: boolean = false): void {
     if (!conf) return;
 
     if (conf instanceof cityConfig.CityViewStatic) {
@@ -156,17 +172,12 @@ function handleView(conf: cityConfig.CityViewStaticOrForward | undefined): void 
         flyTo(conf.pos, conf.target, () => {
             staticStartTime = performance.now();
             isTransitioning = false;
-        });
+        }, immediate);
     } else if (conf instanceof cityConfig.CityViewForward) {
         hasPrev = false;
         isTransitioning = false;
         movementDir.set(0, 0, -1);
     }
-}
-
-function setView(conf: cityConfig.CityViewStaticOrForward): void {
-    console.log('ФУНКЦИя депрекейтед. Работаем через стор.');
-    // currentView.value = conf;
 }
 
 onBeforeRender((ctx) => {
@@ -182,5 +193,5 @@ onBeforeRender((ctx) => {
     }
 });
 
-defineExpose({ setView });
+defineExpose({});
 </script>

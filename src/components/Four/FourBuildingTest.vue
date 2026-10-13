@@ -26,25 +26,15 @@ interface InstanceData {
     scale: Vec3;
 }
 
-/* ============================================================
- *  Параметры
- * ==========================================================*/
-
-const SAFE_ZONE = { width: 20, depth: 50 };
-const CITY_BOUNDS = { width: 150, depth: 150 };
+const SAFE_ZONE = { width: 40, depth: 50 };
+const CITY_BOUNDS = { width: 70, depth: 70 };
 const BUILDING_FOOTPRINT = 4;
 const JITTER = 3;
-const SPACING = 2;
-
-/** Базовые высоты — размеры геометрий. */
-const HEIGHTS = [5, 7, 8] as const;
-
-/** Максимальная высота, до которой масштабируем на краю города. */
+const SPACING = 1;
+const HEIGHTS = [2.5, 4, 5] as const;
 const MAX_HEIGHT_FACTOR = 3;
+const CENTER_BIAS = 0;
 
-/* ============================================================
- *  Базовые меши
- * ==========================================================*/
 
 function createBuildingMesh(name: string, height: number, color: number): THREE.Mesh {
     const geo = new THREE.BoxGeometry(
@@ -52,7 +42,7 @@ function createBuildingMesh(name: string, height: number, color: number): THREE.
         height,
         BUILDING_FOOTPRINT,
     );
-    // Origin внизу куба
+
     geo.translate(0, height / 2, 0);
 
     const mat = new THREE.MeshStandardMaterial({
@@ -62,7 +52,7 @@ function createBuildingMesh(name: string, height: number, color: number): THREE.
     });
 
     const mesh = new THREE.Mesh(geo, mat);
-    mesh.name = name;
+    // mesh.name = name;
     return mesh;
 }
 
@@ -72,10 +62,6 @@ const buildings = computed(() =>
         mesh: createBuildingMesh(`building_${i}`, height, 0x374151),
     })),
 );
-
-/* ============================================================
- *  Генерация позиций
- * ==========================================================*/
 
 interface GridOptions {
     bounds: { width: number; depth: number };
@@ -117,17 +103,7 @@ const allPositions = generatePositions({
     jitter: JITTER,
 });
 
-/* ============================================================
- *  Высота в зависимости от расстояния до центра
- * ==========================================================*/
 
-/**
- * Возвращает коэффициент высоты в зависимости от расстояния до центра.
- * 0 — в центре, 1 — на самой границе города.
- *
- * centerBias = 0.0 → здания в центре низкие, на краю — высокие
- * centerBias = 1.0 → здания в центре высокие, на краю — низкие
- */
 function heightFactor(pos: Vec3, centerBias: number = 0): number {
     const dist = Math.hypot(pos[0], pos[2]);
     const maxDist = Math.hypot(
@@ -136,35 +112,18 @@ function heightFactor(pos: Vec3, centerBias: number = 0): number {
     );
     const t = Math.min(dist / maxDist, 1);
 
-    // centerBias = 0 → t (низко в центре, высоко на краю)
-    // centerBias = 1 → 1 - t (высоко в центре, низко на краю)
     return t * (1 - centerBias) + (1 - t) * centerBias;
 }
 
-/**
- * Считает масштаб по Y для экземпляра.
- * Никогда не меньше 1.0 — базовые меши уже минимальны.
- */
-function scaleForInstance(
-    pos: Vec3,
-    baseHeight: number,
-    centerBias: number,
-): Vec3 {
+function scaleForInstance(pos: Vec3, baseHeight: number, centerBias: number): Vec3 {
     const factor = heightFactor(pos, centerBias);
     const targetHeight = baseHeight + (MAX_HEIGHT_FACTOR - 1) * baseHeight * factor;
     const scaleY = targetHeight / baseHeight;
 
-    // Округление до 2 знаков, чтобы матрицы не раздувались
     const s = Math.round(scaleY * 100) / 100;
     return [1, s, 1];
 }
 
-/* ============================================================
- *  Распределение по типам и подготовка данных
- * ==========================================================*/
-
-/** Куда базируем: 0 — низко в центре, 1 — высоко в центре. */
-const CENTER_BIAS = 0;
 
 function assignType(): 0 | 1 | 2 {
     const r = Math.random();

@@ -67,7 +67,7 @@ async function buildScene(): Promise<CityBuildResult> {
         mixers: [],
     };
 
-    const limit = pLimit(10);
+    const limit = pLimit(6);
 
     const entries = Object.entries(data).filter(([, items]) => items?.length);
     cityStore.setTotalModelsCount(entries.length);
