@@ -1,49 +1,121 @@
 @mixin textCrop($line-height: 1, $top-adjustment: 0px, $bottom-adjustment: 0px) {
-	$top-crop: 10;
-	$bottom-crop: 6;
-	$crop-font-size: 36;
-	$crop-line-height: 1.2;
+    $top-crop: 10;
+    $bottom-crop: 6;
+    $crop-font-size: 36;
+    $crop-line-height: 1.2;
 
-	$dynamic-top-crop: calc(max(($top-crop + ($line-height - $crop-line-height) * ($crop-font-size / 2)), 0) / $crop-font-size);
-	$dynamic-bottom-crop: calc(max(($bottom-crop + ($line-height - $crop-line-height) * ($crop-font-size / 2)), 0) / $crop-font-size);
+    $dynamic-top-crop: calc(max(($top-crop + ($line-height - $crop-line-height) * ($crop-font-size / 2)), 0) / $crop-font-size);
+    $dynamic-bottom-crop: calc(max(($bottom-crop + ($line-height - $crop-line-height) * ($crop-font-size / 2)), 0) / $crop-font-size);
 
-	line-height: $line-height;
+    line-height: $line-height;
 
-	&::before,
-	&::after {
-		content: "";
-		display: block;
-		height: 0;
-		width: 0;
-	}
+    &::before,
+    &::after {
+        content: "";
+        display: block;
+        height: 0;
+        width: 0;
+    }
 
-	&::before {
-		margin-bottom: calc(-#{$dynamic-top-crop}em + #{$top-adjustment});
-	}
+    &::before {
+        margin-bottom: calc(-#{$dynamic-top-crop}em + #{$top-adjustment});
+    }
 
-	&::after {
-		margin-top: calc(-#{$dynamic-bottom-crop}em + #{$bottom-adjustment});
-	}
+    &::after {
+        margin-top: calc(-#{$dynamic-bottom-crop}em + #{$bottom-adjustment});
+    }
 }
 
-@mixin font($size: body, $weight: 400, $height: 1, $space: 0) {
-	font-size: round(up, $size, 1px);
+//@use 'sass:math';
 
-	@if $weight {
-		font-weight: $weight;
-	}
 
-	@if $height {
-		line-height: round(up, calc($size * $height), 1px);
-	}
+@mixin font($size: 1.8rem, $weight: 400, $height: 1, $space: 0) {
+    font-size: round(up, $size, 1px);
 
-	@if $space {
-		letter-spacing: round(up, calc(($size) * $space), 1px);
-	}
+    @if $weight {
+        font-weight: $weight;
+    }
+
+    @if $height {
+        line-height: round(up, calc($size * $height), 1px);
+    }
+
+    @if $space {
+        letter-spacing: round(up, calc($size * $space), 1px);
+    }
 }
 
-@mixin fontTODO($size: 1.8rem, $weight: 400, $height: 1, $space: 0) {
-	@include font($size, $weight, $height, $space);
 
-	font-family: TODO, sans-serif;
+/** ac_boucle — декоративный */
+@mixin fontAcBoucle($size: 1.8rem, $weight: 400, $height: 1, $space: 0) {
+    @include font($size, $weight, $height, $space);
+    font-family: ac_boucle, sans-serif;
 }
+
+/** arkhip — исторический, заголовочный */
+@mixin fontArkhip($size: 1.8rem, $weight: 400, $height: 1, $space: 0) {
+    @include font($size, $weight, $height, $space);
+    font-family: 'arkhip', serif;
+}
+
+/** dewberry — рукописный, только bold */
+@mixin fontDewberry($size: 1.8rem, $weight: 700, $height: 1, $space: 0) {
+    @include font($size, $weight, $height, $space);
+    font-family: 'dewberry', cursive;
+}
+
+/** fascinate_cyrillic — декоративный с кириллицей */
+@mixin fontFascinate($size: 1.8rem, $weight: 400, $height: 1, $space: 0) {
+    @include font($size, $weight, $height, $space);
+    font-family: 'fascinate_cyrillic', sans-serif;
+}
+
+/** gogolia — старославянский, декоративный */
+@mixin fontGogolia($size: 1.8rem, $weight: 400, $height: 1, $space: 0) {
+    @include font($size, $weight, $height, $space);
+    font-family: 'gogolia', serif;
+}
+
+/** igra_sans — современный гротеск, только 500 */
+@mixin fontIgra($size: 1.8rem, $weight: 500, $height: 1, $space: 0) {
+    @include font($size, $weight, $height, $space);
+    font-family: 'igra_sans', sans-serif;
+}
+
+/** miratrix — декоративный */
+@mixin fontMiratrix($size: 1.8rem, $weight: 400, $height: 1, $space: 0) {
+    @include font($size, $weight, $height, $space);
+    font-family: 'miratrix', sans-serif;
+}
+
+/** pobeda — узкий заголовочный */
+@mixin fontPobeda($size: 1.8rem, $weight: 400, $height: 1, $space: 0) {
+    @include font($size, $weight, $height, $space);
+    font-family: pobeda, serif;
+}
+
+/** podkova — variable font, поддерживает веса 100..900 */
+@mixin fontPodkova($size: 1.8rem, $weight: 400, $height: 1, $space: 0) {
+    @include font($size, $weight, $height, $space);
+    font-family: 'podkova', serif;
+    font-variation-settings: 'wght' #{$weight};
+}
+
+/** proto_sans — современный гротеск */
+@mixin fontProto($size: 1.8rem, $weight: 400, $height: 1, $space: 0) {
+    @include font($size, $weight, $height, $space);
+    font-family: 'proto_sans', sans-serif;
+}
+
+/** urban_slavic — старославянский, декоративный */
+@mixin fontUrban($size: 1.8rem, $weight: 400, $height: 1, $space: 0) {
+    @include font($size, $weight, $height, $space);
+    font-family: 'urban_slavic', serif;
+}
+
+/** wiguru — рукописный, декоративный */
+@mixin fontWiguru($size: 1.8rem, $weight: 400, $height: 1, $space: 0) {
+    @include font($size, $weight, $height, $space);
+    font-family: 'wiguru', cursive;
+}
+

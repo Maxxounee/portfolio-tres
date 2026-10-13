@@ -32,6 +32,7 @@
                 @click="setCameraView"
             />
         </TresCanvas>
+        <InterfaceWrapper/>
     </div>
 </template>
 <script setup lang="ts">
@@ -52,6 +53,7 @@ import * as cityConfig from "@/config/four/city";
 import { useCityStore } from "@/store/city";
 import { useMainStore } from "@/store/main";
 import FourCityTest from "@/components/Four/FourCityTest.vue";
+import InterfaceWrapper from "@/components/Interface/InterfaceWrapper.vue";
 
 
 const mainStore = useMainStore();

@@ -40,10 +40,12 @@ watch(() => w.value.fontSize, (value) => {
 onMounted(() => {
     window.addEventListener('resize', onResize);
     nextTick(() => onResize());
-    // this.onResize();
 });
 </script>
-<style scoped>
+<style
+    src="@/style/style.scss"
+    lang="scss"
+>
 header {
     line-height: 1.5;
     max-height: 100vh;

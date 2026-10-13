@@ -15,6 +15,8 @@ import * as THREE from 'three';
 import { shallowRef, onMounted, onBeforeUnmount } from 'vue';
 import { useLoop } from '@tresjs/core';
 import instancesData from '@/config/four/scene.json';
+import pLimit from "p-limit";
+
 import {
     buildInstancedMeshes,
     createAnimatedClone,
@@ -60,13 +62,21 @@ async function buildScene(): Promise<CityBuildResult> {
         mixers: [],
     };
 
-    for (const [modelName, items] of Object.entries(data)) {
-        try {
-            await buildModel(modelName, items, result);
-        } catch (err) {
-            console.error(`[FourCityTest] ошибка загрузки ${modelName}`, err);
-        }
-    }
+    const limit = pLimit(10);
+
+    const entries = Object.entries(data).filter(([, items]) => items?.length);
+
+    await Promise.all(
+        entries.map(([modelName, items]) => {
+            return limit(async () => {
+                try {
+                    await buildModel(modelName, items, result);
+                } catch (err) {
+                    console.error(`[City] ошибка загрузки ${modelName}`, err);
+                }
+            });
+        }),
+    );
 
     return result;
 }

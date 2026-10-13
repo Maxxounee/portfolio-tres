@@ -11,13 +11,11 @@ html {
 body,
 .page {
     @include div100;
-
     overflow: hidden;
-    ///** TODO: #SETUP */
-    //font-family: _, Helvetica, sans-serif;
+    font-family: ac_boucle, Helvetica, sans-serif;
     font-size: 1.5rem;
     font-weight: 400;
-    color: var(--BLACK);
+    color: var(--WHITE);
     text-transform: uppercase;
 }
 
