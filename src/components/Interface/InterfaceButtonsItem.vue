@@ -1,9 +1,12 @@
 <template>
-    <button class="InterfaceButtonsItem">
-        ДАЛЕЕ
+    <button
+        class="InterfaceButtonsItem"
+        v-html="props.text"
+    >
     </button>
 </template>
 <script setup lang="ts">
+const props = defineProps<{ text: string }>();
 </script>
 <style scoped lang="scss">
 @keyframes slide {
@@ -29,6 +32,8 @@
     transition: all 0.1s ease-out;
     padding: 0 15px;
     overflow: hidden;
+    width: 25rem;
+    white-space: nowrap;
 
     &::before {
         //content: "";

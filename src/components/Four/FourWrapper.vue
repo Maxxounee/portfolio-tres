@@ -99,13 +99,19 @@ function init(cityNodes) {
             ...getStaticValues(staticConfig.welcome),
         }),
         new cityConfig.CityViewStatic({
-            ...getStaticValues(staticConfig.one),
+            ...getStaticValues(staticConfig.tech),
         }),
         new cityConfig.CityViewStatic({
-            ...getStaticValues(staticConfig.two),
+            ...getStaticValues(staticConfig.works),
         }),
         new cityConfig.CityViewForward({
-            ...getForwardValues(forwardConfig.one),
+            ...getForwardValues(forwardConfig.about),
+        }),
+        new cityConfig.CityViewStatic({
+            ...getStaticValues(staticConfig.repo),
+        }),
+        new cityConfig.CityViewStatic({
+            ...getStaticValues(staticConfig.contacts),
         }),
     ];
 

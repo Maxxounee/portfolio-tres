@@ -87,22 +87,32 @@ export const cameraMode = {
         welcome: {
             pos: new THREE.Vector3(10, 10, 10),
             target: new THREE.Vector3(6, 3, 2),
-            html: { title: '' },
+            html: { title: '', button: 'HELLO WORLD!' },
         },
-        one: {
+        tech: {
             pos: new THREE.Vector3(-0.367, 3.378, -4.388),
             target: new THREE.Vector3(0.335, 2.949, -4.648),
-            html: { title: '' },
+            html: { title: '', button: 'TECHNOLOGY' },
         },
-        two: {
-            pos: new THREE.Vector3(-10, 8, -5),
-            target: new THREE.Vector3(6, 3, 2),
-            html: { title: '' },
-        }
+        works: {
+            pos: new THREE.Vector3(-0.877, 1.735, 0.017),
+            target: new THREE.Vector3(-0.037, 0.842, -0.877),
+            html: { title: '', button: 'РАБОТЫ' },
+        },
+        repo: {
+            pos: new THREE.Vector3(-2.605, 2.849, -13.412),
+            target: new THREE.Vector3(-2.408, 2.855, -13.198),
+            html: { title: '', button: 'GITHUB' },
+        },
+        contacts: {
+            pos: new THREE.Vector3(4.099, 3.749, 0.322),
+            target: new THREE.Vector3(1.814, 4.861, -2.008),
+            html: { title: '', button: 'КОНТАКТЫ' },
+        },
     },
     forward: {
-        one: {
-            html: { title: '' },
+        about: {
+            html: { title: '', button: 'О САЙТЕ' },
             modelName: 'Empty',
             obj: undefined,
             followDistance: 0.3,
