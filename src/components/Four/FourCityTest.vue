@@ -6,14 +6,19 @@
     />
     <primitive
         v-for="(obj, i) in animatedChars"
-        :key="`anim-${i}`"
+        :key="`char-${i}`"
+        :object="obj"
+    />
+    <primitive
+        v-for="(obj, i) in animatedCars"
+        :key="`car-${i}`"
         :object="obj"
     />
 </template>
 <script setup lang="ts">
 import * as THREE from 'three';
 import { shallowRef, onMounted, onBeforeUnmount } from 'vue';
-import { useLoop } from '@tresjs/core';
+import { useLoop, useTres } from '@tresjs/core';
 import instancesData from '@/config/four/scene.json';
 import pLimit from "p-limit";
 
@@ -27,6 +32,9 @@ import {
 import { getStaticLink } from "@/utils";
 import { useCityStore } from "@/store/city.ts";
 import { collectAnimations } from "@/utils/four/animate.ts";
+import type { GLTF } from "three/examples/jsm/loaders/GLTFLoader.js";
+
+const emit = defineEmits(['loaded']);
 
 const cityStore = useCityStore();
 
@@ -35,10 +43,29 @@ const data = instancesData as SceneJson;
 const instancedMeshes = shallowRef<THREE.InstancedMesh[]>([]);
 // const instancedMeshes = shallowRef<THREE.InstancedMesh[]>([]);
 const animatedChars = shallowRef<THREE.Object3D[]>([]);
+const animatedCars = shallowRef<THREE.Object3D[]>([]);
 const mixers: THREE.AnimationMixer[] = [];
+const scene = useTres();
+const nodes = {};
 
 function isCharName(str: string) {
     return str.startsWith('char');
+}
+
+function loadAnimatedModel(
+    gltf: GLTF,
+    result: CityBuildResult,
+): THREE.Object3D {
+    const mixer = new THREE.AnimationMixer(gltf.scene);
+
+    for (const clip of gltf.animations) {
+        const action = mixer.clipAction(clip);
+        action.setLoop(THREE.LoopRepeat, Infinity);
+        action.play();
+    }
+
+    result.mixers.push(mixer);
+    return gltf.scene;
 }
 
 async function buildModel(modelName: string, configItems: SceneJson[string], result: CityBuildResult): Promise<void> {
@@ -56,7 +83,19 @@ async function buildModel(modelName: string, configItems: SceneJson[string], res
         return;
     }
 
+    if (modelName.startsWith('car')) {
+        console.log(modelName);
+        console.log(gltf.animations);
+    }
+    if (modelName.startsWith('car')) {
+        const model = loadAnimatedModel(gltf, result);
+        result.animatedCars.push(model);
+        return;
+    }
+
+
     const instances = buildInstancedMeshes(gltf.scene, configItems);
+
 
     if (instances.length === 0) {
         console.warn(`[City] No meshes in ${modelName}.glb`);
@@ -70,17 +109,17 @@ async function buildScene(): Promise<CityBuildResult> {
     const result: CityBuildResult = {
         instancedMeshes: [],
         animatedChars: [],
+        animatedCars: [],   // ← добавили
         mixers: [],
     };
 
     const limit = pLimit(6);
-
     const entries = Object.entries(data).filter(([, items]) => items?.length);
     cityStore.setTotalModelsCount(entries.length);
 
     await Promise.all(
-        entries.map(([modelName, items]) => {
-            return limit(async () => {
+        entries.map(([modelName, items]) =>
+            limit(async () => {
                 try {
                     await buildModel(modelName, items, result);
                 } catch (err) {
@@ -88,15 +127,13 @@ async function buildScene(): Promise<CityBuildResult> {
                 } finally {
                     cityStore.incrementTotalModels();
                 }
-            });
-        }),
+            }),
+        ),
     );
 
     return result;
 }
 
-// const animations: { emissiveBlinking?(elapsed: number); } = {};
-// const animations: { emissiveBlinking?(elapsed: number); } = {};
 const animations: Function[] = [];
 
 onMounted(async () => {
@@ -104,10 +141,20 @@ onMounted(async () => {
 
     instancedMeshes.value = result.instancedMeshes;
     animatedChars.value = result.animatedChars;
+    animatedCars.value = result.animatedCars;
     mixers.push(...result.mixers);
 
-    const { emissiveBlinkingPlay } = collectAnimations(result.instancedMeshes);
+    // Собираем nodes из машин
+    const carNodes: Record<string, THREE.Object3D> = {};
+    for (const obj of result.animatedCars) {
+        const name = obj.custom_model_name;
+        if (name) carNodes[name] = obj;
+    }
 
+    emit('loaded', { nodes: carNodes });
+
+    // Запускаем emissive-анимации
+    const { emissiveBlinkingPlay } = collectAnimations(result.instancedMeshes);
     animations.push(emissiveBlinkingPlay);
 });
 

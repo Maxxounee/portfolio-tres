@@ -32,6 +32,7 @@ let hasPrev = false;
 const carWorldPos = new THREE.Vector3();
 const prevPos = new THREE.Vector3();
 const movementDir = new THREE.Vector3(0, 0, -1);
+const _shiftDir = new THREE.Vector3();
 const newDir = new THREE.Vector3();
 const desiredPosition = new THREE.Vector3();
 const desiredLookAt = new THREE.Vector3();
@@ -39,8 +40,10 @@ const desiredLookAt = new THREE.Vector3();
 const _tmpMatrix = new THREE.Matrix4();
 const _tmpQuat = new THREE.Quaternion();
 const _tmpUp = new THREE.Vector3(0, 1, 0);
+const _box = new THREE.Box3();
 
 let currentTl: gsap.core.Timeline | null = null;
+_shiftDir.crossVectors(movementDir, _tmpUp).normalize();
 
 const emit = defineEmits(['flyEnd']);
 let isFirstPosition = true;
@@ -67,14 +70,18 @@ watch(
     },
 );
 
-function renderForward(cam: THREE.PerspectiveCamera, conf: cityConfig.CityViewForward): void {
+
+function renderForward(cam: THREE.PerspectiveCamera, conf: cityConfig.CityViewForward,): void {
     const positionLerp = 0.05;
     const rotationLerp = 0.05;
     const obj = conf.obj;
 
     if (!obj) return;
 
-    obj.getWorldPosition(carWorldPos);
+
+    obj.updateMatrixWorld(true);
+    _box.setFromObject(obj);
+    _box.getCenter(carWorldPos);
 
     if (hasPrev) {
         newDir.subVectors(carWorldPos, prevPos);
@@ -86,16 +93,21 @@ function renderForward(cam: THREE.PerspectiveCamera, conf: cityConfig.CityViewFo
     prevPos.copy(carWorldPos);
     hasPrev = true;
 
+    _shiftDir.crossVectors(movementDir, _tmpUp).normalize();
+
+    const SIDE_OFFSET = conf.sideOffset ?? -0.8;
+
     desiredPosition.copy(carWorldPos);
     desiredPosition.addScaledVector(movementDir, -conf.followDistance);
+    desiredPosition.addScaledVector(_shiftDir, SIDE_OFFSET);
     desiredPosition.y += conf.followHeight;
 
     desiredLookAt.copy(carWorldPos);
     desiredLookAt.addScaledVector(movementDir, 1);
+    desiredLookAt.addScaledVector(_shiftDir, SIDE_OFFSET * 0.5);   // ← чуть сбоку
     desiredLookAt.y += conf.followLookAtHeight;
 
     cam.position.lerp(desiredPosition, positionLerp);
-
     computeLookAtQuaternion(cam.position, desiredLookAt, _tmpQuat);
     cam.quaternion.slerp(_tmpQuat, rotationLerp);
 }

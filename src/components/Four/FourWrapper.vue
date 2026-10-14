@@ -11,10 +11,12 @@
             <FourPerspectiveCamera
                 ref="cameraRef"
             />
-            <FourCity
-                @loaded="({ cityNodes }) => init(cityNodes)"
+            <!--            <FourCity-->
+            <!--                @loaded="({ cityNodes }) => init(cityNodes)"-->
+            <!--            />-->
+            <FourCityTest
+                @loaded="({ nodes }) => init(nodes)"
             />
-            <FourCityTest/>
             <FourBuildingTest/>
             <FourFog/>
             <!--            <FourCharacter ref="character"/>-->
@@ -35,8 +37,8 @@
         <!-- interface -->
         <InterfaceWrapper/>
         <InterfacePreloader
-            v-if="!isDev"
         />
+        <!--            v-if="!isDev"-->
     </div>
 </template>
 <script setup lang="ts">

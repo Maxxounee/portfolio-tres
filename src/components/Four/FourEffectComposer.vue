@@ -1,15 +1,15 @@
 <template>
     <Suspense>
         <EffectComposerPmndrs>
-            <TiltShiftPmndrs
-                :focus-area="0.9"
-                :feather="0.2"
-            />
+            <!--            <TiltShiftPmndrs-->
+            <!--                :focus-area="0.9"-->
+            <!--                :feather="0.2"-->
+            <!--            />-->
             <NoisePmndrs
                 premultiply
                 :blend-function="BlendFunction.SCREEN"
             />
-            <!--            <ColorAveragePmndrs/>-->
+            <ColorAveragePmndrs/>
             <ScanlinePmndrs
                 :density="3"
                 :opacity="0.3"

@@ -93,8 +93,8 @@ export const links = {
 export const cameraMode = {
     static: {
         welcome: {
-            pos: new THREE.Vector3(10, 10, 10),
-            target: new THREE.Vector3(6, 3, 2),
+            pos: new THREE.Vector3(-10.643, 6.291, 11.951),
+            target: new THREE.Vector3(-0.09, -1.633, 0.012),
             html: {
                 button: 'HELLO WORLD!',
                 title: '',
@@ -106,8 +106,8 @@ export const cameraMode = {
             },
         },
         tech: {
-            pos: new THREE.Vector3(-0.367, 3.378, -4.388),
-            target: new THREE.Vector3(0.335, 2.949, -4.648),
+            pos: new THREE.Vector3(-4.206, 2.077, 5.171),
+            target: new THREE.Vector3(-2.826, 1.215, 3.9),
             html: {
                 button: 'TECHNOLOGY',
                 title: '',
@@ -125,8 +125,8 @@ export const cameraMode = {
             },
         },
         works: {
-            pos: new THREE.Vector3(-1.617, 2.041, 0.47),
-            target: new THREE.Vector3(-1.221, 1.503, -0.569),
+            pos: new THREE.Vector3(-1.691, 1.681, 1.753),
+            target: new THREE.Vector3(1.863, 0.583, 0.227),
             html: {
                 button: 'РАБОТЫ',
                 title: '',
@@ -135,8 +135,8 @@ export const cameraMode = {
             },
         },
         repo: {
-            pos: new THREE.Vector3(-2.605, 2.849, -13.412),
-            target: new THREE.Vector3(-2.408, 2.855, -13.198),
+            pos: new THREE.Vector3(-6.486, 0.907, -6.873),
+            target: new THREE.Vector3(-5.699, 0.976, -5.389),
             html: {
                 button: 'GITHUB',
                 title: '',
@@ -145,8 +145,8 @@ export const cameraMode = {
             },
         },
         contacts: {
-            pos: new THREE.Vector3(4.099, 3.749, 0.322),
-            target: new THREE.Vector3(1.814, 4.861, -2.008),
+            pos: new THREE.Vector3(2.98, 3.931, -6.596),
+            target: new THREE.Vector3(3.802, 3.031, -5.313),
             html: {
                 button: 'КОНТАКТЫ',
                 title: '',
@@ -163,10 +163,10 @@ export const cameraMode = {
                 text: `Привет! Меня зовут Максим.<br/>
                 Frontend + Backend разработчик.<br/>`
             },
-            modelName: 'Empty',
+            modelName: 'car_00',
             obj: undefined,
             followDistance: 0.3,
-            followHeight: 1,
+            followHeight: 0.3,
             followLookAtHeight: 0.1,
             dirSmoothing: 0.1,
         }
