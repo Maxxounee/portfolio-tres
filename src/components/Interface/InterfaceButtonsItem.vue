@@ -7,10 +7,10 @@
     </button>
 </template>
 <script setup lang="ts">
-const props = defineProps<{
-    text: string;
-    active: boolean;
-}>();
+const props = defineProps({
+    text: '',
+    active: true
+});
 </script>
 <style scoped lang="scss">
 @keyframes slide {

@@ -37,8 +37,8 @@
         <!-- interface -->
         <InterfaceWrapper/>
         <InterfacePreloader
+            v-if="!isDev"
         />
-        <!--            v-if="!isDev"-->
     </div>
 </template>
 <script setup lang="ts">

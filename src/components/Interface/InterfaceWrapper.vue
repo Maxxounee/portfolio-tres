@@ -13,15 +13,28 @@
         <!--        >-->
         <!--        </p>-->
         <InterfaceTextWindow
-            :position="[90, 90]"
             ref="textWindow"
         />
-        <InterfaceButtons/>
+        <InterfaceButtonsWrapper
+        />
+        <InterfaceButtonsItem
+            :text="noirModeText"
+            class="InterfaceWrapper__noir"
+            @click="() => mainStore.toggleNoirMode()"
+        />
     </div>
 </template>
 <script setup lang="ts">
-import InterfaceButtons from "@/components/Interface/InterfaceButtons.vue";
+import InterfaceButtonsWrapper from "@/components/Interface/InterfaceButtonsWrapper.vue";
 import InterfaceTextWindow from "@/components/Interface/InterfaceTextWindow.vue";
+import InterfaceButtonsItem from "@/components/Interface/InterfaceButtonsItem.vue";
+import { useMainStore } from "@/store/main.ts";
+import { computed } from "vue";
+
+const mainStore = useMainStore();
+const noirModeText = computed(() => {
+    return mainStore.noirMode ? 'Noir Mode: on' : 'Noir Mode: off';
+});
 </script>
 <style lang="scss">
 .InterfaceWrapper {
@@ -29,16 +42,11 @@ import InterfaceTextWindow from "@/components/Interface/InterfaceTextWindow.vue"
     @include flexColumn(center, center);
     pointer-events: none;
 
-    &__title {
-        @include fontPodkova(10rem);
-    }
 
-    &__text {
-        margin-top: 10rem;
-        //@include fontAcBoucle(5rem);
-        //@include fontDewberry(5rem);
-        @include fontIgra(3rem);
-
+    &__noir {
+        position: absolute;
+        top: var(--T);
+        right: var(--R);
     }
 }
 </style>

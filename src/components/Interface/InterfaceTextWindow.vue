@@ -2,10 +2,6 @@
     <div
         class="InterfaceTextWindow"
         :class="{ active }"
-        :style="{
-            '--top': position[0] + '%',
-            '--left': position[1] + '%',
-        }"
     >
         <!--        <button class="InterfaceTextWindow__close" @click="active = !active">-->
         <!--            <img src="/svg/close.svg" alt=""/>-->
@@ -34,9 +30,7 @@ import { Texter } from "@/utils/utils.ts";
 import { useCityStore } from "@/store/city.ts";
 import { storeToRefs } from "pinia";
 
-const props = defineProps<{
-    position: [number, number];
-}>();
+const props = defineProps<{}>();
 
 const active = ref(true);
 
@@ -75,8 +69,8 @@ watch([currentView, isLoaded], async () => {
     position: absolute;
     //top: var(--top);
     //left: var(--left);
-    right: 2rem;
-    bottom: 2rem;
+    right: var(--R);
+    bottom: var(--B);
     //transform: translate(-50%, -50%);
     white-space: nowrap;
     border: 2px solid var(--BLACK);

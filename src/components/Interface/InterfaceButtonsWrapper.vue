@@ -1,6 +1,6 @@
 <template>
-    <div class="InterfaceButtons">
-        <div class="InterfaceButtons__container">
+    <div class="InterfaceButtonsWrapper">
+        <div class="InterfaceButtonsWrapper__container">
             <InterfaceButtonsItem
                 v-for="(obj, i) in cityViewObjects"
                 :text="obj.html.button"
@@ -20,13 +20,13 @@ const cityStore = useCityStore();
 const { cityViewObjects, currentView } = storeToRefs(cityStore);
 </script>
 <style scoped lang="scss">
-.InterfaceButtons {
+.InterfaceButtonsWrapper {
     @include div100;
 
     &__container {
         @include flexColumn(start, center);
         gap: 3rem;
-        padding: 0 0 4rem 4rem;
+        padding: 0 0 var(--B) var(--L);
         position: absolute;
         bottom: 0;
         width: 100%;

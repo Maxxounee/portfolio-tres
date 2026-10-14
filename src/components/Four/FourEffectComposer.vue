@@ -9,7 +9,9 @@
                 premultiply
                 :blend-function="BlendFunction.SCREEN"
             />
-            <ColorAveragePmndrs/>
+            <ColorAveragePmndrs
+                v-if="mainStore.noirMode"
+            />
             <ScanlinePmndrs
                 :density="3"
                 :opacity="0.3"
@@ -33,6 +35,9 @@ import {
     ColorAveragePmndrs
 } from "@tresjs/post-processing";
 import { BlendFunction } from 'postprocessing';
+import { useMainStore } from "@/store/main.ts";
+
+const mainStore = useMainStore();
 </script>
 <style scoped lang="scss">
 .FourEffectComposer {
