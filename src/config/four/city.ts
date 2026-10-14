@@ -125,8 +125,8 @@ export const cameraMode = {
             },
         },
         works: {
-            pos: new THREE.Vector3(-0.877, 1.735, 0.017),
-            target: new THREE.Vector3(-0.037, 0.842, -0.877),
+            pos: new THREE.Vector3(-1.617, 2.041, 0.47),
+            target: new THREE.Vector3(-1.221, 1.503, -0.569),
             html: {
                 button: 'РАБОТЫ',
                 title: '',

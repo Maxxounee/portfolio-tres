@@ -15,6 +15,11 @@
                 :opacity="0.3"
                 :scroll-speed="0.01"
             />
+            <BloomPmndrs
+                :strength="0.6"
+                :radius="0.7"
+                :threshold="0.8"
+            />
         </EffectComposerPmndrs>
     </Suspense>
 </template>
@@ -24,6 +29,7 @@ import {
     NoisePmndrs,
     ScanlinePmndrs,
     TiltShiftPmndrs,
+    BloomPmndrs,
     ColorAveragePmndrs
 } from "@tresjs/post-processing";
 import { BlendFunction } from 'postprocessing';

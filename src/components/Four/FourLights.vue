@@ -1,7 +1,7 @@
 <template>
     <TresDirectionalLight
         :position="[-7, 8, 15]"
-        :intensity="0.9"
+        :intensity="0.3"
         :color="0xffe8c4"
         cast-shadow
         :shadow-mapSize-width="1024"
@@ -14,13 +14,13 @@
     />
     <TresDirectionalLight
         :position="[-15, 10, -10]"
-        :intensity="0.1"
+        :intensity="0.01"
         :color="0xaaccff"
     />
     <TresHemisphereLight
         :color="0x88aaff"
         :ground-color="0xffe8c4"
-        :intensity="0.15"
+        :intensity="0.05"
     />
 </template>
 <script setup lang="ts">

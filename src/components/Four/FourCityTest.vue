@@ -5,7 +5,7 @@
         :object="mesh"
     />
     <primitive
-        v-for="(obj, i) in animatedModels"
+        v-for="(obj, i) in animatedChars"
         :key="`anim-${i}`"
         :object="obj"
     />
@@ -26,31 +26,37 @@ import {
 } from '@/utils/four';
 import { getStaticLink } from "@/utils";
 import { useCityStore } from "@/store/city.ts";
+import { collectAnimations } from "@/utils/four/animate.ts";
 
 const cityStore = useCityStore();
 
 const data = instancesData as SceneJson;
 
 const instancedMeshes = shallowRef<THREE.InstancedMesh[]>([]);
-const animatedModels = shallowRef<THREE.Object3D[]>([]);
+// const instancedMeshes = shallowRef<THREE.InstancedMesh[]>([]);
+const animatedChars = shallowRef<THREE.Object3D[]>([]);
 const mixers: THREE.AnimationMixer[] = [];
 
-async function buildModel(modelName: string, items: SceneJson[string], result: CityBuildResult): Promise<void> {
+function isCharName(str: string) {
+    return str.startsWith('char');
+}
+
+async function buildModel(modelName: string, configItems: SceneJson[string], result: CityBuildResult): Promise<void> {
     const link = getStaticLink(`/3d/glb/${modelName}.glb`);
     const gltf = await loadCityModel(link);
-    /* Добавил, чтобы потом настроить тени в buildInstancedMeshes */
+
     gltf.scene.custom_model_name = modelName;
 
-    if (gltf.animations.length > 0) {
-        for (const item of items) {
-            const { clone, mixer } = createAnimatedClone(gltf, item);
-            result.animatedModels.push(clone);
-            result.mixers.push(mixer);
-        }
+    if (isCharName(modelName) && gltf.animations.length > 0) {
+        const { clone, mixer } = createAnimatedClone(gltf, configItems[0]);
+
+        result.animatedChars.push(clone);
+        result.mixers.push(mixer);
+
         return;
     }
 
-    const instances = buildInstancedMeshes(gltf.scene, items);
+    const instances = buildInstancedMeshes(gltf.scene, configItems);
 
     if (instances.length === 0) {
         console.warn(`[City] No meshes in ${modelName}.glb`);
@@ -63,7 +69,7 @@ async function buildModel(modelName: string, items: SceneJson[string], result: C
 async function buildScene(): Promise<CityBuildResult> {
     const result: CityBuildResult = {
         instancedMeshes: [],
-        animatedModels: [],
+        animatedChars: [],
         mixers: [],
     };
 
@@ -89,17 +95,21 @@ async function buildScene(): Promise<CityBuildResult> {
     return result;
 }
 
+// const animations: { emissiveBlinking?(elapsed: number); } = {};
+// const animations: { emissiveBlinking?(elapsed: number); } = {};
+const animations: Function[] = [];
+
 onMounted(async () => {
     const result = await buildScene();
 
     instancedMeshes.value = result.instancedMeshes;
-    animatedModels.value = result.animatedModels;
+    animatedChars.value = result.animatedChars;
     mixers.push(...result.mixers);
-});
 
-/* ============================================================
- *  Loop
- * ==========================================================*/
+    const { emissiveBlinkingPlay } = collectAnimations(result.instancedMeshes);
+
+    animations.push(emissiveBlinkingPlay);
+});
 
 const { onBeforeRender } = useLoop();
 
@@ -107,6 +117,10 @@ onBeforeRender((ctx) => {
     for (const mixer of mixers) {
         mixer.update(ctx.delta);
     }
+
+    animations.forEach((animation) => {
+        animation(ctx);
+    });
 });
 
 onBeforeUnmount(() => {

@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import type { InstanceItem } from './types';
 
-export function applyInstances(mesh: THREE.InstancedMesh, items: InstanceItem[]): void {
+function applyInstances(mesh: THREE.InstancedMesh, items: InstanceItem[]): void {
     const matrix = new THREE.Matrix4();
     const position = new THREE.Vector3();
     const quaternion = new THREE.Quaternion();
@@ -23,7 +23,7 @@ export function applyInstances(mesh: THREE.InstancedMesh, items: InstanceItem[])
 }
 
 export function buildInstancedMeshes(
-    scene: THREE.Object3D & { custom_model_name?: string }, items: InstanceItem[]
+    scene: THREE.Object3D & { custom_model_name: string }, items: InstanceItem[]
 ): THREE.InstancedMesh[] {
     const sourceMeshes: THREE.Mesh[] = [];
 
@@ -34,6 +34,7 @@ export function buildInstancedMeshes(
     });
 
     if (sourceMeshes.length === 0) {
+        console.warn('instancing. sourceMeshes.length === 0');
         return [];
     }
 
@@ -46,19 +47,18 @@ export function buildInstancedMeshes(
             items.length,
         );
 
-        /* TODO: выбрать модели, которые будут отбрасывать тень */
-        /* TODO: 2. или просто запечь тени и свет */
-        if (typeof scene.custom_model_name === 'string') {
-            if (scene.custom_model_name.startsWith('building')) {
-                inst.castShadow = true;
-                inst.receiveShadow = true;
-            } else {
-                inst.castShadow = true;
-                inst.receiveShadow = true;
-            }
+        inst.custom_model_name = scene.custom_model_name;
+
+        if (scene.custom_model_name.startsWith('building')) {
+            inst.castShadow = true;
+            inst.receiveShadow = true;
+        } else {
+            inst.castShadow = true;
+            inst.receiveShadow = true;
         }
 
         applyInstances(inst, items);
+
         result.push(inst);
     }
 

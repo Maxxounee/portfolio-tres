@@ -22,6 +22,6 @@ export function loadGLB(url: string): Promise<GLTF> {
     return cache.get(url)!;
 }
 
-export function loadCityModel(url: string,): Promise<GLTF> {
+export function loadCityModel(url: string,): Promise<GLTF & { scene: { custom_model_name?: string } }> {
     return loadGLB(url);
 }

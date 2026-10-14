@@ -12,6 +12,6 @@ export type SceneJson = Record<string, InstanceItem[]>
 
 export interface CityBuildResult {
     instancedMeshes: THREE.InstancedMesh[];
-    animatedModels: THREE.Object3D[];
+    animatedChars: THREE.Object3D[];
     mixers: THREE.AnimationMixer[];
 }

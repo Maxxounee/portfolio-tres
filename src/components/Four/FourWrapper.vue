@@ -17,7 +17,7 @@
             <FourCityTest/>
             <FourBuildingTest/>
             <FourFog/>
-            <FourCharacter ref="character"/>
+            <!--            <FourCharacter ref="character"/>-->
             <FourLights/>
             <FourFloor/>
             <FourEffectComposer v-if="true"/>

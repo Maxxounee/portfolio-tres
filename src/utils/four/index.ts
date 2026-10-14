@@ -1,4 +1,5 @@
 export * from './types';
 export * from './gltfLoader';
 export * from './instancing';
-export * from './sceleton.ts';
+export * from './animateChar.ts';
+
