@@ -15,8 +15,7 @@
         <InterfaceTextWindow
             ref="textWindow"
         />
-        <InterfaceButtonsWrapper
-        />
+        <InterfaceButtonsWrapper/>
         <InterfaceButtonsItem
             :text="noirModeText"
             class="InterfaceWrapper__noir"

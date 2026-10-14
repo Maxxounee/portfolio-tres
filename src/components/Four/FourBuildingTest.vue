@@ -26,13 +26,13 @@ interface InstanceData {
     scale: Vec3;
 }
 
-const SAFE_ZONE = { width: 40, depth: 50 };
-const CITY_BOUNDS = { width: 70, depth: 70 };
+const SAFE_ZONE = { width: 40, depth: 60 };
+const CITY_BOUNDS = { width: 120, depth: 120 };
 const BUILDING_FOOTPRINT = 4;
 const JITTER = 3;
 const SPACING = 1;
-const HEIGHTS = [2.5, 4, 5] as const;
-const MAX_HEIGHT_FACTOR = 3;
+const HEIGHTS = [2, 3, 5] as const;
+const MAX_HEIGHT_FACTOR = 2.5;
 const CENTER_BIAS = 0;
 
 
@@ -59,7 +59,7 @@ function createBuildingMesh(name: string, height: number, color: number): THREE.
 const buildings = computed(() =>
     HEIGHTS.map((height, i) => ({
         height,
-        mesh: createBuildingMesh(`building_${i}`, height, 0x374151),
+        mesh: createBuildingMesh(`building_${i}`, height, 0x101010),
     })),
 );
 

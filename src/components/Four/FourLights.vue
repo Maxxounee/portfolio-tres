@@ -1,7 +1,7 @@
 <template>
     <TresDirectionalLight
-        :position="[-7, 8, 15]"
-        :intensity="0.3"
+        :position="[9, 12, -20]"
+        :intensity="0.1"
         :color="0xffffff"
         cast-shadow
         :shadow-mapSize-width="1024"
@@ -12,11 +12,33 @@
         :shadow-camera-bottom="-50"
         :shadow-bias="-0.0008"
     />
-    <TresDirectionalLight
-        :position="[-15, 10, -10]"
-        :intensity="0.01"
-        :color="0xffffff"
+    <TresPointLight
+        :position="[-3, 3 ,3]"
+        :intensity="1"
     />
+    <TresPointLight
+        :position="[-3, 3 ,6]"
+        :intensity="3"
+    />
+    <TresPointLight
+        :position="[-9, 3 ,2]"
+        :intensity="3"
+    />
+    <TresPointLight
+        :position="[3, 3 ,10]"
+        :intensity="3"
+    />
+    <TresPointLight
+        :position="[-6, 3 ,-6]"
+        :intensity="3"
+    />
+    <!--    <TresPointLightHelper/>-->
+    <!--    <TresDirectionalLight-->
+    <!--        :position="[-20, 10, -20]"-->
+    <!--        :intensity="0.1"-->
+    <!--        :color="0xffffff"-->
+    <!--    />-->
+    <!--    <TresDirectionalLightHelper/>-->
     <!--    <TresHemisphereLight-->
     <!--        :color="0xffffff"-->
     <!--        :ground-color="0xffe8c4"-->

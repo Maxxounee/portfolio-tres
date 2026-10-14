@@ -9,11 +9,13 @@
 <script setup lang="ts">
 import { useLoop } from '@tresjs/core';
 import type { TresInstance } from '@tresjs/core';
+import { CameraShake, BakeShadows } from '@tresjs/cientos';
 import { computed, ref, shallowRef, watch } from 'vue';
 import { gsap } from 'gsap';
 import * as THREE from 'three';
 import * as cityConfig from '@/config/four/city';
 import { useCityStore } from '@/store/city';
+import { degToRad } from "three/src/math/MathUtils";
 
 const cameraRef = shallowRef<TresInstance | null>(null);
 
@@ -32,15 +34,19 @@ let hasPrev = false;
 const carWorldPos = new THREE.Vector3();
 const prevPos = new THREE.Vector3();
 const movementDir = new THREE.Vector3(0, 0, -1);
-const _shiftDir = new THREE.Vector3();
 const newDir = new THREE.Vector3();
 const desiredPosition = new THREE.Vector3();
 const desiredLookAt = new THREE.Vector3();
 
+const _shiftDir = new THREE.Vector3();
+const _rotatedDir = new THREE.Vector3();
+const _rotationQuat = new THREE.Quaternion();
 const _tmpMatrix = new THREE.Matrix4();
 const _tmpQuat = new THREE.Quaternion();
 const _tmpUp = new THREE.Vector3(0, 1, 0);
-const _box = new THREE.Box3();
+const _boundingBox = new THREE.Box3();
+const forwardRenderBodyCache = new Map<THREE.Object3D, THREE.Object3D>();
+
 
 let currentTl: gsap.core.Timeline | null = null;
 _shiftDir.crossVectors(movementDir, _tmpUp).normalize();
@@ -75,36 +81,53 @@ function renderForward(cam: THREE.PerspectiveCamera, conf: cityConfig.CityViewFo
     const positionLerp = 0.05;
     const rotationLerp = 0.05;
     const obj = conf.obj;
-
     if (!obj) return;
 
+    let body = forwardRenderBodyCache.get(obj);
 
-    obj.updateMatrixWorld(true);
-    _box.setFromObject(obj);
-    _box.getCenter(carWorldPos);
+    if (!body) {
+        obj.traverse((child) => {
+            if (body) return;
+            if (child.name.startsWith('body')) body = child;
+        });
+        if (body) forwardRenderBodyCache.set(obj, body);
+    }
+
+    if (!body) {
+        console.warn('[renderForward] body not found in', obj.name);
+        return;
+    }
+
+    body.updateMatrixWorld(true);
+    _boundingBox.setFromObject(body);
+    _boundingBox.getCenter(carWorldPos);
 
     if (hasPrev) {
         newDir.subVectors(carWorldPos, prevPos);
+        newDir.y = 0;
         if (newDir.lengthSq() > 1e-6) {
             newDir.normalize();
             movementDir.lerp(newDir, conf.dirSmoothing).normalize();
         }
     }
+
     prevPos.copy(carWorldPos);
     hasPrev = true;
 
-    _shiftDir.crossVectors(movementDir, _tmpUp).normalize();
+    const angle = degToRad(conf.followAngle);
+    _rotationQuat.setFromAxisAngle(_tmpUp, angle);
+    _rotatedDir.copy(movementDir).applyQuaternion(_rotationQuat);
 
-    const SIDE_OFFSET = conf.sideOffset ?? -0.8;
+    _shiftDir.crossVectors(_rotatedDir, _tmpUp).normalize();
 
     desiredPosition.copy(carWorldPos);
-    desiredPosition.addScaledVector(movementDir, -conf.followDistance);
-    desiredPosition.addScaledVector(_shiftDir, SIDE_OFFSET);
+    desiredPosition.addScaledVector(_rotatedDir, -conf.followDistance);
+    desiredPosition.addScaledVector(_shiftDir, conf.sideOffset ?? 0);
     desiredPosition.y += conf.followHeight;
 
     desiredLookAt.copy(carWorldPos);
-    desiredLookAt.addScaledVector(movementDir, 1);
-    desiredLookAt.addScaledVector(_shiftDir, SIDE_OFFSET * 0.5);   // ← чуть сбоку
+    desiredLookAt.addScaledVector(_rotatedDir, 1);
+    desiredLookAt.addScaledVector(_shiftDir, (conf.sideOffset ?? 0) * 0.5);
     desiredLookAt.y += conf.followLookAtHeight;
 
     cam.position.lerp(desiredPosition, positionLerp);
@@ -123,6 +146,7 @@ function renderStatic(cam: THREE.PerspectiveCamera, conf: cityConfig.CityViewSta
     const posAmp = (0.01 + height * height / 1000) * fadeIn;
 
     desiredPosition.copy(conf.pos);
+
     desiredPosition.x += Math.sin(elapsed * 0.7) * posAmp;
     desiredPosition.y += Math.cos(elapsed * 1.1) * posAmp;
     desiredPosition.z += Math.sin(elapsed * 0.5) * posAmp;

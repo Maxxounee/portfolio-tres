@@ -112,8 +112,8 @@ function init(cityNodes) {
         new cityConfig.CityViewStatic({
             ...getStaticValues(staticConfig.repo),
         }),
-        new cityConfig.CityViewStatic({
-            ...getStaticValues(staticConfig.contacts),
+        new cityConfig.CityViewForward({
+            ...getForwardValues(forwardConfig.contacts),
         }),
     ];
 

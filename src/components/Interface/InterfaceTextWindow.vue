@@ -3,9 +3,9 @@
         class="InterfaceTextWindow"
         :class="{ active }"
     >
-        <!--        <button class="InterfaceTextWindow__close" @click="active = !active">-->
-        <!--            <img src="/svg/close.svg" alt=""/>-->
-        <!--        </button>-->
+        <button class="InterfaceTextWindow__close" @click="active = !active">
+            <img src="/svg/close.svg" alt=""/>
+        </button>
         <div class="InterfaceTextWindow__container">
             <p
                 class="InterfaceTextWindow__text InterfaceTextWindow__text_dimension"
@@ -103,6 +103,7 @@ watch([currentView, isLoaded], async () => {
     &__text {
         @include fontIgra(4rem);
         color: var(--BLACK);
+        //color: var(--WHITE);
 
         &_visible {
             position: absolute;

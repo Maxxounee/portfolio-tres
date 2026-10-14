@@ -22,6 +22,10 @@
                 :radius="0.7"
                 :threshold="0.8"
             />
+            <VignettePmndrs
+                :darkness="0.7"
+                :offset="0.1"
+            />
         </EffectComposerPmndrs>
     </Suspense>
 </template>
@@ -32,7 +36,12 @@ import {
     ScanlinePmndrs,
     TiltShiftPmndrs,
     BloomPmndrs,
-    ColorAveragePmndrs
+    ASCIIPmndrs,
+    ColorAveragePmndrs,
+    BrightnessContrastPmndrs,
+    DotScreenPmndrs,
+    KuwaharaPmndrs,
+    VignettePmndrs,
 } from "@tresjs/post-processing";
 import { BlendFunction } from 'postprocessing';
 import { useMainStore } from "@/store/main.ts";

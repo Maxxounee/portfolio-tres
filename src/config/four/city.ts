@@ -20,6 +20,8 @@ export interface CityViewForwardArg extends CityViewArg {
     followHeight: number;
     followLookAtHeight: number;
     dirSmoothing?: number;
+    sideOffset?: number;
+    followAngle?: number;
 }
 
 
@@ -59,6 +61,8 @@ export class CityViewForward extends CityView {
     public followHeight: number;
     public followLookAtHeight: number;
     public dirSmoothing: number = 0.1;
+    public sideOffset: number = -0.8;
+    public followAngle: number = 0;
 
     constructor(arg: CityViewForwardArg) {
         super(arg);
@@ -67,8 +71,16 @@ export class CityViewForward extends CityView {
         this.followHeight = arg.followHeight;
         this.followLookAtHeight = arg.followLookAtHeight;
 
+
         if (arg.dirSmoothing) {
             this.dirSmoothing = arg.dirSmoothing;
+        }
+        if (arg.sideOffset) {
+            this.sideOffset = arg.sideOffset;
+        }
+
+        if (arg.followAngle) {
+            this.followAngle = arg.followAngle;
         }
     }
 }
@@ -82,8 +94,9 @@ export const files = {
 
 
 export const colors = {
-    backgroundStart: '#1f0e2a',
+    backgroundStart: '#131313',
     backgroundEnd: '#2f1114',
+    fog: '#212121',
 };
 
 export const links = {
@@ -144,16 +157,7 @@ export const cameraMode = {
                 Frontend + Backend разработчик.<br/>`
             },
         },
-        contacts: {
-            pos: new THREE.Vector3(2.98, 3.931, -6.596),
-            target: new THREE.Vector3(3.802, 3.031, -5.313),
-            html: {
-                button: 'КОНТАКТЫ',
-                title: '',
-                text: `Привет! Меня зовут Максим.<br/>
-                Frontend + Backend разработчик.<br/>`
-            },
-        },
+
     },
     forward: {
         about: {
@@ -169,7 +173,23 @@ export const cameraMode = {
             followHeight: 0.3,
             followLookAtHeight: 0.1,
             dirSmoothing: 0.1,
-        }
+        },
+        contacts: {
+            html: {
+                button: 'КОНТАКТЫ',
+                title: '',
+                text: `Привет! Меня зовут Максим.<br/>
+                Frontend + Backend разработчик.<br/>`
+            },
+            modelName: 'car_05',
+            obj: undefined,
+            followDistance: -0.3,
+            followHeight: 1.1,
+            followLookAtHeight: -1.5,
+            dirSmoothing: 0.1,
+            sideOffset: 1,
+            followAngle: -70,
+        },
     }
 };
 
