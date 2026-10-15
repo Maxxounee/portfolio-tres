@@ -3,7 +3,7 @@ import * as SkeletonUtils from 'three/examples/jsm/utils/SkeletonUtils.js';
 import type { GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import type { InstanceItem } from './types';
 
-export function createAnimatedClone(
+export function loadAnimatedSkeleton(
     gltf: GLTF,
     item: InstanceItem,
 ): { clone: THREE.Object3D; mixer: THREE.AnimationMixer } {

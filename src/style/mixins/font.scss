@@ -46,76 +46,14 @@
 }
 
 
-/** ac_boucle — декоративный */
-@mixin fontAcBoucle($size: 1.8rem, $weight: 400, $height: 1, $space: 0) {
-    @include font($size, $weight, $height, $space);
-    font-family: ac_boucle, sans-serif;
-}
-
-/** arkhip — исторический, заголовочный */
-@mixin fontArkhip($size: 1.8rem, $weight: 400, $height: 1, $space: 0) {
-    @include font($size, $weight, $height, $space);
-    font-family: 'arkhip', serif;
-}
-
-/** dewberry — рукописный, только bold */
-@mixin fontDewberry($size: 1.8rem, $weight: 700, $height: 1, $space: 0) {
-    @include font($size, $weight, $height, $space);
-    font-family: 'dewberry', cursive;
-}
-
-/** fascinate_cyrillic — декоративный с кириллицей */
-@mixin fontFascinate($size: 1.8rem, $weight: 400, $height: 1, $space: 0) {
-    @include font($size, $weight, $height, $space);
-    font-family: 'fascinate_cyrillic', sans-serif;
-}
-
-/** gogolia — старославянский, декоративный */
-@mixin fontGogolia($size: 1.8rem, $weight: 400, $height: 1, $space: 0) {
-    @include font($size, $weight, $height, $space);
-    font-family: 'gogolia', serif;
-}
-
-/** igra_sans — современный гротеск, только 500 */
 @mixin fontIgra($size: 1.8rem, $weight: 500, $height: 1.2, $space: 0) {
     @include font($size, $weight, $height, $space);
     font-family: 'igra_sans', sans-serif;
 }
 
-/** miratrix — декоративный */
-@mixin fontMiratrix($size: 1.8rem, $weight: 400, $height: 1, $space: 0) {
-    @include font($size, $weight, $height, $space);
-    font-family: 'miratrix', sans-serif;
-}
 
-/** pobeda — узкий заголовочный */
-@mixin fontPobeda($size: 1.8rem, $weight: 400, $height: 1, $space: 0) {
-    @include font($size, $weight, $height, $space);
-    font-family: pobeda, serif;
-}
-
-/** podkova — variable font, поддерживает веса 100..900 */
 @mixin fontPodkova($size: 1.8rem, $weight: 400, $height: 1, $space: 0) {
     @include font($size, $weight, $height, $space);
     font-family: 'podkova', serif;
     font-variation-settings: 'wght' #{$weight};
 }
-
-/** proto_sans — современный гротеск */
-@mixin fontProto($size: 1.8rem, $weight: 400, $height: 1, $space: 0) {
-    @include font($size, $weight, $height, $space);
-    font-family: 'proto_sans', sans-serif;
-}
-
-/** urban_slavic — старославянский, декоративный */
-@mixin fontUrban($size: 1.8rem, $weight: 400, $height: 1, $space: 0) {
-    @include font($size, $weight, $height, $space);
-    font-family: 'urban_slavic', serif;
-}
-
-/** wiguru — рукописный, декоративный */
-@mixin fontWiguru($size: 1.8rem, $weight: 400, $height: 1, $space: 0) {
-    @include font($size, $weight, $height, $space);
-    font-family: 'wiguru', cursive;
-}
-

@@ -63,7 +63,7 @@ watch(isDone, (value) => {
     }
 
     &__message {
-        @include fontWiguru(10rem);
+        @include fontIgra(10rem);
         color: var(--BLACK);
         transition-property: opacity;
         transition-duration: 1s;

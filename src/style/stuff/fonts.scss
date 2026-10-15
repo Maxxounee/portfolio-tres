@@ -1,107 +1,18 @@
-/* --- ac_boucle --- */
-@font-face {
-    font-family: ac_boucle;
-    src: url('@/assets/fonts/ac_boucle.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-    font-display: swap;
-}
-
-/* --- arkhip --- */
-@font-face {
-    font-family: 'arkhip';
-    src: url('@/assets/fonts/arkhip_font.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-    font-display: swap;
-}
-
-/* --- dewberry_bold --- */
-@font-face {
-    font-family: 'dewberry';
-    src: url('@/assets/fonts/dewberry_bold.ttf') format('truetype');
-    font-weight: bold;
-    font-style: normal;
-    font-display: swap;
-}
-
-/* --- fascinate_cyrillic --- */
-@font-face {
-    font-family: 'fascinate_cyrillic';
-    src: url('@/assets/fonts/fascinate_cyrillic.otf') format('opentype');
-    font-weight: normal;
-    font-style: normal;
-    font-display: swap;
-}
-
-/* --- gogolia --- */
-@font-face {
-    font-family: 'gogolia';
-    src: url('@/assets/fonts/gogoia.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-    font-display: swap;
-}
-
 /* --- igra_sans --- */
 @font-face {
     font-family: 'igra_sans';
-    src: url('@/assets/fonts/igra_sans.otf') format('opentype');
-    font-weight: 500;
+    src: url('@/assets/fonts/igra/igra-sans-full-400-normal.woff2') format('woff2');
+    font-weight: 400;
     font-style: normal;
     font-display: swap;
 }
 
-/* --- miratrix_normal --- */
-@font-face {
-    font-family: 'miratrix';
-    src: url('@/assets/fonts/miratrix_normal.otf') format('opentype');
-    font-weight: normal;
-    font-style: normal;
-    font-display: swap;
-}
-
-/* --- pobeda_regular --- */
-@font-face {
-    font-family: pobeda;
-    src: url('@/assets/fonts/pobeda_regular.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-    font-display: swap;
-}
 
 /* --- podkova_variable --- */
 @font-face {
     font-family: 'podkova';
-    src: url('@/assets/fonts/podkova_variable.ttf') format('truetype');
-    font-weight: 100 900;   /* variable font — поддерживает весь диапазон */
-    font-style: normal;
-    font-display: swap;
-}
-
-/* --- proto_sans --- */
-@font-face {
-    font-family: 'proto_sans';
-    src: url('@/assets/fonts/proto_sans.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-    font-display: swap;
-}
-
-/* --- urban_slavic --- */
-@font-face {
-    font-family: 'urban_slavic';
-    src: url('@/assets/fonts/urban_slavic.otf') format('opentype');
-    font-weight: normal;
-    font-style: normal;
-    font-display: swap;
-}
-
-/* --- wiguru --- */
-@font-face {
-    font-family: 'wiguru';
-    src: url('@/assets/fonts/wiguru.ttf') format('truetype');
-    font-weight: normal;
+    src: url('@/assets/fonts/podkova/podkova-full-full-normal.woff2') format('woff2-variations');
+    font-weight: 400 800;
     font-style: normal;
     font-display: swap;
 }

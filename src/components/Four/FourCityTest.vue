@@ -24,7 +24,7 @@ import pLimit from "p-limit";
 
 import {
     buildInstancedMeshes,
-    createAnimatedClone,
+    loadAnimatedSkeleton,
     loadCityModel,
     type SceneJson,
     type CityBuildResult,
@@ -32,7 +32,7 @@ import {
 import { getStaticLink } from "@/utils";
 import { useCityStore } from "@/store/city.ts";
 import { collectAnimations } from "@/utils/four/animate.ts";
-import type { GLTF } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { loadAnimatedModel } from "@/utils/four/loadAnimatedModel.ts";
 
 const emit = defineEmits(['loaded']);
 
@@ -41,32 +41,9 @@ const cityStore = useCityStore();
 const data = instancesData as SceneJson;
 
 const instancedMeshes = shallowRef<THREE.InstancedMesh[]>([]);
-// const instancedMeshes = shallowRef<THREE.InstancedMesh[]>([]);
 const animatedChars = shallowRef<THREE.Object3D[]>([]);
 const animatedCars = shallowRef<THREE.Object3D[]>([]);
 const mixers: THREE.AnimationMixer[] = [];
-const scene = useTres();
-const nodes = {};
-
-function isCharName(str: string) {
-    return str.startsWith('char');
-}
-
-function loadAnimatedModel(
-    gltf: GLTF,
-    result: CityBuildResult,
-): THREE.Object3D {
-    const mixer = new THREE.AnimationMixer(gltf.scene);
-
-    for (const clip of gltf.animations) {
-        const action = mixer.clipAction(clip);
-        action.setLoop(THREE.LoopRepeat, Infinity);
-        action.play();
-    }
-
-    result.mixers.push(mixer);
-    return gltf.scene;
-}
 
 async function buildModel(modelName: string, configItems: SceneJson[string], result: CityBuildResult): Promise<void> {
     const link = getStaticLink(`/3d/glb/${modelName}.glb`);
@@ -74,8 +51,8 @@ async function buildModel(modelName: string, configItems: SceneJson[string], res
 
     gltf.scene.custom_model_name = modelName;
 
-    if (isCharName(modelName) && gltf.animations.length > 0) {
-        const { clone, mixer } = createAnimatedClone(gltf, configItems[0]);
+    if (modelName.startsWith('char')) {
+        const { clone, mixer } = loadAnimatedSkeleton(gltf, configItems[0]);
 
         result.animatedChars.push(clone);
         result.mixers.push(mixer);
@@ -83,19 +60,16 @@ async function buildModel(modelName: string, configItems: SceneJson[string], res
         return;
     }
 
-    if (modelName.startsWith('car')) {
-        console.log(modelName);
-        console.log(gltf.animations);
-    }
+
     if (modelName.startsWith('car')) {
         const model = loadAnimatedModel(gltf, result);
         result.animatedCars.push(model);
+
         return;
     }
 
 
     const instances = buildInstancedMeshes(gltf.scene, configItems);
-
 
     if (instances.length === 0) {
         console.warn(`[City] No meshes in ${modelName}.glb`);
@@ -109,11 +83,12 @@ async function buildScene(): Promise<CityBuildResult> {
     const result: CityBuildResult = {
         instancedMeshes: [],
         animatedChars: [],
-        animatedCars: [],   // ← добавили
+        animatedCars: [],
         mixers: [],
     };
 
     const limit = pLimit(6);
+
     const entries = Object.entries(data).filter(([, items]) => items?.length);
     cityStore.setTotalModelsCount(entries.length);
 
@@ -144,17 +119,20 @@ onMounted(async () => {
     animatedCars.value = result.animatedCars;
     mixers.push(...result.mixers);
 
-    // Собираем nodes из машин
     const carNodes: Record<string, THREE.Object3D> = {};
+
     for (const obj of result.animatedCars) {
         const name = obj.custom_model_name;
-        if (name) carNodes[name] = obj;
+
+        if (name) {
+            carNodes[name] = obj;
+        }
     }
 
     emit('loaded', { nodes: carNodes });
 
-    // Запускаем emissive-анимации
     const { emissiveBlinkingPlay } = collectAnimations(result.instancedMeshes);
+
     animations.push(emissiveBlinkingPlay);
 });
 
