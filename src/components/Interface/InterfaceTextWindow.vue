@@ -45,6 +45,11 @@ const text = ref('');
 const animated = ref('');
 let timeout = null;
 
+watch(() => mainStore.noTextMode, (value) => {
+    if (value) {
+        active.value = true;
+    }
+});
 watch([currentView, isLoaded], async () => {
     if (!isLoaded) {
         return;

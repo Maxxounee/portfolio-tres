@@ -50,7 +50,6 @@ const _rotationQuat = new THREE.Quaternion();
 const _tmpMatrix = new THREE.Matrix4();
 const _tmpQuat = new THREE.Quaternion();
 const _tmpUp = new THREE.Vector3(0, 1, 0);
-const _boundingBox = new THREE.Box3();
 const forwardRenderBodyCache = new Map<THREE.Object3D, THREE.Object3D>();
 
 
@@ -105,8 +104,8 @@ function renderForward(cam: THREE.PerspectiveCamera, conf: cityConfig.CityViewFo
     }
 
     body.updateMatrixWorld(true);
-    _boundingBox.setFromObject(body);
-    _boundingBox.getCenter(carWorldPos);
+    body.getWorldPosition(carWorldPos);
+
 
     if (hasPrev) {
         newDir.subVectors(carWorldPos, prevPos);
@@ -139,6 +138,7 @@ function renderForward(cam: THREE.PerspectiveCamera, conf: cityConfig.CityViewFo
     cam.position.lerp(desiredPosition, positionLerp);
     computeLookAtQuaternion(cam.position, desiredLookAt, _tmpQuat);
     cam.quaternion.slerp(_tmpQuat, rotationLerp);
+    cam.quaternion.normalize();
 }
 
 function renderStatic(cam: THREE.PerspectiveCamera, conf: cityConfig.CityViewStatic, elapsed): void {

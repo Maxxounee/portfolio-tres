@@ -50,10 +50,22 @@
         :position="[-4, 2.9, -6]"
         :intensity="10"
         :target="billboardTarget"
-        :width="4"
-        :height="2"
         :color="0xfadd07"
         :distance="10"
+        cast-shadow
+    />
+    <TresObject3D
+        ref="breakingTarget"
+        :position="[7.6, -0.7, 5.8]"
+    />
+    <TresSpotLight
+        v-if="breakingTarget"
+        ref="breaking"
+        :position="[9.8, 0.36, 4]"
+        :intensity="5"
+        :target="breakingTarget"
+        :color="0xfadd07"
+        :distance="7"
         cast-shadow
     />
     <!--    <TresPointLightHelper/>-->
@@ -70,7 +82,7 @@
     <!--    />-->
     <TransformControls
         v-if="debug"
-        :object="billboardTarget"
+        :object="breaking"
     />
     <TresHemisphereLight
         :color="0xffffff"
@@ -86,6 +98,9 @@ import { nextTick, onMounted, ref, shallowRef, watch } from "vue";
 const billboard = ref();
 const billboardTarget = ref();
 
+const breaking = ref();
+const breakingTarget = ref();
+
 const debug = false;
 
 if (debug) {
@@ -95,6 +110,14 @@ if (debug) {
 
     watch(() => billboardTarget.value?.position, () => {
         console.log(billboardTarget.value.position);
+    }, { deep: true },);
+
+    watch(() => breaking.value?.position, () => {
+        console.log(breaking.value.position);
+    }, { deep: true },);
+
+    watch(() => breakingTarget.value?.position, () => {
+        console.log(breakingTarget.value.position);
     }, { deep: true },);
 }
 </script>

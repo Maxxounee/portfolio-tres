@@ -224,10 +224,10 @@ export const cameraMode = {
 
             /** fov 30*/
             followDistance: -0.3,
-            followHeight: 3,
-            followLookAtHeight: 0,
+            followHeight: 2,
+            followLookAtHeight: 1,
             sideOffset: 1,
-            followAngle: -70,
+            followAngle: -90,
         },
     }
 };
