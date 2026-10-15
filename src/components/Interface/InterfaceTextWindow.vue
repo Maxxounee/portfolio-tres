@@ -3,9 +3,9 @@
         class="InterfaceTextWindow"
         :class="{ active: realActive }"
     >
-        <button class="InterfaceTextWindow__close" @click="active = !active">
-            <img src="/svg/close.svg" alt=""/>
-        </button>
+        <!--        <button class="InterfaceTextWindow__close" @click="active = !active">-->
+        <!--            <img src="/svg/close.svg" alt=""/>-->
+        <!--        </button>-->
         <div class="InterfaceTextWindow__container">
             <p
                 class="InterfaceTextWindow__text InterfaceTextWindow__text_dimension"

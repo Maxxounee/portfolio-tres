@@ -152,7 +152,7 @@ onMounted(async () => {
 
     animations.push(emissiveBlinkingPlay);
 
-
+    /* TODO аудио */
     const listener = new THREE.AudioListener();
     const loader = new THREE.AudioLoader();
 
@@ -163,18 +163,17 @@ onMounted(async () => {
         (buffer) => {
             const sound = new THREE.PositionalAudio(listener);
             const target = carNodes['car_05'];
-            console.log(target);
+
             sound.setBuffer(buffer);
             sound.setLoop(true);
-            sound.setVolume(0.6);
-            sound.setRefDistance(20);
-            sound.setRolloffFactor(1.5);
-            sound.setDistanceModel('exponential');
+            sound.setVolume(0.5);
+            sound.setRefDistance(15);
+            sound.setRolloffFactor(1);
+            sound.setDistanceModel('inverse');
 
             target.add(sound);
             audio.value = sound;
             // audio.value.play();
-            // bladesAudio.value = sound
         }
     );
 

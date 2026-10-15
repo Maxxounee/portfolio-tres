@@ -20,7 +20,7 @@ watch(() => mainStore.musicOn, (value) => {
 onMounted(() => {
     music = new Audio(getStaticLink('/audio/evening_cafe.mp3'));
     music.loop = true;
-    music.volume = 0.3;
+    music.volume = 0.2;
 });
 </script>
 <style scoped lang="scss">
