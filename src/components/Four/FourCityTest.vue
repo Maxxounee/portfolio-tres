@@ -17,7 +17,7 @@
 </template>
 <script setup lang="ts">
 import * as THREE from 'three';
-import { shallowRef, onMounted, onBeforeUnmount, watch } from 'vue';
+import { shallowRef, onMounted, watch } from 'vue';
 import { useLoop, useTres } from '@tresjs/core';
 import instancesData from '@/config/four/scene.json';
 import pLimit from "p-limit";
@@ -33,6 +33,7 @@ import { getStaticLink } from "@/utils";
 import { useCityStore } from "@/store/city.ts";
 import { createAnimatedModel } from "@/utils/four/createAnimatedModel.ts";
 import { useMainStore } from "@/store/main.ts";
+import { loadEnvAudio } from "@/utils/four/loadEnvAudio.ts";
 
 const emit = defineEmits(['loaded']);
 
@@ -46,6 +47,7 @@ const animatedChars = shallowRef<THREE.Object3D[]>([]);
 const animatedCars = shallowRef<THREE.Object3D[]>([]);
 const mixers: THREE.AnimationMixer[] = [];
 const { camera } = useTres();
+const audio = shallowRef<THREE.PositionalAudio | null>(null);
 
 async function buildModel(modelName: string, configItems: SceneJson[string], result: CityBuildResult): Promise<void> {
     const link = getStaticLink(`/3d/glb/${modelName}.glb`);
@@ -120,9 +122,6 @@ async function buildScene(): Promise<CityBuildResult> {
 }
 
 
-const audio = shallowRef<THREE.PositionalAudio | null>(null);
-
-
 watch(() => mainStore.musicOn, (value) => {
     if (!audio.value) {
         return;
@@ -134,13 +133,14 @@ watch(() => mainStore.musicOn, (value) => {
         audio.value?.pause();
     }
 });
+
 onMounted(async () => {
     const result = await buildScene();
+
     instancedMeshes.value = result.instancedMeshes;
     animatedChars.value = result.animatedChars;
     animatedCars.value = result.animatedCars;
     mixers.push(...result.mixers);
-
 
     const carNodes: Record<string, THREE.Object3D> = {};
 
@@ -154,30 +154,16 @@ onMounted(async () => {
 
     emit('loaded', { nodes: carNodes });
 
-    /* TODO аудио */
-    const listener = new THREE.AudioListener();
-    const loader = new THREE.AudioLoader();
+    if (camera.value instanceof THREE.Camera) {
+        /* TODO доделать loadEnvAudio */
+        loadEnvAudio({ target: carNodes['car_05'] }).then(({ listener, audio: _audio }) => {
+            camera.value!.add(listener);
+            audio.value = _audio;
+        });
+    } else {
+        console.error('LoadEnvAudio: camera.value undefined');
+    }
 
-    camera.value?.add(listener);
-
-    loader.load(
-        getStaticLink('/audio/env/helicopter.mp3'),
-        (buffer) => {
-            const sound = new THREE.PositionalAudio(listener);
-            const target = carNodes['car_05'];
-
-            sound.setBuffer(buffer);
-            sound.setLoop(true);
-            sound.setVolume(0.5);
-            sound.setRefDistance(15);
-            sound.setRolloffFactor(1);
-            sound.setDistanceModel('inverse');
-
-            target.add(sound);
-            audio.value = sound;
-            // audio.value.play();
-        }
-    );
 
 });
 
@@ -187,12 +173,5 @@ onBeforeRender((ctx) => {
     for (const mixer of mixers) {
         mixer.update(ctx.delta);
     }
-});
-
-onBeforeUnmount(() => {
-    for (const mixer of mixers) {
-        mixer.stopAllAction();
-    }
-    mixers.length = 0;
 });
 </script>
