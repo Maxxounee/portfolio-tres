@@ -1,5 +1,7 @@
 import * as THREE from 'three';
 import type { InstanceItem } from './types';
+import { collectMixerAnimations } from "@/utils/four/collectMixerAnimations.ts";
+import type { GLTF } from "three/examples/jsm/loaders/GLTFLoader.js";
 
 function applyInstances(mesh: THREE.InstancedMesh, items: InstanceItem[]): void {
     const matrix = new THREE.Matrix4();
@@ -22,12 +24,15 @@ function applyInstances(mesh: THREE.InstancedMesh, items: InstanceItem[]): void 
     mesh.computeBoundingSphere();
 }
 
-export function buildInstancedMeshes(
-    scene: THREE.Object3D & { custom_model_name: string }, items: InstanceItem[]
-): THREE.InstancedMesh[] {
+export function buildInstancedMeshes(gltf: GLTF, items: InstanceItem[]): {
+    instances: THREE.InstancedMesh[],
+    mixer: THREE.AnimationMixer | null
+} {
     const sourceMeshes: THREE.Mesh[] = [];
 
-    scene.traverse((obj) => {
+    const scene: THREE.Object3D = gltf.scene;
+
+    gltf.scene.traverse((obj: THREE.Mesh | THREE.Object3D) => {
         if (obj instanceof THREE.Mesh) {
             sourceMeshes.push(obj);
         }
@@ -35,7 +40,7 @@ export function buildInstancedMeshes(
 
     if (sourceMeshes.length === 0) {
         console.warn('instancing. sourceMeshes.length === 0');
-        return [];
+        return { instances: [], mixer: null };
     }
 
     const result: THREE.InstancedMesh[] = [];
@@ -47,9 +52,9 @@ export function buildInstancedMeshes(
             items.length,
         );
 
-        inst.custom_model_name = scene.custom_model_name;
+        inst.userData.modelName = scene.userData.modelName;
 
-        if (scene.custom_model_name.startsWith('building')) {
+        if (scene.userData.modelName.startsWith('building')) {
             inst.castShadow = true;
             inst.receiveShadow = true;
         } else {
@@ -62,5 +67,7 @@ export function buildInstancedMeshes(
         result.push(inst);
     }
 
-    return result;
+    const mixer = collectMixerAnimations(gltf.animations, scene);
+
+    return { instances: result, mixer };
 }

@@ -12,6 +12,7 @@
         "build:ci": "vite build"
     },
     "dependencies": {
+        "@needle-tools/three-animation-pointer": "^1.1.3",
         "@tailwindcss/vite": "^4.1.11",
         "@tresjs/cientos": "^5.9.3",
         "@tresjs/core": "^5.9.3",

@@ -79,14 +79,6 @@ function init(cityNodes) {
     const staticConfig = cityConfig.cameraMode.static;
     const forwardConfig = cityConfig.cameraMode.forward;
 
-    const applySetter = (conf: cityConfig.CityViewStaticOrForward): void => {
-        conf.apply = () => cityStore.setView(conf);
-    };
-
-    const getStaticValues = (conf): cityConfig.CityViewStaticArg => {
-        applySetter(conf);
-        return { ...conf };
-    };
 
     const getForwardValues = (conf): cityConfig.CityViewForwardArg => {
         const obj = cityNodes[conf.modelName];
@@ -98,25 +90,24 @@ function init(cityNodes) {
         return { ...conf, obj };
     };
 
+    const handleConfigItem = (item) => {
+        if (item.pos && item.target) {
+            return new cityConfig.CityViewStatic(item);
+        } else if (item.modelName) {
+            return new cityConfig.CityViewForward(getForwardValues(item));
+        } else {
+            console.warn('[fourWrapper.handleConfigItem] вронг айтем');
+        }
+    };
+
     const arr: cityConfig.CityViewStaticOrForward[] = [
-        new cityConfig.CityViewStatic({
-            ...getStaticValues(staticConfig.welcome),
-        }),
-        new cityConfig.CityViewStatic({
-            ...getStaticValues(staticConfig.tech),
-        }),
-        new cityConfig.CityViewStatic({
-            ...getStaticValues(staticConfig.works),
-        }),
-        new cityConfig.CityViewForward({
-            ...getForwardValues(forwardConfig.about),
-        }),
-        new cityConfig.CityViewStatic({
-            ...getStaticValues(staticConfig.repo),
-        }),
-        new cityConfig.CityViewForward({
-            ...getForwardValues(forwardConfig.contacts),
-        }),
+        handleConfigItem(staticConfig.test),
+        handleConfigItem(staticConfig.welcome),
+        handleConfigItem(staticConfig.tech),
+        handleConfigItem(staticConfig.works),
+        handleConfigItem(forwardConfig.about),
+        handleConfigItem(staticConfig.repo),
+        handleConfigItem(forwardConfig.contacts),
     ];
 
     arr.forEach((item) => {
@@ -126,16 +117,7 @@ function init(cityNodes) {
     cityStore.pushCityViewObjects(arr);
 
     arr[0].apply();
-
-    if (cameraRef.value) {
-        // cameraRef.value.setView(arr[0]);
-        // cityStore.setView(cameraRef.value.setView(arr[0]));
-    }
 }
-
-const setCameraView = (configIndex: number): void => {
-    cameraRef.value.setView(cityStore.cityViewObjects[configIndex]);
-};
 </script>
 <style scoped lang="scss">
 .FourWrapper {

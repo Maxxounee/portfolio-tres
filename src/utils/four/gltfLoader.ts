@@ -1,6 +1,8 @@
 import { GLTFLoader, type GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { GLTFAnimationPointerExtension } from "@needle-tools/three-animation-pointer";
 
 const loader = new GLTFLoader();
+loader.register((parser) => new GLTFAnimationPointerExtension(parser));
 const cache = new Map<string, Promise<GLTF>>();
 
 function loadGLBUncached(url: string): Promise<GLTF> {
@@ -22,6 +24,6 @@ export function loadGLB(url: string): Promise<GLTF> {
     return cache.get(url)!;
 }
 
-export function loadCityModel(url: string,): Promise<GLTF & { scene: { custom_model_name?: string } }> {
+export function loadCityModel(url: string,): Promise<GLTF> {
     return loadGLB(url);
 }

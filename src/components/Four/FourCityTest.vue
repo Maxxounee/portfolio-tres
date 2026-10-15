@@ -24,20 +24,20 @@ import pLimit from "p-limit";
 
 import {
     buildInstancedMeshes,
-    loadAnimatedSkeleton,
+    createAnimatedSkeleton,
     loadCityModel,
     type SceneJson,
     type CityBuildResult,
 } from '@/utils/four';
 import { getStaticLink } from "@/utils";
 import { useCityStore } from "@/store/city.ts";
-import { collectAnimations } from "@/utils/four/animate.ts";
-import { loadAnimatedModel } from "@/utils/four/loadAnimatedModel.ts";
+import { createAnimatedModel } from "@/utils/four/createAnimatedModel.ts";
 import { useMainStore } from "@/store/main.ts";
 
 const emit = defineEmits(['loaded']);
 
 const cityStore = useCityStore();
+const mainStore = useMainStore();
 
 const data = instancesData as SceneJson;
 
@@ -51,34 +51,42 @@ async function buildModel(modelName: string, configItems: SceneJson[string], res
     const link = getStaticLink(`/3d/glb/${modelName}.glb`);
     const gltf = await loadCityModel(link);
 
-    gltf.scene.custom_model_name = modelName;
+    gltf.scene.userData.modelName = modelName;
 
     if (modelName.startsWith('char')) {
-        const { clone, mixer } = loadAnimatedSkeleton(gltf, configItems[0]);
+        const { model, mixer } = createAnimatedSkeleton(gltf, configItems[0]);
 
-        result.animatedChars.push(clone);
-        result.mixers.push(mixer);
+        result.animatedChars.push(model);
+
+        if (mixer) {
+            result.mixers.push(mixer);
+        }
 
         return;
-    }
+    } else if (modelName.startsWith('car')) {
+        const { model, mixer } = createAnimatedModel(gltf);
 
-
-    if (modelName.startsWith('car')) {
-        const model = loadAnimatedModel(gltf, result);
         result.animatedCars.push(model);
 
+        if (mixer) {
+            result.mixers.push(mixer);
+        }
+
         return;
+    } else {
+        const { instances, mixer } = buildInstancedMeshes(gltf, configItems);
+
+        if (mixer) {
+            result.mixers.push(mixer);
+        }
+
+        if (instances.length === 0) {
+            console.warn(`[City] No meshes in ${modelName}.glb`);
+            return;
+        }
+
+        result.instancedMeshes.push(...instances);
     }
-
-
-    const instances = buildInstancedMeshes(gltf.scene, configItems);
-
-    if (instances.length === 0) {
-        console.warn(`[City] No meshes in ${modelName}.glb`);
-        return;
-    }
-
-    result.instancedMeshes.push(...instances);
 }
 
 async function buildScene(): Promise<CityBuildResult> {
@@ -111,11 +119,9 @@ async function buildScene(): Promise<CityBuildResult> {
     return result;
 }
 
-const animations: Function[] = [];
+
 const audio = shallowRef<THREE.PositionalAudio | null>(null);
 
-
-const mainStore = useMainStore();
 
 watch(() => mainStore.musicOn, (value) => {
     if (!audio.value) {
@@ -139,7 +145,7 @@ onMounted(async () => {
     const carNodes: Record<string, THREE.Object3D> = {};
 
     for (const obj of result.animatedCars) {
-        const name = obj.custom_model_name;
+        const name = obj.userData.modelName;
 
         if (name) {
             carNodes[name] = obj;
@@ -147,10 +153,6 @@ onMounted(async () => {
     }
 
     emit('loaded', { nodes: carNodes });
-
-    const { emissiveBlinkingPlay } = collectAnimations(result.instancedMeshes);
-
-    animations.push(emissiveBlinkingPlay);
 
     /* TODO аудио */
     const listener = new THREE.AudioListener();
@@ -185,10 +187,6 @@ onBeforeRender((ctx) => {
     for (const mixer of mixers) {
         mixer.update(ctx.delta);
     }
-
-    animations.forEach((animation) => {
-        animation(ctx);
-    });
 });
 
 onBeforeUnmount(() => {

@@ -42,12 +42,12 @@
     <!--    />-->
     <TresObject3D
         ref="billboardTarget"
-        :position="[-4, 1.6, -4.2]"
+        :position="[-4, -2.6, -4.6]"
     />
     <TresSpotLight
         v-if="billboardTarget"
         ref="billboard"
-        :position="[-4, 2.9, -6]"
+        :position="[-4, 3.6, -6]"
         :intensity="10"
         :target="billboardTarget"
         :color="0xfadd07"
@@ -80,10 +80,10 @@
     <!--        :ground-color="0xffe8c4"-->
     <!--        :intensity="1"-->
     <!--    />-->
-    <TransformControls
-        v-if="debug"
-        :object="breaking"
-    />
+    <!--    <TransformControls-->
+    <!--        v-if="debug"-->
+    <!--        :object="billboardTarget"-->
+    <!--    />-->
     <TresHemisphereLight
         :color="0xffffff"
         :ground-color="0xffffff"
@@ -101,7 +101,7 @@ const billboardTarget = ref();
 const breaking = ref();
 const breakingTarget = ref();
 
-const debug = false;
+const debug = true;
 
 if (debug) {
     watch(() => billboard.value?.position, () => {

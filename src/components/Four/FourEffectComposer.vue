@@ -12,11 +12,11 @@
             <ColorAveragePmndrs
                 v-if="mainStore.noirMode"
             />
-            <ScanlinePmndrs
-                :density="3"
-                :opacity="0.3"
-                :scroll-speed="0.01"
-            />
+            <!--            <ScanlinePmndrs-->
+            <!--                :density="3"-->
+            <!--                :opacity="0.3"-->
+            <!--                :scroll-speed="0.01"-->
+            <!--            />-->
             <BloomPmndrs
                 :strength="0.6"
                 :radius="0.7"

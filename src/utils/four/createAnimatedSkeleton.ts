@@ -2,11 +2,12 @@ import * as THREE from 'three';
 import * as SkeletonUtils from 'three/examples/jsm/utils/SkeletonUtils.js';
 import type { GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import type { InstanceItem } from './types';
+import { collectMixerAnimations } from "@/utils/four/collectMixerAnimations.ts";
 
-export function loadAnimatedSkeleton(
-    gltf: GLTF,
-    item: InstanceItem,
-): { clone: THREE.Object3D; mixer: THREE.AnimationMixer } {
+export function createAnimatedSkeleton(gltf: GLTF, item: InstanceItem): {
+    model: THREE.Object3D;
+    mixer: THREE.AnimationMixer | null
+} {
     const clone = SkeletonUtils.clone(gltf.scene);
 
     clone.position.set(...item.position);
@@ -20,13 +21,7 @@ export function loadAnimatedSkeleton(
         }
     });
 
-    const mixer = new THREE.AnimationMixer(clone);
+    const mixer = collectMixerAnimations(gltf.animations, clone);
 
-    for (const clip of gltf.animations) {
-        const action = mixer.clipAction(clip);
-        action.setLoop(THREE.LoopRepeat, Infinity);
-        action.play();
-    }
-
-    return { clone, mixer };
+    return { model: clone, mixer };
 }

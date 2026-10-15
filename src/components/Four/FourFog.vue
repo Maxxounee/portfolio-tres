@@ -1,11 +1,11 @@
 <template>
     <Precipitation
         :count="2000"
-        :speed="5.3"
+        :speed="3.3"
         :randomness="0"
-        :size="0.02"
-        :area="[30, 30, 30]"
-        color="#aaccff"
+        :size="0.01"
+        :area="[30, 20, 30]"
+        color="#ffffff"
         :opacity="0.3"
     />
     <Stars/>

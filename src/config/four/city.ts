@@ -179,6 +179,21 @@ export const cameraMode = {
             },
         },
 
+        test: {
+            /** fov 70 */
+            // pos: new THREE.Vector3(-6.486, 0.907, -6.873),
+            // target: new THREE.Vector3(-5.699, 0.976, -5.389),
+
+            /** fov 30 */
+            pos: new THREE.Vector3(5.366, 2.361, 13.546),
+            target: new THREE.Vector3(14.888, -1.937, -3.178),
+            html: {
+                button: 'TEST',
+                title: '',
+                text: `TEST`
+            },
+        },
+
     },
     forward: {
         about: {
