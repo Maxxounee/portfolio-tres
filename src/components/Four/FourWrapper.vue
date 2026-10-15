@@ -36,6 +36,7 @@
         <!--        </TresCanvas>-->
         <!-- interface -->
         <InterfaceWrapper/>
+        <InterfaceAudio/>
         <InterfacePreloader
             v-if="!isDev"
         />
@@ -61,6 +62,7 @@ import { useMainStore } from "@/store/main";
 import FourCityTest from "@/components/Four/FourCityTest.vue";
 import InterfaceWrapper from "@/components/Interface/InterfaceWrapper.vue";
 import InterfacePreloader from "@/components/Interface/InterfacePreloader.vue";
+import InterfaceAudio from "@/components/Interface/InterfaceAudio.vue";
 
 
 const mainStore = useMainStore();

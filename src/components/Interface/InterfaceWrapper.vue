@@ -27,6 +27,11 @@
                 class="InterfaceWrapper__noir"
                 @click="() => mainStore.toggleTextMode()"
             />
+            <InterfaceButtonsItem
+                :text="musicModeText"
+                class="InterfaceWrapper__music"
+                @click="() => mainStore.toggleMusicMode()"
+            />
         </div>
     </div>
 </template>
@@ -43,6 +48,9 @@ const noirModeText = computed(() => {
 });
 const noTextModeText = computed(() => {
     return mainStore.noTextMode ? 'Hide text: on' : 'Hide text: off';
+});
+const musicModeText = computed(() => {
+    return mainStore.musicOn ? 'Sound: on' : 'Sound: off';
 });
 </script>
 <style lang="scss">
