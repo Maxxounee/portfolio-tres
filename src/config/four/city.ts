@@ -106,8 +106,13 @@ export const links = {
 export const cameraMode = {
     static: {
         welcome: {
-            pos: new THREE.Vector3(-10.643, 6.291, 11.951),
-            target: new THREE.Vector3(-0.09, -1.633, 0.012),
+            /** fov 70 */
+            // pos: new THREE.Vector3(-10.643, 6.291, 11.951),
+            // target: new THREE.Vector3(-0.09, -1.633, 0.012),
+
+            /** fov 30*/
+            pos: new THREE.Vector3(-30.529, 17.913, 31.163),
+            target: new THREE.Vector3(0, 0, 0),
             html: {
                 button: 'HELLO WORLD!',
                 title: '',
@@ -119,8 +124,14 @@ export const cameraMode = {
             },
         },
         tech: {
-            pos: new THREE.Vector3(-4.206, 2.077, 5.171),
-            target: new THREE.Vector3(-2.826, 1.215, 3.9),
+            /* fov 70 */
+            // pos: new THREE.Vector3(-4.206, 2.077, 5.171),
+            // target: new THREE.Vector3(-2.826, 1.215, 3.9),
+
+            /* fov 30 */
+            pos: new THREE.Vector3(-1.534, 1.845, 10.323),
+            target: new THREE.Vector3(-2.966, 1.046, -0.772),
+
             html: {
                 button: 'TECHNOLOGY',
                 title: '',
@@ -138,8 +149,13 @@ export const cameraMode = {
             },
         },
         works: {
-            pos: new THREE.Vector3(-1.691, 1.681, 1.753),
-            target: new THREE.Vector3(1.863, 0.583, 0.227),
+            /** fov 70 */
+            // pos: new THREE.Vector3(-1.691, 1.681, 1.753),
+            // target: new THREE.Vector3(1.863, 0.583, 0.227),
+
+            /** fov 30 */
+            pos: new THREE.Vector3(-3.213, 1.445, 6.069),
+            target: new THREE.Vector3(0.29, 1.449, -0.071),
             html: {
                 button: 'РАБОТЫ',
                 title: '',
@@ -148,8 +164,13 @@ export const cameraMode = {
             },
         },
         repo: {
-            pos: new THREE.Vector3(-6.486, 0.907, -6.873),
-            target: new THREE.Vector3(-5.699, 0.976, -5.389),
+            /** fov 70 */
+            // pos: new THREE.Vector3(-6.486, 0.907, -6.873),
+            // target: new THREE.Vector3(-5.699, 0.976, -5.389),
+
+            /** fov 30 */
+            pos: new THREE.Vector3(-10.962, 0.211, -9.108),
+            target: new THREE.Vector3(-5.609, 0.677, 0.737),
             html: {
                 button: 'GITHUB',
                 title: '',
@@ -169,10 +190,19 @@ export const cameraMode = {
             },
             modelName: 'car_00',
             obj: undefined,
-            followDistance: 0.3,
-            followHeight: 0.3,
-            followLookAtHeight: 0.1,
+
             dirSmoothing: 0.1,
+
+            /* fov 70 */
+            // followDistance: 0.3,
+            // followHeight: 0.3,
+            // followLookAtHeight: 0.1,
+
+            /* fov 30 */
+            followDistance: 1,
+            followHeight: 0.4,
+            followLookAtHeight: 0,
+            sideOffset: 0.5,
         },
         contacts: {
             html: {
@@ -183,10 +213,19 @@ export const cameraMode = {
             },
             modelName: 'car_05',
             obj: undefined,
-            followDistance: -0.3,
-            followHeight: 1.1,
-            followLookAtHeight: -1.5,
             dirSmoothing: 0.1,
+
+            /** fov 70 */
+            // followDistance: -0.3,
+            // followHeight: 1.1,
+            // followLookAtHeight: -1.5,
+            // sideOffset: 1,
+            // followAngle: -70,
+
+            /** fov 30*/
+            followDistance: -0.3,
+            followHeight: 3,
+            followLookAtHeight: 0,
             sideOffset: 1,
             followAngle: -70,
         },

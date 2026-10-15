@@ -1,10 +1,16 @@
 <template>
     <TresPerspectiveCamera
         ref="cameraRef"
-        :fov="75"
+        :fov="30"
         :near="0.1"
         :far="1000"
     />
+    <!--    <TresOrthographicCamera-->
+    <!--        ref="cameraRef"-->
+    <!--        :fov="75"-->
+    <!--        :near="0.1"-->
+    <!--        :far="1000"-->
+    <!--    />-->
 </template>
 <script setup lang="ts">
 import { useLoop } from '@tresjs/core';

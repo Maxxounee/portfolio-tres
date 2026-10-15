@@ -1,7 +1,7 @@
 <template>
     <div
         class="InterfaceTextWindow"
-        :class="{ active }"
+        :class="{ active: realActive }"
     >
         <button class="InterfaceTextWindow__close" @click="active = !active">
             <img src="/svg/close.svg" alt=""/>
@@ -25,14 +25,18 @@
     </div>
 </template>
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { Texter } from "@/utils/utils.ts";
 import { useCityStore } from "@/store/city.ts";
 import { storeToRefs } from "pinia";
+import { useMainStore } from "@/store/main.ts";
 
 const props = defineProps<{}>();
-
+const mainStore = useMainStore();
 const active = ref(true);
+const realActive = computed(() => {
+    return active.value && !mainStore.noTextMode;
+});
 
 const { currentView, isLoaded } = storeToRefs(useCityStore());
 const { nextView } = useCityStore();

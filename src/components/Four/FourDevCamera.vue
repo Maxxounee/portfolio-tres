@@ -1,7 +1,7 @@
 <template>
     <TresPerspectiveCamera
         ref="cameraRef"
-        :fov="75"
+        :fov="20"
         :near="0.1"
         :far="1000"
     />

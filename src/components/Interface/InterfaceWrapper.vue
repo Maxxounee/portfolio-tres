@@ -16,11 +16,18 @@
             ref="textWindow"
         />
         <InterfaceButtonsWrapper/>
-        <InterfaceButtonsItem
-            :text="noirModeText"
-            class="InterfaceWrapper__noir"
-            @click="() => mainStore.toggleNoirMode()"
-        />
+        <div class="InterfaceWrapper__func">
+            <InterfaceButtonsItem
+                :text="noirModeText"
+                class="InterfaceWrapper__noir"
+                @click="() => mainStore.toggleNoirMode()"
+            />
+            <InterfaceButtonsItem
+                :text="noTextModeText"
+                class="InterfaceWrapper__noir"
+                @click="() => mainStore.toggleTextMode()"
+            />
+        </div>
     </div>
 </template>
 <script setup lang="ts">
@@ -34,6 +41,9 @@ const mainStore = useMainStore();
 const noirModeText = computed(() => {
     return mainStore.noirMode ? 'Noir Mode: on' : 'Noir Mode: off';
 });
+const noTextModeText = computed(() => {
+    return mainStore.noTextMode ? 'Hide text: on' : 'Hide text: off';
+});
 </script>
 <style lang="scss">
 .InterfaceWrapper {
@@ -41,11 +51,15 @@ const noirModeText = computed(() => {
     @include flexColumn(center, center);
     pointer-events: none;
 
-
-    &__noir {
+    &__func {
+        @include flexColumn(end);
+        gap: 2rem;
         position: absolute;
         top: var(--T);
         right: var(--R);
+    }
+
+    &__noir {
     }
 }
 </style>
