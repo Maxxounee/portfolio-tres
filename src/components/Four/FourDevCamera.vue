@@ -5,7 +5,7 @@
         :near="0.1"
         :far="1000"
     />
-    <OrbitControls ref="controlsRef"/>
+    <OrbitControls ref="controlsRef" make-default/>
 </template>
 <script setup lang="ts">
 import { OrbitControls } from '@tresjs/cientos';

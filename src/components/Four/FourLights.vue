@@ -32,6 +32,30 @@
         :position="[-6, 3 ,-6]"
         :intensity="3"
     />
+    <!--        <TresPointLight v-light-helper :intensity="3" />-->
+    <!--    <TresPointLight-->
+    <!--        ref="target"-->
+    <!--        v-light-helper-->
+    <!--        :position="[-4, 3 ,-5]"-->
+    <!--        :intensity="3"-->
+    <!--        :color="0xfadd07"-->
+    <!--    />-->
+    <TresObject3D
+        ref="billboardTarget"
+        :position="[-4, 1.6, -4.2]"
+    />
+    <TresSpotLight
+        v-if="billboardTarget"
+        ref="billboard"
+        :position="[-4, 2.9, -6]"
+        :intensity="10"
+        :target="billboardTarget"
+        :width="4"
+        :height="2"
+        :color="0xfadd07"
+        :distance="10"
+        cast-shadow
+    />
     <!--    <TresPointLightHelper/>-->
     <!--    <TresDirectionalLight-->
     <!--        :position="[-20, 10, -20]"-->
@@ -44,6 +68,10 @@
     <!--        :ground-color="0xffe8c4"-->
     <!--        :intensity="1"-->
     <!--    />-->
+    <TransformControls
+        v-if="debug"
+        :object="billboardTarget"
+    />
     <TresHemisphereLight
         :color="0xffffff"
         :ground-color="0xffffff"
@@ -51,4 +79,22 @@
     />
 </template>
 <script setup lang="ts">
+import { vLightHelper } from '@tresjs/core';
+import { TransformControls } from '@tresjs/cientos';
+import { nextTick, onMounted, ref, shallowRef, watch } from "vue";
+
+const billboard = ref();
+const billboardTarget = ref();
+
+const debug = false;
+
+if (debug) {
+    watch(() => billboard.value?.position, () => {
+        console.log(billboard.value.position);
+    }, { deep: true },);
+
+    watch(() => billboardTarget.value?.position, () => {
+        console.log(billboardTarget.value.position);
+    }, { deep: true },);
+}
 </script>
