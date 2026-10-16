@@ -41,8 +41,9 @@
 
 
 @font-face {
-    font-family: 'KULAG_SHA';
-    src: url('@/assets/fonts/KULAG_SHA.otf') format('opentype');
+    font-family: 'KULAG';
     font-style: normal;
     font-display: swap;
+    font-weight: 400;
+    src: url('@/assets/fonts/kulag/kulag.woff2') format('woff2');
 }

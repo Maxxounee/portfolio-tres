@@ -110,7 +110,7 @@ watch([currentView, isLoaded], async () => {
     }
 
     &__text {
-        @include fontIgra(4rem);
+        //@include fontIgra(4rem);
         color: var(--BLACK);
         //color: var(--WHITE);
 

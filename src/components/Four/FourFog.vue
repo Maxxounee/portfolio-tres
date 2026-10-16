@@ -8,7 +8,7 @@
         color="#ffffff"
         :opacity="0.3"
     />
-    <Stars/>
+    <Stars ref="starsRef"/>
 </template>
 <script setup lang="ts">
 import * as THREE from 'three';
@@ -17,45 +17,61 @@ import * as cityConfig from "@/config/four/city";
 import { Precipitation, Stars } from "@tresjs/cientos";
 import { gsap } from "gsap";
 import type { Ref } from "vue";
-import { onMounted } from "vue";
+import { nextTick, onMounted, shallowRef, watch } from "vue";
+import { useMainStore } from "@/store/main.ts";
 
 const { scene, camera } = useTres();
 const { onBeforeRender } = useLoop();
 
-// const baseFogFar = 10;
+const starsRef = shallowRef();
 const baseFogFar = 90;
-const startColor = new THREE.Color(cityConfig.colors.backgroundStart);
-const endColor = new THREE.Color(cityConfig.colors.backgroundEnd);
+const nightColor = new THREE.Color(cityConfig.colors.backgroundNight);
+const dayColor = new THREE.Color(cityConfig.colors.backgroundDay);
 const fogColor = new THREE.Color(cityConfig.colors.fog);
 const fog = new THREE.Fog(fogColor, 0, baseFogFar);
 
 scene.value.fog = fog;
-scene.value.background = new THREE.Color(startColor);
+scene.value.background = nightColor.clone();
+const mainStore = useMainStore();
 
-function animateBackground(scene: Ref<THREE.Scene>, start: THREE.Color, end: THREE.Color) {
+function toggleBackground(isDay) {
+    const startColor = isDay ? nightColor : dayColor;
+    const endColor = isDay ? dayColor : nightColor;
     const progress = { value: 0 };
-    // gsap.to(progress, {
-    //     value: 1,
-    //     repeat: -1,
-    //     yoyo: true,
-    //     duration: 10,
-    //     ease: 'none',
-    //     onUpdate: () => {
-    //         scene.value.background.lerpColors(start, end, progress.value);
-    //         scene.value.fog.color.copy(scene.value.background);
-    //     }
-    // });
+
+
+    gsap.to(progress, {
+        value: 1,
+        duration: 1,
+        ease: 'power2.inOut',
+        onUpdate: () => {
+            (scene.value.background as THREE.Color).lerpColors(
+                startColor,
+                endColor,
+                progress.value,
+            );
+        },
+    });
 }
 
-onBeforeRender((ctx) => {
-    if (!camera.value?.position) return;
-
-    const heightFactor = camera.value.position.y;
-    // fog.far = baseFogFar + (heightFactor ** 1.5) * 5;
+watch(() => mainStore.dayMode, (value) => {
+    toggleBackground(value);
 });
 
-onMounted(() => {
-    animateBackground(scene, startColor, endColor);
+onMounted(async () => {
+
+    const stars = starsRef.value as any;
+    const points = stars?.instance as THREE.Points | undefined;
+
+    if (!points) {
+        console.warn('[FourFog.onMounted] Points не найдены');
+        return;
+    }
+
+    const mat = points.material as THREE.PointsMaterial;
+    mat.fog = false;
+    mat.needsUpdate = true;
+
 });
 </script>
 <style lang="scss" scoped>

@@ -3,16 +3,9 @@
         class="InterfaceTextWindowNew"
         :class="{ active: realActive }"
     >
-        <!--        <button class="InterfaceTextWindowNew__close" @click="active = !active">-->
-        <!--            <img src="/svg/close.svg" alt=""/>-->
-        <!--        </button>-->
         <div class="InterfaceTextWindowNew__container">
             <p class="InterfaceTextWindowNew__title" v-html="title">
             </p>
-            <!--            <p-->
-            <!--                class="InterfaceTextWindowNew__text InterfaceTextWindowNew__text_dimension"-->
-            <!--                v-html="text"-->
-            <!--            ></p>-->
             <p
                 class="InterfaceTextWindowNew__text InterfaceTextWindowNew__text_visible"
                 v-html="text"
@@ -27,67 +20,56 @@
     </div>
 </template>
 <script setup lang="ts">
-import { computed, ref, watch } from "vue";
-import { Texter } from "@/utils/utils.ts";
-import { useCityStore } from "@/store/city.ts";
-import { storeToRefs } from "pinia";
-import { useMainStore } from "@/store/main.ts";
+import { computed, ref, watch } from 'vue';
+import { useCityStore } from '@/store/city.ts';
+import { useMainStore } from '@/store/main.ts';
 
-const props = defineProps<{}>();
 const mainStore = useMainStore();
-const active = ref(true);
+const cityStore = useCityStore();
+
+const active = ref(false);
+const text = ref('');
+const title = ref('');
+
+let timeout: ReturnType<typeof setTimeout> | null = null;
+
 const realActive = computed(() => {
     return active.value && !mainStore.noTextMode;
 });
 
-const { currentView, isLoaded } = storeToRefs(useCityStore());
-const { nextView } = useCityStore();
+watch(
+    [
+        () => cityStore.currentView,
+        () => cityStore.isLoaded,
+        () => mainStore.preloaderHidden
+    ],
+    ([view, loaded, preloader]) => {
+        if (!loaded || !preloader) return;
+        if (!view) return;
 
-const text = ref('');
-const title = ref('');
-// const title = computed(() => {
-//     return currentView.value?.html.title;
-// });
-//
-// const text = computed(() => {
-//     return currentView.value?.html.text;
-// });
+        if (timeout) clearTimeout(timeout);
+        active.value = false;
 
-const animated = ref('');
-let timeout = null;
+        timeout = setTimeout(() => {
+            text.value = view.html.text ?? '';
+            title.value = view.html.title ?? '';
+            active.value = true;
+        }, 1000);
+    },
+    { immediate: true },
+);
 
 watch(() => mainStore.noTextMode, (value) => {
-    if (value) {
-        active.value = true;
-    }
-});
-watch([currentView, isLoaded], async () => {
-    if (!isLoaded) {
-        return;
-    }
-
-    active.value = false;
-
-    clearTimeout(timeout);
-
-    timeout = setTimeout(() => {
-        text.value = currentView.value.html.text ?? '';
-        //
-        const texter = new Texter({ str: text.value });
-        //
-        texter.play((value) => animated.value = value);
-        // text.value = currentView.value.html.text ?? '';
-        title.value = currentView.value.html.title ?? '';
-        active.value = true;
-    }, 1000);
-
-
-});
+        if (value) {
+            timeout && clearTimeout(timeout);
+        }
+    },
+);
 </script>
 <style lang="scss">
 .InterfaceTextWindowNew {
     @include div100;
-    pointer-events: auto;
+    pointer-events: none;
     color: var(--ORANGE);
     perspective: 1200px;
     opacity: 0;
@@ -128,6 +110,7 @@ watch([currentView, isLoaded], async () => {
     }
 
     &__text {
+        pointer-events: auto;
         //@include fontIgra(7rem);
         //@include size(100%);
         @include fontKulag(5rem);

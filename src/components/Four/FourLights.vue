@@ -108,7 +108,7 @@ const billboardTarget = ref();
 const breaking = ref();
 const breakingTarget = ref();
 
-const debug = true;
+const debug = false;
 
 if (debug) {
     watch(() => billboard.value?.position, () => {
@@ -145,7 +145,7 @@ function toggleLight(isDay = false) {
             intensity: 0.7,
             position: {
                 x: 1,
-                y: 16,
+                y: 26,
                 z: -20
             }
         },

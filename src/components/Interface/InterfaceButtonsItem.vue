@@ -7,25 +7,19 @@
     </button>
 </template>
 <script setup lang="ts">
-const props = defineProps({
-    text: '',
-    active: true
-});
+const props = defineProps<{
+    text?: string
+    active?: boolean
+}>();
 </script>
 <style scoped lang="scss">
-@keyframes slide {
-    0% {
-        left: -100%;
-    }
-    100% {
-        left: 100%;
-    }
-}
-
 .InterfaceButtonsItem {
     @include flex(center);
     @include size(16rem, 6rem);
-    @include fontIgra(2rem);
+    @include fontKulag(3rem);
+    --lr-padding: 2rem;
+    --width: 21rem;
+    --inner-width: calc(var(--width) - var(--lr-padding) * 2);
 
     pointer-events: auto;
     background-color: var(--BLACK);
@@ -34,47 +28,20 @@ const props = defineProps({
     outline: 3px solid Var(--BLACK);
     box-shadow: 6px 6px 0 var(--DIALOGUE);
     transition: all 0.1s ease-out;
-    padding: 0 2rem;
+    padding: 0 var(--lr-padding) 0.6rem;
     overflow: hidden;
-    width: 25rem;
+    width: var(--width);
     white-space: nowrap;
-
-
-    &::before {
-        //content: "";
-        //position: absolute;
-        //top: 0;
-        //left: -100%;
-        //width: 100%;
-        //height: 100%;
-        //background: linear-gradient(
-        //        90deg,
-        //        transparent,
-        //        rgba(255, 255, 255, 0.1),
-        //        transparent
-        //);
-        //z-index: 1;
-        //transition: none;
-        ///* Initially hide the pseudo-element */
-        //opacity: 0;
-    }
 
     &:hover {
         transform: translate(-4px, -4px);
         box-shadow: 10px 10px 0 #000;
         background-color: #000;
-
-        &::before {
-            opacity: 1;
-            animation: slide 2s infinite;
-        }
     }
 
     &:active {
         transform: translate(4px, 4px);
         box-shadow: 0px 0px 0 #00a4ef;
-        //background-color: var(--WHITE);
-        //color: var(--BLACK);
         border-color: var(--BLACK);
     }
 
@@ -89,13 +56,10 @@ const props = defineProps({
         pointer-events: none;
         cursor: default;
         transform: translate(0);
-        //box-shadow: 6px 6px 0 var(--RED);
 
         span {
-            transform: translateX(calc(21rem - 100%));
+            transform: translateX(calc(var(--inner-width) - 100%));
         }
-
-        //background: red;
     }
 }
 </style>

@@ -38,8 +38,8 @@
         <InterfaceWrapper/>
         <InterfaceAudio/>
         <InterfacePreloader
-            v-if="!isDev"
         />
+        <!--            v-if="!isDev"-->
     </div>
 </template>
 <script setup lang="ts">
@@ -118,7 +118,7 @@ function init(cityNodes) {
 
     cityStore.pushCityViewObjects(arr);
 
-    arr[4].apply();
+    arr[0].apply();
 }
 </script>
 <style scoped lang="scss">

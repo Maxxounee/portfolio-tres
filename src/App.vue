@@ -33,7 +33,6 @@ function onResize() {
 }
 
 watch(() => w.value.fontSize, (value) => {
-    console.log('watch');
     document.querySelector('html').style.fontSize = w.value.fontSize + 'px';
 });
 

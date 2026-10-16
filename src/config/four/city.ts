@@ -94,8 +94,8 @@ export const files = {
 
 
 export const colors = {
-    backgroundStart: '#131313',
-    backgroundEnd: '#2f1114',
+    backgroundNight: '#171717',
+    backgroundDay: '#56bdd0',
     fog: '#212121',
 };
 
@@ -139,12 +139,16 @@ export const cameraMode = {
             /* fov 30 */
             // pos: new THREE.Vector3(-1.534, 1.845, 10.323),
             // target: new THREE.Vector3(-2.966, 1.046, -0.772),
-            pos: new THREE.Vector3(-6.119, 0.972, 7.094),
-            target: new THREE.Vector3(-3.649, 1.492, 4.746),
+            // pos: new THREE.Vector3(-6.119, 0.972, 7.094),
+            // target: new THREE.Vector3(-3.649, 1.492, 4.746),
             // pos: new THREE.Vector3(-12.703, 0.786, 10.797),
             // target: new THREE.Vector3(-4.939, 2.137, 3.627),
+            // pos: new THREE.Vector3(-5.331, 1.206, 9.621),
+            // target: new THREE.Vector3(-2.017, 0.9, 0.061),
+            pos: new THREE.Vector3(-5.248, 1.065, 9.454),
+            target: new THREE.Vector3(-3.667, 1.164, 5.04),
             html: {
-                button: 'TECHNOLOGY',
+                button: 'Технологии',
                 title: 'основной стек:',
                 // text: `Мой основной стек:<br/>
                 // <br/>
@@ -159,7 +163,7 @@ export const cameraMode = {
                 // * Laravel 12/13`,
                 text: `Frontend:<br/>
                 TypeScript · JavaScript · Vue · Nuxt<br/>
-                GSAP · Lenis · Three.js<br/>
+                GSAP · Three.js · LESS<br/>
                 <br/>
                 Backend:<br/>
                  PHP · Laravel · PostgreSQL · MySQL`
@@ -177,7 +181,7 @@ export const cameraMode = {
             target: new THREE.Vector3(4.913, -3.982, 0.004),
             html: {
                 button: 'ОПЫТ',
-                title: 'Мой опыт',
+                title: 'опыт работы',
                 text: `2024 — 2026<br/>
                 Ведущий веб-разработчик · Руководство web-отделом<br/>
                 Сайты для крупнейших застройщиков · Работа с клиентами<br/>
@@ -281,9 +285,12 @@ export const cameraMode = {
         contacts: {
             html: {
                 button: 'КОНТАКТЫ',
-                title: '',
-                text: `Привет! Меня зовут Максим.<br/>
-                Frontend + Backend разработчик.<br/>`
+                title: 'Свяжитесь со мной',
+                text: `
+                <a href="https://t.me/maxounee" target="_blank">Telegram: maxounee</a>
+                <br/><br/>
+<!--                <a href="tel:+79963441180">Phone: 8 996 344 11 80</a>-->
+                `
             },
             modelName: 'car_05',
             obj: undefined,

@@ -44,7 +44,6 @@ export class SoundLoader {
 
                 if (obj.name === opt.target.userData.modelName) {
                     _target = obj;
-                    console.log('OPTPOPOPO', obj);
                     targetFoundByTraverse = true;
                 }
             });

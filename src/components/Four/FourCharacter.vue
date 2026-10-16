@@ -24,10 +24,7 @@ watch(
 
         mixer.value = new THREE.AnimationMixer(gltf.scene);
 
-        // console.log('Available animations:', gltf.animations.map(a => a.name));
         if (gltf.animations.length > 0) {
-            console.log(gltf.animations);
-            // playAnimation(gltf.animations[0].name);
             playAnimation('Push_Ups');
         }
     },

@@ -3,7 +3,10 @@
         class="InterfacePreloader"
         :class="{
             loaded: loaded,
-            active: active
+            active: active,
+        }"
+        :style="{
+            '--progress': cityStore.totalModelsLoadedPercent,
         }"
     >
         <div
@@ -16,6 +19,7 @@
                 {{ percent }} %
             </p>
         </div>
+        <div class="InterfacePreloader__line"></div>
         <p class="InterfacePreloader__message" :class="{ loaded: isLoaded }">
             {{ percent }} %
         </p>
@@ -31,8 +35,10 @@ import { useMainStore } from "@/store/main.ts";
 
 const cityStore = useCityStore();
 const loaded = ref(false);
-const active = ref(true);
 const mainStore = useMainStore();
+const active = computed(() => {
+    return !mainStore.preloaderHidden;
+});
 
 const percent = computed(() => {
     return Math.round(cityStore.totalModelsLoadedPercent * 100);
@@ -43,8 +49,8 @@ const isLoaded = computed(() => {
 });
 
 function start() {
-    active.value = false;
     mainStore.toggleMusicMode();
+    mainStore.hidePreloader();
 }
 
 watch(isLoaded, (value) => {
@@ -57,7 +63,8 @@ watch(isLoaded, (value) => {
 .InterfacePreloader {
     @include div100;
     @include flex(center, center);
-    background: var(--DIALOGUE);
+    //background: var(--DIALOGUE);
+    background: var(--BLACK);
     text-align: right;
     transition-property: opacity;
     transition-duration: 1s;
@@ -68,19 +75,32 @@ watch(isLoaded, (value) => {
         @include div100;
         @include flex(center, center);
 
-        background: var(--BLACK);
+        //background: var(--ORANGE);
         clip-path: inset(0px 0px var(--clip) 0px);
         transition: clip-path 1s ease;
 
         .InterfacePreloader__message {
-            color: var(--DIALOGUE);
+            //color: var(--DIALOGUE);
         }
+    }
+
+    &__line {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        height: 1rem;
+        width: 100vw;
+        background: var(--ORANGE);
+        transform: translateX(calc(-100% * (1 - var(--progress))));
+        transition-property: transform, opacity;
+        transition-duration: 0.3s;
+        transition-timing-function: linear;
     }
 
     &__start,
     &__message {
-        @include fontIgra(10rem);
-        color: var(--BLACK);
+        @include fontKulag(10rem);
+        color: var(--ORANGE);
         transition-property: opacity;
         transition-duration: 1s;
 
@@ -100,6 +120,10 @@ watch(isLoaded, (value) => {
         .InterfacePreloader__start {
             opacity: 1;
             pointer-events: auto;
+        }
+
+        .InterfacePreloader__line {
+            opacity: 0;
         }
 
         //opacity: 0;
