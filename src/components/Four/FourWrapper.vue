@@ -102,12 +102,13 @@ function init(cityNodes) {
 
     const arr: cityConfig.CityViewStaticOrForward[] = [
         // handleConfigItem(staticConfig.test),
-        
+
         handleConfigItem(staticConfig.welcome),
         handleConfigItem(staticConfig.tech),
+        handleConfigItem(staticConfig.experience),
         handleConfigItem(staticConfig.works),
         handleConfigItem(forwardConfig.about),
-        handleConfigItem(staticConfig.repo),
+        // handleConfigItem(staticConfig.repo),
         handleConfigItem(forwardConfig.contacts),
     ];
 
@@ -117,7 +118,7 @@ function init(cityNodes) {
 
     cityStore.pushCityViewObjects(arr);
 
-    arr[0].apply();
+    arr[4].apply();
 }
 </script>
 <style scoped lang="scss">

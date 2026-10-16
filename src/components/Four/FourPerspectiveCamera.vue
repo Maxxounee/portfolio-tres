@@ -82,7 +82,7 @@ watch(
 );
 
 
-function renderForward(cam: THREE.PerspectiveCamera, conf: cityConfig.CityViewForward,): void {
+function renderForward(cam: THREE.PerspectiveCamera, conf: cityConfig.CityViewForward, ctx): void {
     const positionLerp = 0.05;
     const rotationLerp = 0.05;
     const obj = conf.obj;
@@ -112,7 +112,7 @@ function renderForward(cam: THREE.PerspectiveCamera, conf: cityConfig.CityViewFo
         newDir.y = 0;
         if (newDir.lengthSq() > 1e-6) {
             newDir.normalize();
-            movementDir.lerp(newDir, conf.dirSmoothing).normalize();
+            movementDir.lerp(newDir, conf.dirSmoothing);
         }
     }
 
@@ -135,7 +135,9 @@ function renderForward(cam: THREE.PerspectiveCamera, conf: cityConfig.CityViewFo
     desiredLookAt.addScaledVector(_shiftDir, (conf.sideOffset ?? 0) * 0.5);
     desiredLookAt.y += conf.followLookAtHeight;
 
-    cam.position.lerp(desiredPosition, positionLerp);
+    const t = 1 - Math.pow(1 - positionLerp, ctx.delta * 60);
+
+    cam.position.lerp(desiredPosition, t);
     computeLookAtQuaternion(cam.position, desiredLookAt, _tmpQuat);
     cam.quaternion.slerp(_tmpQuat, rotationLerp);
     cam.quaternion.normalize();
@@ -144,7 +146,7 @@ function renderForward(cam: THREE.PerspectiveCamera, conf: cityConfig.CityViewFo
 function renderStatic(cam: THREE.PerspectiveCamera, conf: cityConfig.CityViewStatic, elapsed): void {
     const positionLerp = 0.1;
 
-    const fadeInDuration = 6;
+    const fadeInDuration = 1.5;
     const fadeIn = Math.min(elapsed / fadeInDuration, 1);
 
     const height = Math.max(cam.position.y - conf.target.y, 0);
@@ -196,14 +198,27 @@ function flyTo(targetPosition: THREE.Vector3, targetTarget: THREE.Vector3, onCom
         ease: transitionEase,
     }, 0);
 
-    currentTl.to(cam.quaternion, {
-        x: targetQuat.x,
-        y: targetQuat.y,
-        z: targetQuat.z,
-        w: targetQuat.w,
+    const progress = { value: 0 };
+    const startQuat = cam.quaternion.clone();
+
+    currentTl.to(progress, {
+        value: 1,
         duration: transitionDuration,
         ease: transitionEase,
+        onUpdate: () => {
+            cam.quaternion.slerpQuaternions(startQuat, targetQuat, progress.value);
+            cam.quaternion.normalize();
+        },
     }, 0);
+
+    // currentTl.to(cam.quaternion, {
+    //     x: targetQuat.x,
+    //     y: targetQuat.y,
+    //     z: targetQuat.z,
+    //     w: targetQuat.w,
+    //     duration: transitionDuration,
+    //     ease: transitionEase,
+    // }, 0);
 }
 
 function handleView(conf: cityConfig.CityViewStaticOrForward | undefined, immediate: boolean = false): void {
@@ -229,7 +244,7 @@ onBeforeRender((ctx) => {
     if (!cam) return;
 
     if (cityStore.currentView instanceof cityConfig.CityViewForward) {
-        renderForward(cam, cityStore.currentView);
+        renderForward(cam, cityStore.currentView, ctx);
     } else if (cityStore.currentView instanceof cityConfig.CityViewStatic) {
         renderStatic(cam, cityStore.currentView, ctx.elapsed);
     }

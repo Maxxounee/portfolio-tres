@@ -115,12 +115,20 @@ export const cameraMode = {
             target: new THREE.Vector3(0, 0, 0),
             html: {
                 button: 'HELLO WORLD!',
-                title: '',
+                title: 'HELLO WORLD!',
                 // text: `Привет! Меня зовут Максим.<br/>
                 // Frontend + Backend разработчик.<br/>
                 // <a href="${links.resume}" target="_blank">Скачать резюме.PDF</a>`
+                // text: `Привет! Меня зовут Максим.<br/>
+                // Frontend + Backend разработчик.<br/>`
                 text: `Привет! Меня зовут Максим.<br/>
-                Frontend + Backend разработчик.<br/>`
+                <br/>
+                Fullstack-разработчик. Создаю сложные<br/>
+                интерактивные сайты и веб-приложения.<br/>
+                <br/>
+                Vue · Nuxt · PHP · Laravel<br/>
+                более 4х лет в разработке
+`
             },
         },
         tech: {
@@ -137,21 +145,27 @@ export const cameraMode = {
             // target: new THREE.Vector3(-4.939, 2.137, 3.627),
             html: {
                 button: 'TECHNOLOGY',
-                title: '',
-                text: `Мой основной стек:<br/>
-                <br/>
-                Frontend:<br/>
-                <br/>
-                * JavaScript/TypeScript<br/>
-                * Vue/Nuxt (options/composition)<br/>
+                title: 'основной стек:',
+                // text: `Мой основной стек:<br/>
+                // <br/>
+                // Frontend:<br/>
+                // <br/>
+                // * JavaScript/TypeScript<br/>
+                // * Vue/Nuxt (options/composition)<br/>
+                // <br/>
+                // Backend:<br/>
+                // <br/>
+                // * php 8+<br/>
+                // * Laravel 12/13`,
+                text: `Frontend:<br/>
+                TypeScript · JavaScript · Vue · Nuxt<br/>
+                GSAP · Lenis · Three.js<br/>
                 <br/>
                 Backend:<br/>
-                <br/>
-                * php 8+<br/>
-                * Laravel 12/13`,
+                 PHP · Laravel · PostgreSQL · MySQL`
             },
         },
-        works: {
+        experience: {
             /** fov 70 */
             // pos: new THREE.Vector3(-1.691, 1.681, 1.753),
             // target: new THREE.Vector3(1.863, 0.583, 0.227),
@@ -162,27 +176,59 @@ export const cameraMode = {
             pos: new THREE.Vector3(19.669, 20.689, 25.481),
             target: new THREE.Vector3(4.913, -3.982, 0.004),
             html: {
-                button: 'РАБОТЫ',
-                title: '',
-                text: `Привет! Меня зовут Максим.<br/>
-                Frontend + Backend разработчик.<br/>`
+                button: 'ОПЫТ',
+                title: 'Мой опыт',
+                text: `2024 — 2026<br/>
+                Ведущий веб-разработчик · Руководство web-отделом<br/>
+                Сайты для крупнейших застройщиков · Работа с клиентами<br/>
+                <br/>
+                2023 — 2024<br/>
+                Frontend-разработчик<br/>
+                Code-review · Поддержка и оптимизация сайтов`
             },
         },
-        repo: {
+        works: {
             /** fov 70 */
-            // pos: new THREE.Vector3(-6.486, 0.907, -6.873),
-            // target: new THREE.Vector3(-5.699, 0.976, -5.389),
+            // pos: new THREE.Vector3(-1.691, 1.681, 1.753),
+            // target: new THREE.Vector3(1.863, 0.583, 0.227),
 
             /** fov 30 */
+            // pos: new THREE.Vector3(-3.213, 1.445, 6.069),
+            // target: new THREE.Vector3(0.29, 1.449, -0.071),
             pos: new THREE.Vector3(-10.962, 0.211, -9.108),
             target: new THREE.Vector3(-5.609, 0.677, 0.737),
+            // pos: new THREE.Vector3(19.669, 20.689, 25.481),
+            // target: new THREE.Vector3(4.913, -3.982, 0.004),
             html: {
-                button: 'GITHUB',
-                title: '',
-                text: `Привет! Меня зовут Максим.<br/>
-                Frontend + Backend разработчик.<br/>`
+                button: 'ПРОЕКТЫ',
+                title: 'мои значимые проекты',
+                text: `
+                <a href="https://art.ice-towers.ru" target="_blank">ICE-TOWERS.ru</a><br/>
+                <a href="https://wowfest.ru/archive/2025/#work-58225" target="_blank">· золото премии «WOW Awards» 2025</a><br/>
+                <a href="https://tagline.ru/art-3d/cases/promosayt-dlya-premialjnogo-kompleksa-ice-towers-kak-proizvedenie-sovremennogo-iskusstva/" target="_blank">· серебро премии «TAGLINE Awards» 2025</a><br/>
+                <br/>
+                <a href="https://kingsons.ru" target="_blank">kingsons.ru</a><br/>
+                <a href="https://wowfest.ru/archive/2024/#work-46535" target="_blank">· золото премии «WOW Awards» 2024</a><br/>
+                <a href="https://awards.ratingruneta.ru/winners?year=2024" target="_blank">· золото премии «Рейтинг Рунета» 2024</a>
+
+                `
             },
         },
+        // repo: {
+        //     /** fov 70 */
+        //     // pos: new THREE.Vector3(-6.486, 0.907, -6.873),
+        //     // target: new THREE.Vector3(-5.699, 0.976, -5.389),
+        //
+        //     /** fov 30 */
+        //     pos: new THREE.Vector3(-10.962, 0.211, -9.108),
+        //     target: new THREE.Vector3(-5.609, 0.677, 0.737),
+        //     html: {
+        //         button: 'GITHUB',
+        //         title: '',
+        //         text: `Привет! Меня зовут Максим.<br/>
+        //         Frontend + Backend разработчик.<br/>`
+        //     },
+        // },
 
         test: {
             /** fov 70 */
@@ -204,9 +250,17 @@ export const cameraMode = {
         about: {
             html: {
                 button: 'О САЙТЕ',
-                title: '',
-                text: `Привет! Меня зовут Максим.<br/>
-                Frontend + Backend разработчик.<br/>`
+                title: 'SOME FACTS',
+                text: `
+                8 зданий · 20 объектов окружения · 5 машин · 1 персонаж<br/>
+                <br/>
+                < 6 МБ — весь сайт целиком, с 3D-сценой
+                <br/><br/>
+                • Instancing сцены • Очередь загрузок на p-limit.js<br/>
+                • Процедурная генерация фоновых зданий • Positional Audio
+                <br/><br/>
+                Код доступен на <a href="https://github.com/Maxxounee/portfolio-tres" target="_blank">github</a>
+`
             },
             modelName: 'car_00',
             obj: undefined,

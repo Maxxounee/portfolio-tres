@@ -55,5 +55,31 @@
 @mixin fontPodkova($size: 1.8rem, $weight: 400, $height: 1, $space: 0) {
     @include font($size, $weight, $height, $space);
     font-family: 'podkova', serif;
-    font-variation-settings: 'wght' #{$weight};
+    //font-variation-settings: 'wght' #{$weight};
+}
+
+
+@mixin fontBrown($size: 1.8rem, $weight: 400, $height: 1, $space: 0) {
+    @include font($size, $weight, $height, $space);
+    font-family: 'Brown-Bold_2', serif;
+    //font-variation-settings: 'wght' #{$weight};
+}
+
+@mixin fontKulag($size: 1.8rem, $weight: 400, $height: 1, $space: 0) {
+    @include font($size, $weight, $height, $space);
+    font-family: 'KULAG_SHA', serif;
+    //font-variation-settings: 'wght' #{$weight};
+}
+
+
+@mixin fontKulagOutline($size: 1.8rem, $weight: 400, $height: 1, $space: 0) {
+    @include font($size, $weight, $height, $space);
+    font-family: 'KULAG_SHA_Outline', serif;
+    //font-variation-settings: 'wght' #{$weight};
+}
+
+@mixin fontMinsk($size: 1.8rem, $weight: 400, $height: 1.2, $space: 0) {
+    @include font($size, $weight, $height, $space);
+    font-family: 'Minsk-Regular', serif;
+    //font-variation-settings: 'wght' #{$weight};
 }

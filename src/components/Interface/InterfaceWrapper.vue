@@ -12,9 +12,9 @@
         <!--            v-html="str"-->
         <!--        >-->
         <!--        </p>-->
-        <InterfaceTextWindow
-            ref="textWindow"
-        />
+        <!--        <InterfaceTextWindow-->
+        <!--        />-->
+        <InterfaceTextWindowNew/>
         <InterfaceButtonsWrapper/>
         <div class="InterfaceWrapper__func">
             <InterfaceButtonsItem
@@ -46,6 +46,7 @@ import InterfaceTextWindow from "@/components/Interface/InterfaceTextWindow.vue"
 import InterfaceButtonsItem from "@/components/Interface/InterfaceButtonsItem.vue";
 import { useMainStore } from "@/store/main.ts";
 import { computed } from "vue";
+import InterfaceTextWindowNew from "@/components/Interface/InterfaceTextWindowNew.vue";
 
 const mainStore = useMainStore();
 const noirModeText = computed(() => {
@@ -68,11 +69,14 @@ const dayModeText = computed(() => {
     pointer-events: none;
 
     &__func {
-        @include flexColumn(end);
+        //@include flexColumn(end);
+        @include flex(start);
         gap: 2rem;
         position: absolute;
-        top: var(--T);
+        //top: var(--T);
         right: var(--R);
+        //left: var(--L);
+        bottom: var(--B);
     }
 
     &__noir {

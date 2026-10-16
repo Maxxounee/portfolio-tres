@@ -14,3 +14,35 @@
     font-style: normal;
     font-display: swap;
 }
+
+
+@font-face {
+    font-family: 'AR_ZOZH';
+    src: url('@/assets/fonts/AR_ZOZH.ttf') format('truetype');
+    font-weight: 400 800;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Minsk-Regular';
+    src: url('@/assets/fonts/Minsk-Regular.otf') format('opentype');
+    font-style: normal;
+    font-display: swap;
+}
+
+
+@font-face {
+    font-family: 'KULAG_SHA_Outline';
+    src: url('@/assets/fonts/KULAG_SHA_Outline.otf') format('opentype');
+    font-style: normal;
+    font-display: swap;
+}
+
+
+@font-face {
+    font-family: 'KULAG_SHA';
+    src: url('@/assets/fonts/KULAG_SHA.otf') format('opentype');
+    font-style: normal;
+    font-display: swap;
+}
