@@ -34,7 +34,7 @@ import { useCityStore } from "@/store/city.ts";
 import { createAnimatedModel } from "@/utils/four/createAnimatedModel.ts";
 import { useMainStore } from "@/store/main.ts";
 import { loadEnvAudio } from "@/utils/four/loadEnvAudio.ts";
-import { CustomAnimator } from "@/utils/four/collectMixerAnimations.ts";
+import { CustomAnimator } from "@/utils/four/CustomAnimator.ts";
 
 const emit = defineEmits(['loaded']);
 

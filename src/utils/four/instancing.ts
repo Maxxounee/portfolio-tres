@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import type { InstanceItem } from './types';
 import { collectMixerAnimations } from "@/utils/four/collectMixerAnimations.ts";
 import type { GLTF } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { CustomAnimator } from "@/utils/four/CustomAnimator.ts";
 
 function applyInstances(mesh: THREE.InstancedMesh, items: InstanceItem[]): void {
     const matrix = new THREE.Matrix4();
@@ -68,6 +69,8 @@ export function buildInstancedMeshes(gltf: GLTF, items: InstanceItem[]): {
     }
 
     const mixer = collectMixerAnimations(gltf.animations, scene);
+    
+    CustomAnimator.collectAnimatedMaterials(gltf.scene);
 
     return { instances: result, mixer };
 }
