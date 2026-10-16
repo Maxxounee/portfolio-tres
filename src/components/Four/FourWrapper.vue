@@ -101,7 +101,8 @@ function init(cityNodes) {
     };
 
     const arr: cityConfig.CityViewStaticOrForward[] = [
-        handleConfigItem(staticConfig.test),
+        // handleConfigItem(staticConfig.test),
+        
         handleConfigItem(staticConfig.welcome),
         handleConfigItem(staticConfig.tech),
         handleConfigItem(staticConfig.works),

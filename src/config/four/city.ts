@@ -129,9 +129,12 @@ export const cameraMode = {
             // target: new THREE.Vector3(-2.826, 1.215, 3.9),
 
             /* fov 30 */
-            pos: new THREE.Vector3(-1.534, 1.845, 10.323),
-            target: new THREE.Vector3(-2.966, 1.046, -0.772),
-
+            // pos: new THREE.Vector3(-1.534, 1.845, 10.323),
+            // target: new THREE.Vector3(-2.966, 1.046, -0.772),
+            pos: new THREE.Vector3(-6.119, 0.972, 7.094),
+            target: new THREE.Vector3(-3.649, 1.492, 4.746),
+            // pos: new THREE.Vector3(-12.703, 0.786, 10.797),
+            // target: new THREE.Vector3(-4.939, 2.137, 3.627),
             html: {
                 button: 'TECHNOLOGY',
                 title: '',
@@ -154,8 +157,10 @@ export const cameraMode = {
             // target: new THREE.Vector3(1.863, 0.583, 0.227),
 
             /** fov 30 */
-            pos: new THREE.Vector3(-3.213, 1.445, 6.069),
-            target: new THREE.Vector3(0.29, 1.449, -0.071),
+            // pos: new THREE.Vector3(-3.213, 1.445, 6.069),
+            // target: new THREE.Vector3(0.29, 1.449, -0.071),
+            pos: new THREE.Vector3(19.669, 20.689, 25.481),
+            target: new THREE.Vector3(4.913, -3.982, 0.004),
             html: {
                 button: 'РАБОТЫ',
                 title: '',

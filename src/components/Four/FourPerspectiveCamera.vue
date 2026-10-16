@@ -144,12 +144,12 @@ function renderForward(cam: THREE.PerspectiveCamera, conf: cityConfig.CityViewFo
 function renderStatic(cam: THREE.PerspectiveCamera, conf: cityConfig.CityViewStatic, elapsed): void {
     const positionLerp = 0.1;
 
-    const fadeInDuration = 1.5;
+    const fadeInDuration = 6;
     const fadeIn = Math.min(elapsed / fadeInDuration, 1);
 
     const height = Math.max(cam.position.y - conf.target.y, 0);
 
-    const posAmp = (0.01 + height * height / 1000) * fadeIn;
+    const posAmp = (0.01 + height * height / 5000) * fadeIn;
 
     desiredPosition.copy(conf.pos);
 

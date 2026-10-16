@@ -7,20 +7,39 @@ import { onMounted, watch } from "vue";
 import { getStaticLink } from "@/utils";
 import { useMainStore } from "@/store/main.ts";
 
-let music: HTMLAudioElement | null = null;
+let music: HTMLAudioElement[] = [];
 const mainStore = useMainStore();
 
 watch(() => mainStore.musicOn, (value) => {
     if (value) {
-        music?.play();
+        music.forEach((sound) => {
+            sound?.play();
+        });
+
     } else {
-        music?.pause();
+        music.forEach((sound) => {
+            sound?.pause();
+        });
     }
 });
 onMounted(() => {
-    music = new Audio(getStaticLink('/audio/evening_cafe.mp3'));
-    music.loop = true;
-    music.volume = 0.2;
+    [
+        // '/audio/evening_cafe.mp3',
+        {
+            link: '/audio/rain.mp3',
+            volume: 0.7,
+        },
+        {
+            link: '/audio/evening_cafe.mp3',
+            volume: 0.2,
+        },
+    ].forEach((item) => {
+        const audio = new Audio(getStaticLink(item.link));
+        audio.loop = true;
+        audio.volume = item.volume;
+        music.push(audio);
+    });
+
 });
 </script>
 <style scoped lang="scss">

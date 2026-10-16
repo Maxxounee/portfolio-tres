@@ -152,6 +152,7 @@ onMounted(async () => {
 
     emit('loaded', { nodes: result.animatedCarsMap });
 
+
     if (camera.value instanceof THREE.Camera) {
         const audioLoader = new SoundLoader({ camera: camera.value });
 
@@ -159,18 +160,49 @@ onMounted(async () => {
             {
                 target: result.animatedCarsMap['car_05'],
                 path: getStaticLink('/audio/env/helicopter.mp3'),
-                refDistance: 1,
-                volume: 8,
+                volume: 1,
                 loopStart: 0.01,
                 loopEnd: 0.9,
+                refDistance: 50,
+                rolloffFactor: 14,
             },
+
             {
                 target: result.animatedCarsMap['car_00'],
                 path: getStaticLink('/audio/env/car.mp3'),
-                refDistance: 1,
-                loopStart: 0.05,
-                loopEnd: 0.9
+                loopStart: 0.1,
+                loopEnd: 0.7
             },
+            {
+                target: result.animatedCarsMap['car_04'],
+                path: getStaticLink('/audio/env/police.mp3'),
+                refDistance: 10,
+                volume: 1,
+                rolloffFactor: 4,
+                loopStart: 0.1,
+                loopEnd: 0.7
+            },
+            // {
+            //     target: result.animatedCarsMap['car_02'],
+            //     path: getStaticLink('/audio/env/car.mp3'),
+            //     refDistance: 5,
+            //     loopStart: 0.05,
+            //     loopEnd: 0.6
+            // },
+            // {
+            //     target: result.animatedCarsMap['car_03'],
+            //     path: getStaticLink('/audio/env/car.mp3'),
+            //     refDistance: 5,
+            //     loopStart: 0.05,
+            //     loopEnd: 0.6
+            // },
+            // {
+            //     target: result.animatedCarsMap['car_04'],
+            //     path: getStaticLink('/audio/env/car.mp3'),
+            //     refDistance: 5,
+            //     loopStart: 0.05,
+            //     loopEnd: 0.6
+            // },
         ]).then((data) => {
             audio.value.push(...data.map(({ sound }) => sound));
         });
@@ -178,11 +210,10 @@ onMounted(async () => {
     } else {
         console.error('LoadEnvAudio: camera.value undefined');
     }
-
-
 });
 
 const { onBeforeRender } = useLoop();
+
 
 onBeforeRender((ctx) => {
     for (const mixer of mixers) {

@@ -17,9 +17,9 @@ export interface LoadResult {
 export class SoundLoader {
     public camera: THREE.Camera;
     public listener: THREE.AudioListener;
-    public volume = 0.4;
-    public refDistance = 15;
-    public rolloffFactor = 1;
+    public volume = 0.8;
+    public refDistance = 10;
+    public rolloffFactor = 15;
 
     constructor({ camera }: { camera: THREE.Camera }) {
         this.camera = camera;
@@ -44,6 +44,7 @@ export class SoundLoader {
 
                 if (obj.name === opt.target.userData.modelName) {
                     _target = obj;
+                    console.log('OPTPOPOPO', obj);
                     targetFoundByTraverse = true;
                 }
             });
@@ -56,17 +57,11 @@ export class SoundLoader {
         sound.setLoop(true);
         sound.setVolume(opt.volume ?? this.volume);
         sound.setRefDistance(opt.refDistance ?? this.refDistance);
-        sound.setRolloffFactor(this.rolloffFactor);
-        sound.setDistanceModel('inverse');
+        sound.setRolloffFactor(opt.rolloffFactor ?? this.rolloffFactor);
+        sound.setDistanceModel('exponential');
 
-        // opt.target.add(sound);
         _target.add(sound);
 
-        console.log('duration:', buffer.duration);
-        console.log('sampleRate:', buffer.sampleRate);
-
-
-        console.log('sound.duration', sound.duration);
 
         if (opt.loopStart) {
             sound.setLoopStart(buffer.duration * opt.loopStart);

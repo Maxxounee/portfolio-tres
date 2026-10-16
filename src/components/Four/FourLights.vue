@@ -142,15 +142,15 @@ function toggleLight(isDay = false) {
 
     const day = {
         mainLight: {
-            intensity: 1,
+            intensity: 0.7,
             position: {
-                x: 9,
-                y: 30,
+                x: 1,
+                y: 16,
                 z: -20
             }
         },
         generalLight: {
-            intensity: 1,
+            intensity: 0.3,
         }
     };
 
