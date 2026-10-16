@@ -14,5 +14,6 @@ export interface CityBuildResult {
     instancedMeshes: THREE.InstancedMesh[];
     animatedChars: THREE.Object3D[];
     animatedCars: THREE.Object3D[];
+    animatedCarsMap: Record<string, THREE.Object3D>;
     mixers: THREE.AnimationMixer[];
 }

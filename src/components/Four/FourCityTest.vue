@@ -34,6 +34,7 @@ import { useCityStore } from "@/store/city.ts";
 import { createAnimatedModel } from "@/utils/four/createAnimatedModel.ts";
 import { useMainStore } from "@/store/main.ts";
 import { loadEnvAudio } from "@/utils/four/loadEnvAudio.ts";
+import { CustomAnimator } from "@/utils/four/collectMixerAnimations.ts";
 
 const emit = defineEmits(['loaded']);
 
@@ -46,6 +47,7 @@ const instancedMeshes = shallowRef<THREE.InstancedMesh[]>([]);
 const animatedChars = shallowRef<THREE.Object3D[]>([]);
 const animatedCars = shallowRef<THREE.Object3D[]>([]);
 const mixers: THREE.AnimationMixer[] = [];
+
 const { camera } = useTres();
 const audio = shallowRef<THREE.PositionalAudio | null>(null);
 
@@ -69,6 +71,7 @@ async function buildModel(modelName: string, configItems: SceneJson[string], res
         const { model, mixer } = createAnimatedModel(gltf);
 
         result.animatedCars.push(model);
+        result.animatedCarsMap[modelName] = model;
 
         if (mixer) {
             result.mixers.push(mixer);
@@ -96,6 +99,7 @@ async function buildScene(): Promise<CityBuildResult> {
         instancedMeshes: [],
         animatedChars: [],
         animatedCars: [],
+        animatedCarsMap: {},
         mixers: [],
     };
 
@@ -142,21 +146,11 @@ onMounted(async () => {
     animatedCars.value = result.animatedCars;
     mixers.push(...result.mixers);
 
-    const carNodes: Record<string, THREE.Object3D> = {};
-
-    for (const obj of result.animatedCars) {
-        const name = obj.userData.modelName;
-
-        if (name) {
-            carNodes[name] = obj;
-        }
-    }
-
-    emit('loaded', { nodes: carNodes });
+    emit('loaded', { nodes: result.animatedCarsMap });
 
     if (camera.value instanceof THREE.Camera) {
         /* TODO доделать loadEnvAudio */
-        loadEnvAudio({ target: carNodes['car_05'] }).then(({ listener, audio: _audio }) => {
+        loadEnvAudio({ target: result.animatedCarsMap['car_05'] }).then(({ listener, audio: _audio }) => {
             camera.value!.add(listener);
             audio.value = _audio;
         });
@@ -173,5 +167,7 @@ onBeforeRender((ctx) => {
     for (const mixer of mixers) {
         mixer.update(ctx.delta);
     }
+
+    CustomAnimator.play(ctx);
 });
 </script>

@@ -14,7 +14,7 @@ export function createAnimatedSkeleton(gltf: GLTF, item: InstanceItem): {
     clone.rotation.set(...item.rotation);
     clone.scale.set(...item.scale);
 
-    clone.traverse((obj) => {
+    clone.traverse((obj: THREE.Object3D | THREE.Mesh) => {
         if (obj instanceof THREE.Mesh) {
             obj.castShadow = true;
             obj.receiveShadow = true;
