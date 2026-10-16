@@ -6,6 +6,7 @@ export const useMainStore = defineStore('main', () => {
     const noirMode = ref(true);
     const noTextMode = ref(false);
     const musicOn = ref(false);
+    const dayMode = ref(false);
 
     function toggleNoirMode() {
         noirMode.value = !noirMode.value;
@@ -19,13 +20,19 @@ export const useMainStore = defineStore('main', () => {
         musicOn.value = !musicOn.value;
     }
 
+    function toggleDayMode() {
+        dayMode.value = !dayMode.value;
+    }
+
     return {
         noirMode,
         isDebug,
         noTextMode,
         musicOn,
+        dayMode,
         toggleNoirMode,
         toggleTextMode,
         toggleMusicMode,
+        toggleDayMode,
     };
 });

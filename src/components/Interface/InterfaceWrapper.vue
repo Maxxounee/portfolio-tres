@@ -32,6 +32,11 @@
                 class="InterfaceWrapper__music"
                 @click="() => mainStore.toggleMusicMode()"
             />
+            <InterfaceButtonsItem
+                :text="dayModeText"
+                class="InterfaceWrapper__day"
+                @click="() => mainStore.toggleDayMode()"
+            />
         </div>
     </div>
 </template>
@@ -51,6 +56,9 @@ const noTextModeText = computed(() => {
 });
 const musicModeText = computed(() => {
     return mainStore.musicOn ? 'Sound: on' : 'Sound: off';
+});
+const dayModeText = computed(() => {
+    return mainStore.dayMode ? 'Day: on' : 'Day: off';
 });
 </script>
 <style lang="scss">

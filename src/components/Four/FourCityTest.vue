@@ -35,6 +35,7 @@ import { createAnimatedModel } from "@/utils/four/createAnimatedModel.ts";
 import { useMainStore } from "@/store/main.ts";
 import { loadEnvAudio } from "@/utils/four/loadEnvAudio.ts";
 import { CustomAnimator } from "@/utils/four/CustomAnimator.ts";
+import { SoundLoader } from "@/utils/four/SoundLoader.ts";
 
 const emit = defineEmits(['loaded']);
 
@@ -49,7 +50,7 @@ const animatedCars = shallowRef<THREE.Object3D[]>([]);
 const mixers: THREE.AnimationMixer[] = [];
 
 const { camera } = useTres();
-const audio = shallowRef<THREE.PositionalAudio | null>(null);
+const audio = shallowRef<THREE.PositionalAudio[]>([]);
 
 async function buildModel(modelName: string, configItems: SceneJson[string], result: CityBuildResult): Promise<void> {
     const link = getStaticLink(`/3d/glb/${modelName}.glb`);
@@ -127,15 +128,18 @@ async function buildScene(): Promise<CityBuildResult> {
 
 
 watch(() => mainStore.musicOn, (value) => {
-    if (!audio.value) {
+    if (!audio.value.length) {
         return;
     }
 
-    if (value && !audio.value.isPlaying) {
-        audio.value.play();
-    } else {
-        audio.value?.pause();
-    }
+    audio.value.forEach((sound) => {
+        if (value && !sound.isPlaying) {
+            sound.play();
+        } else {
+            sound.pause();
+        }
+    });
+
 });
 
 onMounted(async () => {
@@ -149,11 +153,28 @@ onMounted(async () => {
     emit('loaded', { nodes: result.animatedCarsMap });
 
     if (camera.value instanceof THREE.Camera) {
-        /* TODO доделать loadEnvAudio */
-        loadEnvAudio({ target: result.animatedCarsMap['car_05'] }).then(({ listener, audio: _audio }) => {
-            camera.value!.add(listener);
-            audio.value = _audio;
+        const audioLoader = new SoundLoader({ camera: camera.value });
+
+        audioLoader.loadMany([
+            {
+                target: result.animatedCarsMap['car_05'],
+                path: getStaticLink('/audio/env/helicopter.mp3'),
+                refDistance: 1,
+                volume: 8,
+                loopStart: 0.01,
+                loopEnd: 0.9,
+            },
+            {
+                target: result.animatedCarsMap['car_00'],
+                path: getStaticLink('/audio/env/car.mp3'),
+                refDistance: 1,
+                loopStart: 0.05,
+                loopEnd: 0.9
+            },
+        ]).then((data) => {
+            audio.value.push(...data.map(({ sound }) => sound));
         });
+
     } else {
         console.error('LoadEnvAudio: camera.value undefined');
     }

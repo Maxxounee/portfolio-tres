@@ -1,33 +1,48 @@
-import * as THREE from "three";
-import { getStaticLink } from "@/utils";
+// utils/four/audio.ts
+import * as THREE from 'three';
+import { getStaticLink } from '@/utils';
 
-const listener = new THREE.AudioListener();
-const loader = new THREE.AudioLoader();
-let audio: THREE.PositionalAudio;
+export interface EnvAudioResult {
+    // listener: THREE.AudioListener;
+    sound: THREE.PositionalAudio;
+}
 
-export function loadEnvAudio({ target }: { target: THREE.Object3D }): Promise<{
-    listener: THREE.AudioListener,
-    audio: THREE.PositionalAudio
-}> {
-    return new Promise((resolve) => {
-        loader.load(
-            getStaticLink('/audio/env/helicopter.mp3'),
-            (buffer) => {
-                const sound = new THREE.PositionalAudio(listener);
+export interface LoadEnvAudioOptions {
+    target: THREE.Object3D;
+    listener: THREE.AudioListener;
+    path: string;
+    // /** Громкость. */
+    // volume?: number;
+    // /** Расстояние, на котором громкость полная. */
+    // refDistance?: number;
+    // /** Скорость затухания. */
+    // rolloffFactor?: number;
+}
 
-                sound.setBuffer(buffer);
-                sound.setLoop(true);
-                sound.setVolume(0.5);
-                sound.setRefDistance(15);
-                sound.setRolloffFactor(1);
-                sound.setDistanceModel('inverse');
+const volume = 0.4;
+const refDistance = 15;
+const rolloffFactor = 1;
 
-                target.add(sound);
-                audio = sound;
+export async function loadEnvAudio({
+    target,
+    path,
+    listener,
+}: LoadEnvAudioOptions): Promise<EnvAudioResult> {
+    const loader = new THREE.AudioLoader();
 
-                resolve({ listener, audio });
-            }
-        );
+    return new Promise(async (resolve) => {
+        const buffer = await loader.loadAsync(path);
+
+        const sound = new THREE.PositionalAudio(listener);
+        sound.setBuffer(buffer);
+        sound.setLoop(true);
+        sound.setVolume(volume);
+        sound.setRefDistance(refDistance);
+        sound.setRolloffFactor(rolloffFactor);
+        sound.setDistanceModel('inverse');
+
+        target.add(sound);
+
+        resolve({ sound });
     });
-
 }

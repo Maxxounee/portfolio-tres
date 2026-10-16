@@ -1,5 +1,6 @@
 <template>
     <TresDirectionalLight
+        ref="mainLight"
         :position="[9, 12, -20]"
         :intensity="0.1"
         :color="0xffffff"
@@ -85,15 +86,21 @@
     <!--        :object="billboardTarget"-->
     <!--    />-->
     <TresHemisphereLight
+        ref="generalLight"
         :color="0xffffff"
         :ground-color="0xffffff"
         :intensity="0.1"
     />
 </template>
 <script setup lang="ts">
-import { vLightHelper } from '@tresjs/core';
+import { useLoop, useTres, vLightHelper } from '@tresjs/core';
 import { TransformControls } from '@tresjs/cientos';
 import { nextTick, onMounted, ref, shallowRef, watch } from "vue";
+import { useMainStore } from "@/store/main.ts";
+import { gsap } from 'gsap';
+
+const mainLight = ref();
+const generalLight = ref();
 
 const billboard = ref();
 const billboardTarget = ref();
@@ -120,4 +127,69 @@ if (debug) {
         console.log(breakingTarget.value.position);
     }, { deep: true },);
 }
+
+
+/* =================================== */
+
+const mainStore = useMainStore();
+const { onBeforeRender } = useLoop();
+
+let tl: gsap.core.Timeline | null = null;
+
+function toggleLight(isDay = false) {
+    tl?.kill();
+    tl = gsap.timeline({ ease: 'inOut.quad' });
+
+    const day = {
+        mainLight: {
+            intensity: 1,
+            position: {
+                x: 9,
+                y: 30,
+                z: -20
+            }
+        },
+        generalLight: {
+            intensity: 1,
+        }
+    };
+
+    const night = {
+        mainLight: {
+            intensity: 0.1,
+            position: {
+                x: 9,
+                y: 12,
+                z: -20
+            }
+        },
+        generalLight: {
+            intensity: 0.1,
+        }
+    };
+
+    const conf = isDay ? day : night;
+
+    tl
+    .to(mainLight.value, {
+        intensity: conf.mainLight.intensity,
+        duration: 3,
+    }, 0)
+    .to(mainLight.value.position, {
+        ...conf.mainLight.position,
+        duration: 4,
+    }, 0)
+    .to(generalLight.value, {
+        intensity: conf.generalLight.intensity,
+        duration: 3,
+    }, 0);
+}
+
+watch(() => mainStore.dayMode, (value) => {
+    toggleLight(value);
+});
+
+onBeforeRender((ctx) => {
+
+});
 </script>
