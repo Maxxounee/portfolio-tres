@@ -37,7 +37,7 @@ import { useWindow } from "@/utils/useWindow.ts";
 const cityStore = useCityStore();
 const loaded = ref(false);
 const mainStore = useMainStore();
-const isMobile = useWindow();
+const { isMobile } = useWindow();
 const active = computed(() => {
     return !mainStore.preloaderHidden;
 });
@@ -51,7 +51,7 @@ const isLoaded = computed(() => {
 });
 
 function start() {
-    if (!isMobile) {
+    if (!isMobile.value) {
         mainStore.toggleMusicMode();
     }
     mainStore.hidePreloader();
