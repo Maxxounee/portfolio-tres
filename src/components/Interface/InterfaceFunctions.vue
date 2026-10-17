@@ -7,6 +7,7 @@
         />
         <InterfaceCheckbox
             text="text"
+            v-if="!isMobile"
             :active="!mainStore.noTextMode"
             @change="mainStore.toggleTextMode()"
         />
@@ -25,16 +26,31 @@
 <script setup lang="ts">
 import InterfaceCheckbox from "@/components/Interface/InterfaceCheckbox.vue";
 import { useMainStore } from "@/store/main.ts";
+import { useWindow } from "@/utils/useWindow.ts";
 
 const mainStore = useMainStore();
+const { isMobile } = useWindow();
 </script>
 <style scoped lang="scss">
-.InterfaceFunctions {
-    @include flexColumn();
-    gap: 3rem;
-    position: absolute;
-    top: var(--T);
-    left: var(--L);
-    pointer-events: auto;
+.device-desktop {
+    .InterfaceFunctions {
+        @include flexColumn();
+        gap: 3rem;
+        position: absolute;
+        top: var(--T);
+        left: var(--L);
+        pointer-events: auto;
+    }
+}
+
+.device-mobile {
+    .InterfaceFunctions {
+        @include flex();
+        gap: 3rem;
+        position: absolute;
+        top: var(--T);
+        left: var(--L);
+        pointer-events: auto;
+    }
 }
 </style>

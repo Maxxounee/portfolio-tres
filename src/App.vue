@@ -9,37 +9,9 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router';
 import { nextTick, onMounted, ref, watch, watchEffect } from "vue";
+import { useWindow } from "@/utils/useWindow.ts";
 
-const w = ref({
-    width: 1920,
-    height: 1080,
-    fontSize: 0,
-    initial: {
-        width: 1920,
-        height: 1080,
-    }
-});
-
-function onResize() {
-    const width = innerWidth;
-    const height = innerHeight;
-
-    const ratio = (width * height) / (w.value.initial.width * w.value.initial.height);
-    const fontSize = Math.round(10 * Math.sqrt(ratio));
-
-    w.value.width = width;
-    w.value.height = height;
-    w.value.fontSize = fontSize;
-}
-
-watch(() => w.value.fontSize, (value) => {
-    document.querySelector('html').style.fontSize = w.value.fontSize + 'px';
-});
-
-onMounted(() => {
-    window.addEventListener('resize', onResize);
-    nextTick(() => onResize());
-});
+useWindow();
 </script>
 <style
     src="@/style/style.scss"

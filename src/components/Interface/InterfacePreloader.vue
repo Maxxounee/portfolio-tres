@@ -32,10 +32,12 @@
 import { useCityStore } from "@/store/city.ts";
 import { computed, onBeforeMount, ref, watch } from "vue";
 import { useMainStore } from "@/store/main.ts";
+import { useWindow } from "@/utils/useWindow.ts";
 
 const cityStore = useCityStore();
 const loaded = ref(false);
 const mainStore = useMainStore();
+const isMobile = useWindow();
 const active = computed(() => {
     return !mainStore.preloaderHidden;
 });
@@ -49,7 +51,9 @@ const isLoaded = computed(() => {
 });
 
 function start() {
-    mainStore.toggleMusicMode();
+    if (!isMobile) {
+        mainStore.toggleMusicMode();
+    }
     mainStore.hidePreloader();
 }
 
@@ -64,7 +68,7 @@ watch(isLoaded, (value) => {
 </script>
 <style scoped lang="scss">
 .InterfacePreloader {
-    @include div100;
+    @include div100v;
     @include flex(center, center);
     //background: var(--DIALOGUE);
     background: var(--BLACK);

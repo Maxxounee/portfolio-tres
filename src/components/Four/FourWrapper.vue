@@ -20,8 +20,8 @@
             <FourBuildingTest/>
             <FourFog/>
             <!--            <FourCharacter ref="character"/>-->
-            <FourLights/>
             <FourFloor/>
+            <FourLights/>
             <FourEffectComposer v-if="true"/>
         </TresCanvas>
         <!--        <TresCanvas-->
@@ -38,8 +38,8 @@
         <InterfaceWrapper/>
         <InterfaceAudio/>
         <InterfacePreloader
-            v-if="!isDev"
         />
+        v-if="!isDev"
     </div>
 </template>
 <script setup lang="ts">

@@ -15,7 +15,7 @@
         <!--        <InterfaceTextWindow-->
         <!--        />-->
         <InterfaceTextWindowNew/>
-        <InterfaceButtonsWrapper/>
+        <InterfaceButtonsWrapper v-if="!isMobile"/>
         <InterfaceFunctions/>
         <!--        <div class="InterfaceWrapper__func">-->
         <!--            <InterfaceButtonsItem-->
@@ -45,6 +45,7 @@
 import InterfaceButtonsWrapper from "@/components/Interface/InterfaceButtonsWrapper.vue";
 import InterfaceTextWindowNew from "@/components/Interface/InterfaceTextWindowNew.vue";
 import InterfaceFunctions from "@/components/Interface/InterfaceFunctions.vue";
+import { useWindow } from "@/utils/useWindow.ts";
 // import InterfaceTextWindow from "@/components/Interface/InterfaceTextWindow.vue";
 // import InterfaceButtonsItem from "@/components/Interface/InterfaceButtonsItem.vue";
 // import { useMainStore } from "@/store/main.ts";
@@ -63,10 +64,11 @@ import InterfaceFunctions from "@/components/Interface/InterfaceFunctions.vue";
 // const dayModeText = computed(() => {
 //     return mainStore.dayMode ? 'Day: on' : 'Day: off';
 // });
+const { isMobile } = useWindow();
 </script>
 <style lang="scss">
 .InterfaceWrapper {
-    @include div100;
+    @include div100v;
     @include flexColumn(center, center);
     pointer-events: none;
 

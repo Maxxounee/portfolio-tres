@@ -205,7 +205,7 @@ export const cameraMode = {
             // target: new THREE.Vector3(4.913, -3.982, 0.004),
             html: {
                 button: 'ПРОЕКТЫ',
-                title: 'мои значимые проекты',
+                title: 'значимые проекты',
                 text: `
                 <a href="https://art.ice-towers.ru" target="_blank">ICE-TOWERS.ru</a><br/>
                 <a href="https://wowfest.ru/archive/2025/#work-58225" target="_blank">· золото премии «WOW Awards» 2025</a><br/>
@@ -256,11 +256,11 @@ export const cameraMode = {
                 button: 'О САЙТЕ',
                 title: 'SOME FACTS',
                 text: `
-                8 зданий · 20 объектов окружения · 5 машин · 1 персонаж<br/>
+                <nobr>8 зданий</nobr> · <nobr>20 объектов окружения</nobr> · <nobr>5 машин</nobr> · <nobr>1 персонаж</nobr><br/>
                 <br/>
                 < 6 МБ — весь сайт целиком, с 3D-сценой
                 <br/><br/>
-                • Instancing сцены • Очередь загрузок на p-limit.js<br/>
+                • Instancing сцены • Очередь загрузок на <nobr>p-limit.js</nobr><br/>
                 • Процедурная генерация фоновых зданий • Positional Audio
                 <br/><br/>
                 Код доступен на <a href="https://github.com/Maxxounee/portfolio-tres" target="_blank">github</a>

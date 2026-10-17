@@ -72,102 +72,195 @@ watch(() => mainStore.noTextMode, (value) => {
 );
 </script>
 <style lang="scss">
-.InterfaceTextWindowNew {
-    @include div100;
-    pointer-events: none;
-    color: var(--ORANGE);
-    perspective: 1200px;
-    opacity: 0;
+.device-desktop {
+    .InterfaceTextWindowNew {
+        @include div100;
+        pointer-events: none;
+        color: var(--ORANGE);
+        perspective: 1200px;
+        opacity: 0;
 
-    transition-property: opacity, translate, clip-path;
-    transition-duration: 1s, 1s;
-    transition-timing-function: ease-in-out;
+        transition-property: opacity, translate, clip-path;
+        transition-duration: 1s, 1s;
+        transition-timing-function: ease-in-out;
 
-    &__container {
-        @include div100(relative);
-        @include flexColumn(center);
+        &__container {
+            @include div100(relative);
+            @include flexColumn(center);
 
-        padding: 15rem 40rem 5rem;
-    }
-
-
-    &__title {
-        @include fontKulag(10rem);
-        white-space: nowrap;
-
-    }
-
-    &__text {
-
-        @include fontKulag(5rem);
-        margin-top: 10rem;
-        text-align: center;
-
-        a {
-            text-decoration: underline;
-
-            &:hover {
-                text-decoration: none;
-            }
+            padding: 15rem 40rem 5rem;
         }
 
 
-        &_dimension {
-            opacity: 0;
-            position: absolute;
+        &__title {
+            @include fontKulag(10rem);
+            white-space: nowrap;
+
         }
 
-        &_next {
-            display: block;
-            margin-top: 3rem;
-        }
-    }
+        &__text {
 
-    &__next {
-        position: absolute;
-        bottom: var(--B);
-        overflow: hidden;
-        width: max-content;
-        height: 1.1em;
-        cursor: pointer;
+            @include fontKulag(5rem);
+            margin-top: 10rem;
+            text-align: center;
 
-        &:after {
-            content: '';
-            width: 100%;
-            position: absolute;
-            height: 2px;
-            bottom: 0;
-            left: 0;
-            background: var(--ORANGE);
-        }
+            a {
+                text-decoration: underline;
 
-        &-inner {
-            display: block;
-            transition-property: translate;
-            transition-duration: 0.3s;
-        }
-
-        &:hover {
-
-            .InterfaceTextWindowNew__next-inner {
-                translate: 0 -100%;
-
-                &_first {
+                &:hover {
+                    text-decoration: none;
                 }
             }
+
+
+            &_dimension {
+                opacity: 0;
+                position: absolute;
+            }
+
+            &_next {
+                display: block;
+                margin-top: 3rem;
+            }
+        }
+
+        &__next {
+            position: absolute;
+            bottom: var(--B);
+            overflow: hidden;
+            width: max-content;
+            height: 1.1em;
+            cursor: pointer;
+
+            &:after {
+                content: '';
+                width: 100%;
+                position: absolute;
+                height: 2px;
+                bottom: 0;
+                left: 0;
+                background: var(--ORANGE);
+            }
+
+            &-inner {
+                display: block;
+                transition-property: translate;
+                transition-duration: 0.3s;
+            }
+
+            &:hover {
+
+                .InterfaceTextWindowNew__next-inner {
+                    translate: 0 -100%;
+
+                    &_first {
+                    }
+                }
+            }
+
+
         }
 
 
+        &.active {
+            opacity: 1;
+            translate: none;
+            clip-path: inset(0);
+
+            .InterfaceTextWindowNew__text {
+                pointer-events: auto;
+            }
+        }
     }
 
+}
 
-    &.active {
-        opacity: 1;
-        translate: none;
-        clip-path: inset(0);
+.device-mobile {
+    .InterfaceTextWindowNew {
+        @include div100;
+        pointer-events: none;
+        color: var(--ORANGE);
+        perspective: 1200px;
+        opacity: 0;
 
-        .InterfaceTextWindowNew__text {
-            pointer-events: auto;
+        transition-property: opacity, translate, clip-path;
+        transition-duration: 1s, 1s;
+        transition-timing-function: ease-in-out;
+
+        &__container {
+            @include div100(relative);
+            @include flexColumn(center, center);
+            padding: 3rem 3rem 3rem;
+        }
+
+
+        &__title {
+            @include fontKulag(12rem);
+            white-space: nowrap;
+        }
+
+        &__text {
+
+            @include fontKulag(5rem);
+            margin-top: 10rem;
+            text-align: center;
+
+            a {
+                text-decoration: underline;
+
+                &:hover {
+                    text-decoration: none;
+                }
+            }
+
+
+            &_dimension {
+                opacity: 0;
+                position: absolute;
+            }
+
+            &_next {
+                display: block;
+                margin-top: 3rem;
+            }
+        }
+
+        &__next {
+            @include font(7rem);
+            position: absolute;
+            bottom: 5rem;
+            overflow: hidden;
+            width: max-content;
+            height: 1.1em;
+            cursor: pointer;
+
+            &:after {
+                content: '';
+                width: 100%;
+                position: absolute;
+                height: 2px;
+                bottom: 0;
+                left: 0;
+                background: var(--ORANGE);
+            }
+
+            &-inner {
+                display: block;
+                transition-property: translate;
+                transition-duration: 0.3s;
+            }
+
+        }
+
+
+        &.active {
+            opacity: 1;
+            translate: none;
+            clip-path: inset(0);
+
+            .InterfaceTextWindowNew__text {
+                pointer-events: auto;
+            }
         }
     }
 }
