@@ -16,51 +16,53 @@
         <!--        />-->
         <InterfaceTextWindowNew/>
         <InterfaceButtonsWrapper/>
-        <div class="InterfaceWrapper__func">
-            <InterfaceButtonsItem
-                :text="noirModeText"
-                class="InterfaceWrapper__noir"
-                @click="() => mainStore.toggleNoirMode()"
-            />
-            <InterfaceButtonsItem
-                :text="noTextModeText"
-                class="InterfaceWrapper__noir"
-                @click="() => mainStore.toggleTextMode()"
-            />
-            <InterfaceButtonsItem
-                :text="musicModeText"
-                class="InterfaceWrapper__music"
-                @click="() => mainStore.toggleMusicMode()"
-            />
-            <InterfaceButtonsItem
-                :text="dayModeText"
-                class="InterfaceWrapper__day"
-                @click="() => mainStore.toggleDayMode()"
-            />
-        </div>
+        <InterfaceFunctions/>
+        <!--        <div class="InterfaceWrapper__func">-->
+        <!--            <InterfaceButtonsItem-->
+        <!--                :text="noirModeText"-->
+        <!--                class="InterfaceWrapper__noir"-->
+        <!--                @click="() => mainStore.toggleNoirMode()"-->
+        <!--            />-->
+        <!--            <InterfaceButtonsItem-->
+        <!--                :text="noTextModeText"-->
+        <!--                class="InterfaceWrapper__noir"-->
+        <!--                @click="() => mainStore.toggleTextMode()"-->
+        <!--            />-->
+        <!--            <InterfaceButtonsItem-->
+        <!--                :text="musicModeText"-->
+        <!--                class="InterfaceWrapper__music"-->
+        <!--                @click="() => mainStore.toggleMusicMode()"-->
+        <!--            />-->
+        <!--            <InterfaceButtonsItem-->
+        <!--                :text="dayModeText"-->
+        <!--                class="InterfaceWrapper__day"-->
+        <!--                @click="() => mainStore.toggleDayMode()"-->
+        <!--            />-->
+        <!--        </div>-->
     </div>
 </template>
 <script setup lang="ts">
 import InterfaceButtonsWrapper from "@/components/Interface/InterfaceButtonsWrapper.vue";
-import InterfaceTextWindow from "@/components/Interface/InterfaceTextWindow.vue";
-import InterfaceButtonsItem from "@/components/Interface/InterfaceButtonsItem.vue";
-import { useMainStore } from "@/store/main.ts";
-import { computed } from "vue";
 import InterfaceTextWindowNew from "@/components/Interface/InterfaceTextWindowNew.vue";
+import InterfaceFunctions from "@/components/Interface/InterfaceFunctions.vue";
+// import InterfaceTextWindow from "@/components/Interface/InterfaceTextWindow.vue";
+// import InterfaceButtonsItem from "@/components/Interface/InterfaceButtonsItem.vue";
+// import { useMainStore } from "@/store/main.ts";
+// import { computed } from "vue";
 
-const mainStore = useMainStore();
-const noirModeText = computed(() => {
-    return mainStore.noirMode ? 'Noir Mode: on' : 'Noir Mode: off';
-});
-const noTextModeText = computed(() => {
-    return mainStore.noTextMode ? 'Hide text: on' : 'Hide text: off';
-});
-const musicModeText = computed(() => {
-    return mainStore.musicOn ? 'Sound: on' : 'Sound: off';
-});
-const dayModeText = computed(() => {
-    return mainStore.dayMode ? 'Day: on' : 'Day: off';
-});
+// const mainStore = useMainStore();
+// const noirModeText = computed(() => {
+//     return mainStore.noirMode ? 'Noir Mode: on' : 'Noir Mode: off';
+// });
+// const noTextModeText = computed(() => {
+//     return mainStore.noTextMode ? 'Hide text: on' : 'Hide text: off';
+// });
+// const musicModeText = computed(() => {
+//     return mainStore.musicOn ? 'Sound: on' : 'Sound: off';
+// });
+// const dayModeText = computed(() => {
+//     return mainStore.dayMode ? 'Day: on' : 'Day: off';
+// });
 </script>
 <style lang="scss">
 .InterfaceWrapper {

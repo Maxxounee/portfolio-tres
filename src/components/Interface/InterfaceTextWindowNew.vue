@@ -10,12 +10,17 @@
                 class="InterfaceTextWindowNew__text InterfaceTextWindowNew__text_visible"
                 v-html="text"
             ></p>
-            <!--            <p-->
-            <!--                class="InterfaceTextWindowNew__text InterfaceTextWindowNew__text_next"-->
-            <!--                @click="nextView()"-->
-            <!--            >-->
-            <!--                Далее-->
-            <!--            </p>-->
+            <p
+                class="InterfaceTextWindowNew__text InterfaceTextWindowNew__next"
+                @click="cityStore.nextView()"
+            >
+                <span class="InterfaceTextWindowNew__next-inner InterfaceTextWindowNew__next-inner_first">
+                    Далее
+                </span>
+                <span class="InterfaceTextWindowNew__next-inner InterfaceTextWindowNew__next-inner_second">
+                    Далее
+                </span>
+            </p>
         </div>
     </div>
 </template>
@@ -73,56 +78,31 @@ watch(() => mainStore.noTextMode, (value) => {
     color: var(--ORANGE);
     perspective: 1200px;
     opacity: 0;
-    //translate: 3rem;
 
     transition-property: opacity, translate, clip-path;
     transition-duration: 1s, 1s;
     transition-timing-function: ease-in-out;
 
-    //clip-path: inset(0% 1000% 0% 0%);
-
     &__container {
         @include div100(relative);
         @include flexColumn(center);
-        //transform: rotateY(-20deg) rotateZ(-5deg) rotateX(10deg);
-        //transform: rotateY(-20deg);
+
         padding: 15rem 40rem 5rem;
     }
 
-    &__close {
-        @include size(20px);
-        position: absolute;
-        top: 5px;
-        right: 5px;
-        transition-property: rotate;
-        transition-duration: 0.2s;
-
-        &:hover {
-            rotate: 90deg;
-        }
-    }
 
     &__title {
         @include fontKulag(10rem);
         white-space: nowrap;
-        //@include center;
-        //top: 15rem;
+
     }
 
     &__text {
-        pointer-events: auto;
-        //@include fontIgra(7rem);
-        //@include size(100%);
+
         @include fontKulag(5rem);
         margin-top: 10rem;
-        //width: 100vw;
         text-align: center;
-        //white-space: nowrap;
-        //@include fontPodkova(4rem);
-        //width: 40vw;
-        //border: 2px solid red;
-        //color: var(--BLACK);
-        //color: var(--WHITE);
+
         a {
             text-decoration: underline;
 
@@ -131,11 +111,6 @@ watch(() => mainStore.noTextMode, (value) => {
             }
         }
 
-        &_visible {
-            //position: absolute;
-            //top: 0;
-            //left: 0;
-        }
 
         &_dimension {
             opacity: 0;
@@ -143,29 +118,57 @@ watch(() => mainStore.noTextMode, (value) => {
         }
 
         &_next {
-            position: relative;
-            //margin-left: auto;
             display: block;
             margin-top: 3rem;
-            width: max-content;
-            cursor: pointer;
-
-            &:after {
-                content: '';
-                width: 100%;
-                position: absolute;
-                height: 2px;
-                bottom: 0.4rem;
-                left: 0;
-                background: var(--BLACK);
-            }
         }
     }
+
+    &__next {
+        position: absolute;
+        bottom: var(--B);
+        overflow: hidden;
+        width: max-content;
+        height: 1.1em;
+        cursor: pointer;
+
+        &:after {
+            content: '';
+            width: 100%;
+            position: absolute;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background: var(--ORANGE);
+        }
+
+        &-inner {
+            display: block;
+            transition-property: translate;
+            transition-duration: 0.3s;
+        }
+
+        &:hover {
+
+            .InterfaceTextWindowNew__next-inner {
+                translate: 0 -100%;
+
+                &_first {
+                }
+            }
+        }
+
+
+    }
+
 
     &.active {
         opacity: 1;
         translate: none;
         clip-path: inset(0);
+
+        .InterfaceTextWindowNew__text {
+            pointer-events: auto;
+        }
     }
 }
 </style>

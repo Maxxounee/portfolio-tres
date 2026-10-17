@@ -15,8 +15,7 @@ const props = defineProps<{
 <style scoped lang="scss">
 .InterfaceButtonsItem {
     @include flex(center);
-    @include size(16rem, 6rem);
-    @include fontKulag(3rem);
+    @include fontKulag(2.6rem);
     --lr-padding: 2rem;
     --width: 21rem;
     --inner-width: calc(var(--width) - var(--lr-padding) * 2);
@@ -31,6 +30,7 @@ const props = defineProps<{
     padding: 0 var(--lr-padding) 0.6rem;
     overflow: hidden;
     width: var(--width);
+    height: 5rem;
     white-space: nowrap;
 
     &:hover {

@@ -30,7 +30,7 @@
 </template>
 <script setup lang="ts">
 import { useCityStore } from "@/store/city.ts";
-import { computed, ref, watch } from "vue";
+import { computed, onBeforeMount, ref, watch } from "vue";
 import { useMainStore } from "@/store/main.ts";
 
 const cityStore = useCityStore();
@@ -53,6 +53,9 @@ function start() {
     mainStore.hidePreloader();
 }
 
+onBeforeMount(() => {
+    mainStore.showPreloader();
+});
 watch(isLoaded, (value) => {
     if (value) {
         setTimeout(() => loaded.value = true, 1000);

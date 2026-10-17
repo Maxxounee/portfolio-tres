@@ -25,7 +25,7 @@ const { cityViewObjects, currentView } = storeToRefs(cityStore);
 
     &__container {
         @include flexColumn(start, center);
-        gap: 3rem;
+        gap: 2rem;
         padding: 0 0 var(--B) var(--L);
         position: absolute;
         bottom: 0;
