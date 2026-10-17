@@ -5,23 +5,16 @@
         :near="0.1"
         :far="1000"
     />
-    <!--    <TresOrthographicCamera-->
-    <!--        ref="cameraRef"-->
-    <!--        :fov="75"-->
-    <!--        :near="0.1"-->
-    <!--        :far="1000"-->
-    <!--    />-->
 </template>
 <script setup lang="ts">
 import { useLoop } from '@tresjs/core';
 import type { TresInstance } from '@tresjs/core';
-import { CameraShake, BakeShadows } from '@tresjs/cientos';
-import { computed, ref, shallowRef, watch } from 'vue';
+import { computed, shallowRef, watch } from 'vue';
 import { gsap } from 'gsap';
 import * as THREE from 'three';
 import * as cityConfig from '@/config/four/city';
 import { useCityStore } from '@/store/city';
-import { degToRad } from "three/src/math/MathUtils";
+import { degToRad } from 'three/src/math/MathUtils';
 
 const cameraRef = shallowRef<TresInstance | null>(null);
 
@@ -50,13 +43,14 @@ const _rotationQuat = new THREE.Quaternion();
 const _tmpMatrix = new THREE.Matrix4();
 const _tmpQuat = new THREE.Quaternion();
 const _tmpUp = new THREE.Vector3(0, 1, 0);
+const _targetQuat = new THREE.Quaternion();
+const _startQuat = new THREE.Quaternion();
 const forwardRenderBodyCache = new Map<THREE.Object3D, THREE.Object3D>();
 
-
 let currentTl: gsap.core.Timeline | null = null;
+
 _shiftDir.crossVectors(movementDir, _tmpUp).normalize();
 
-const emit = defineEmits(['flyEnd']);
 let isFirstPosition = true;
 
 function computeLookAtQuaternion(fromPos: THREE.Vector3, toPos: THREE.Vector3, out: THREE.Quaternion): void {
@@ -64,52 +58,50 @@ function computeLookAtQuaternion(fromPos: THREE.Vector3, toPos: THREE.Vector3, o
     out.setFromRotationMatrix(_tmpMatrix);
 }
 
-
 watch(
     () => [cityStore.sceneIsReady, cityStore.currentView],
     ([isReady, view]) => {
-        if (!isReady) return;
-
-        if (!view) {
-            console.error('[FourPerspectiveCamera] Нет currentView');
+        if (!isReady || !view) {
             return;
         }
 
         handleView(view, isFirstPosition);
-
         isFirstPosition = false;
     },
 );
-
 
 function renderForward(cam: THREE.PerspectiveCamera, conf: cityConfig.CityViewForward, ctx): void {
     const positionLerp = 0.05;
     const rotationLerp = 0.05;
     const obj = conf.obj;
+
     if (!obj) return;
 
     let body = forwardRenderBodyCache.get(obj);
 
     if (!body) {
         obj.traverse((child) => {
-            if (body) return;
-            if (child.name.startsWith('body')) body = child;
+            if (body) {
+                return;
+            }
+            if (child.name.startsWith('body')) {
+                body = child;
+            }
         });
-        if (body) forwardRenderBodyCache.set(obj, body);
-    }
+        if (!body) {
+            return;
+        }
 
-    if (!body) {
-        console.warn('[renderForward] body not found in', obj.name);
-        return;
+        forwardRenderBodyCache.set(obj, body);
     }
 
     body.updateMatrixWorld(true);
     body.getWorldPosition(carWorldPos);
 
-
     if (hasPrev) {
         newDir.subVectors(carWorldPos, prevPos);
         newDir.y = 0;
+
         if (newDir.lengthSq() > 1e-6) {
             newDir.normalize();
             movementDir.lerp(newDir, conf.dirSmoothing);
@@ -120,6 +112,7 @@ function renderForward(cam: THREE.PerspectiveCamera, conf: cityConfig.CityViewFo
     hasPrev = true;
 
     const angle = degToRad(conf.followAngle);
+
     _rotationQuat.setFromAxisAngle(_tmpUp, angle);
     _rotatedDir.copy(movementDir).applyQuaternion(_rotationQuat);
 
@@ -143,49 +136,61 @@ function renderForward(cam: THREE.PerspectiveCamera, conf: cityConfig.CityViewFo
     cam.quaternion.normalize();
 }
 
-function renderStatic(cam: THREE.PerspectiveCamera, conf: cityConfig.CityViewStatic, elapsed): void {
+function renderStatic(cam: THREE.PerspectiveCamera, conf: cityConfig.CityViewStatic): void {
     const positionLerp = 0.1;
-
     const fadeInDuration = 1.5;
+    const elapsed = (performance.now() - staticStartTime) / 1000;
     const fadeIn = Math.min(elapsed / fadeInDuration, 1);
 
     const height = Math.max(cam.position.y - conf.target.y, 0);
-
     const posAmp = (0.01 + height * height / 5000) * fadeIn;
 
     desiredPosition.copy(conf.pos);
-
     desiredPosition.x += Math.sin(elapsed * 0.7) * posAmp;
     desiredPosition.y += Math.cos(elapsed * 1.1) * posAmp;
     desiredPosition.z += Math.sin(elapsed * 0.5) * posAmp;
 
     cam.position.lerp(desiredPosition, positionLerp);
+
+    computeLookAtQuaternion(cam.position, conf.target, _tmpQuat);
+    cam.quaternion.slerp(_tmpQuat, 0.1);
+    cam.quaternion.normalize();
 }
 
-function flyTo(targetPosition: THREE.Vector3, targetTarget: THREE.Vector3, onComplete?: () => void, immediate: boolean = false): void {
+function flyTo(
+    targetPosition: THREE.Vector3,
+    targetTarget: THREE.Vector3,
+    onComplete?: () => void,
+    immediate = false,
+): void {
     const cam = camera.value;
     if (!cam) return;
 
     const transitionDuration = 1.2;
     const transitionEase = 'power2.inOut';
 
-    computeLookAtQuaternion(targetPosition, targetTarget, _tmpQuat);
-
-    const targetQuat = _tmpQuat.clone();
+    computeLookAtQuaternion(targetPosition, targetTarget, _targetQuat);
+    _startQuat.copy(cam.quaternion);
 
     if (immediate) {
-        cam.position.set(targetPosition.x, targetPosition.y, targetPosition.z);
-        cam.quaternion.set(targetQuat.x, targetQuat.y, targetQuat.z, targetQuat.w);
-
+        cam.position.copy(targetPosition);
+        cam.quaternion.copy(_targetQuat);
         onComplete?.();
         return;
     }
 
     currentTl?.kill();
+    currentTl?.clear();
+    currentTl = null;
+
+    const progress = { value: 0 };
 
     currentTl = gsap.timeline({
+        onUpdate: () => {
+            cam.quaternion.slerpQuaternions(_startQuat, _targetQuat, progress.value);
+            cam.quaternion.normalize();
+        },
         onComplete: () => {
-            emit('flyEnd');
             onComplete?.();
         },
     });
@@ -198,57 +203,45 @@ function flyTo(targetPosition: THREE.Vector3, targetTarget: THREE.Vector3, onCom
         ease: transitionEase,
     }, 0);
 
-    const progress = { value: 0 };
-    const startQuat = cam.quaternion.clone();
-
     currentTl.to(progress, {
         value: 1,
         duration: transitionDuration,
         ease: transitionEase,
-        onUpdate: () => {
-            cam.quaternion.slerpQuaternions(startQuat, targetQuat, progress.value);
-            cam.quaternion.normalize();
-        },
     }, 0);
-
-    // currentTl.to(cam.quaternion, {
-    //     x: targetQuat.x,
-    //     y: targetQuat.y,
-    //     z: targetQuat.z,
-    //     w: targetQuat.w,
-    //     duration: transitionDuration,
-    //     ease: transitionEase,
-    // }, 0);
 }
 
-function handleView(conf: cityConfig.CityViewStaticOrForward | undefined, immediate: boolean = false): void {
+function handleView(conf: cityConfig.CityViewStaticOrForward | undefined, immediate = false): void {
     if (!conf) return;
 
     if (conf instanceof cityConfig.CityViewStatic) {
         isTransitioning = true;
-        flyTo(conf.pos, conf.target, () => {
-            staticStartTime = performance.now();
-            isTransitioning = false;
-        }, immediate);
-    } else if (conf instanceof cityConfig.CityViewForward) {
+        flyTo(
+            conf.pos,
+            conf.target,
+            () => {
+                staticStartTime = performance.now();
+                isTransitioning = false;
+            },
+            immediate,
+        );
+    } else {
         hasPrev = false;
         isTransitioning = false;
         movementDir.set(0, 0, -1);
     }
 }
 
-onBeforeRender((ctx) => {
+onBeforeRender(() => {
     if (isTransitioning) return;
 
     const cam = camera.value;
+
     if (!cam) return;
 
     if (cityStore.currentView instanceof cityConfig.CityViewForward) {
-        renderForward(cam, cityStore.currentView, ctx);
+        renderForward(cam, cityStore.currentView, { delta: 1 / 60 });
     } else if (cityStore.currentView instanceof cityConfig.CityViewStatic) {
-        renderStatic(cam, cityStore.currentView, ctx.elapsed);
+        renderStatic(cam, cityStore.currentView);
     }
 });
-
-defineExpose({});
 </script>
