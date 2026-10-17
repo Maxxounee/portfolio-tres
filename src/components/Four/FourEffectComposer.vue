@@ -45,6 +45,7 @@ import {
 } from "@tresjs/post-processing";
 import { BlendFunction } from 'postprocessing';
 import { useMainStore } from "@/store/main.ts";
+import { useWindow } from "@/utils/useWindow.ts";
 
 const mainStore = useMainStore();
 </script>

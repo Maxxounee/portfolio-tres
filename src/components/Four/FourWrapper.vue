@@ -17,7 +17,7 @@
             <FourCityTest
                 @loaded="({ nodes }) => init(nodes)"
             />
-            <FourBuildingTest/>
+            <FourBuildingTest v-if="!isMobile "/>
             <FourFog/>
             <!--            <FourCharacter ref="character"/>-->
             <FourFloor/>
@@ -38,8 +38,8 @@
         <InterfaceWrapper/>
         <InterfaceAudio/>
         <InterfacePreloader
+            v-if="!isDev"
         />
-        v-if="!isDev"
     </div>
 </template>
 <script setup lang="ts">
@@ -63,12 +63,14 @@ import FourCityTest from "@/components/Four/FourCityTest.vue";
 import InterfaceWrapper from "@/components/Interface/InterfaceWrapper.vue";
 import InterfacePreloader from "@/components/Interface/InterfacePreloader.vue";
 import InterfaceAudio from "@/components/Interface/InterfaceAudio.vue";
+import { useWindow } from "@/utils/useWindow.ts";
 
 
 const mainStore = useMainStore();
 const cityStore = useCityStore();
 const cameraRef = ref<InstanceType<typeof ThreePerspectiveCamera> | null>(null);
 const isDev = import.meta.env.DEV;
+const { isMobile } = useWindow();
 
 function init(cityNodes) {
     if (!cityNodes || !Object.keys(cityNodes).length) {

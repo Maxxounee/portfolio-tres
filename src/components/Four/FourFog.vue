@@ -1,14 +1,14 @@
 <template>
     <Precipitation
-        :count="2000"
+        :count="isMobile ? 1000 :  2000"
         :speed="3.3"
         :randomness="0"
-        :size="0.01"
-        :area="[30, 20, 30]"
+        :size="0.06"
+        :area="isMobile ? [20, 15, 20] : [30, 20, 30]"
         color="#ffffff"
         :opacity="0.3"
     />
-    <Stars ref="starsRef"/>
+    <Stars ref="starsRef" v-if="!isMobile"/>
 </template>
 <script setup lang="ts">
 import * as THREE from 'three';
@@ -19,9 +19,11 @@ import { gsap } from "gsap";
 import type { Ref } from "vue";
 import { nextTick, onMounted, shallowRef, watch } from "vue";
 import { useMainStore } from "@/store/main.ts";
+import { useWindow } from "@/utils/useWindow.ts";
 
 const { scene, camera } = useTres();
 const { onBeforeRender } = useLoop();
+const { isMobile } = useWindow();
 
 const starsRef = shallowRef();
 const baseFogFar = 90;
@@ -58,9 +60,12 @@ watch(() => mainStore.dayMode, (value) => {
     toggleBackground(value);
 });
 
-onMounted(async () => {
-
+function removeFogFromStars() {
+    if (isMobile) {
+        return;
+    }
     const stars = starsRef.value as any;
+
     const points = stars?.instance as THREE.Points | undefined;
 
     if (!points) {
@@ -71,7 +76,10 @@ onMounted(async () => {
     const mat = points.material as THREE.PointsMaterial;
     mat.fog = false;
     mat.needsUpdate = true;
+}
 
+onMounted(() => {
+    removeFogFromStars();
 });
 </script>
 <style lang="scss" scoped>
