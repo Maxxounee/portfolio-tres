@@ -231,9 +231,8 @@ function handleView(conf: cityConfig.CityViewStaticOrForward | undefined, immedi
     }
 }
 
-onBeforeRender(() => {
+onBeforeRender((ctx) => {
     if (isTransitioning) return;
-
     const cam = camera.value;
 
     if (!cam) return;

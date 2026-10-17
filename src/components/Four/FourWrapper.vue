@@ -23,6 +23,8 @@
             <FourFloor/>
             <FourLights/>
             <FourEffectComposer v-if="true"/>
+            <!--            <StatsGl/>-->
+            <Stats v-if="isDev"/>
         </TresCanvas>
         <!--        <TresCanvas-->
         <!--            v-if="!mainStore.isDebug"-->
@@ -43,26 +45,24 @@
     </div>
 </template>
 <script setup lang="ts">
-import { ref, } from 'vue';
-import { TresCanvas, useTres } from '@tresjs/core';
+import { ref } from 'vue';
+import { TresCanvas } from '@tresjs/core';
+import { Stats, StatsGl } from '@tresjs/cientos';
 import ThreePerspectiveCamera from "@/components/Four/FourPerspectiveCamera.vue";
-import FourCharacter from "@/components/Four/FourCharacter.vue";
 import FourLights from "@/components/Four/FourLights.vue";
 import FourPerspectiveCamera from "@/components/Four/FourPerspectiveCamera.vue";
-import FourControls from "@/components/Four/Controls/FourControls.vue";
-import FourCity from "@/components/Four/FourCity.vue";
 import FourBuildingTest from "@/components/Four/FourBuildingTest.vue";
 import FourDevCamera from "@/components/Four/FourDevCamera.vue";
 import FourFog from "@/components/Four/FourFog.vue";
 import FourFloor from "@/components/Four/FourFloor.vue";
 import FourEffectComposer from "@/components/Four/FourEffectComposer.vue";
 import * as cityConfig from "@/config/four/city";
-import { useCityStore } from "@/store/city";
-import { useMainStore } from "@/store/main";
 import FourCityTest from "@/components/Four/FourCityTest.vue";
 import InterfaceWrapper from "@/components/Interface/InterfaceWrapper.vue";
 import InterfacePreloader from "@/components/Interface/InterfacePreloader.vue";
 import InterfaceAudio from "@/components/Interface/InterfaceAudio.vue";
+import { useCityStore } from "@/store/city";
+import { useMainStore } from "@/store/main";
 import { useWindow } from "@/utils/useWindow.ts";
 
 

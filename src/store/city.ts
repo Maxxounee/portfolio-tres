@@ -6,7 +6,7 @@ import type { CityViewStaticOrForward } from "@/config/four/city";
 
 export const useCityStore = defineStore('city', () => {
     // state
-    const cityViewObjects = ref<cityConfig.CityViewStaticOrForward[]>([]);
+    const cityViewObjects = shallowRef<cityConfig.CityViewStaticOrForward[]>([]);
     const sceneIsReady = ref(false);
     const currentView = shallowRef<cityConfig.CityViewStaticOrForward | null>(null);
     const totalModelsCount = ref(1);
@@ -25,12 +25,9 @@ export const useCityStore = defineStore('city', () => {
 
     // ----------------- actions
     function pushCityViewObjects(arr: cityConfig.CityViewStaticOrForward[]) {
-        if (cityViewObjects.value.length || !arr.length) {
-            console.log('City store. cityViewObjects уже заполнен');
-            return;
-        }
+        if (!arr.length) return;
 
-        cityViewObjects.value.push(...arr);
+        cityViewObjects.value = arr;
         sceneIsReady.value = true;
     }
 
@@ -44,21 +41,21 @@ export const useCityStore = defineStore('city', () => {
         currentView.value = view;
     }
 
-    function nextView() {
-        const curIndex = cityViewObjects.value.findIndex((item) => {
-            if (!currentView.value) {
-                return;
-            }
+    function nextView(): void {
+        if (!currentView.value || cityViewObjects.value.length === 0) return;
 
-            return item.id === currentView.value.id;
-        });
-        const nextIndex = increment(curIndex + 1, 0, cityViewObjects.value.length - 1);
+        const curIndex = cityViewObjects.value.findIndex(
+            (item) => item.id === currentView.value!.id,
+        );
 
-        if (cityViewObjects.value[nextIndex]) {
-            setView(cityViewObjects.value[nextIndex]);
-        }
+        const nextIndex = increment(
+            curIndex + 1,
+            0,
+            cityViewObjects.value.length - 1,
+        );
 
-        // console.log(curIndex);
+        const next = cityViewObjects.value[nextIndex];
+        if (next) setView(next);
     }
 
     function setTotalModelsCount(count: number) {

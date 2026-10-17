@@ -49,7 +49,7 @@ const animatedChars = shallowRef<THREE.Object3D[]>([]);
 const animatedCars = shallowRef<THREE.Object3D[]>([]);
 const mixers: THREE.AnimationMixer[] = [];
 
-const { camera } = useTres();
+const { camera, renderer } = useTres();
 const audio = shallowRef<THREE.PositionalAudio[]>([]);
 
 async function buildModel(modelName: string, configItems: SceneJson[string], result: CityBuildResult): Promise<void> {
@@ -182,27 +182,6 @@ onMounted(async () => {
                 loopStart: 0.1,
                 loopEnd: 0.7
             },
-            // {
-            //     target: result.animatedCarsMap['car_02'],
-            //     path: getStaticLink('/audio/env/car.mp3'),
-            //     refDistance: 5,
-            //     loopStart: 0.05,
-            //     loopEnd: 0.6
-            // },
-            // {
-            //     target: result.animatedCarsMap['car_03'],
-            //     path: getStaticLink('/audio/env/car.mp3'),
-            //     refDistance: 5,
-            //     loopStart: 0.05,
-            //     loopEnd: 0.6
-            // },
-            // {
-            //     target: result.animatedCarsMap['car_04'],
-            //     path: getStaticLink('/audio/env/car.mp3'),
-            //     refDistance: 5,
-            //     loopStart: 0.05,
-            //     loopEnd: 0.6
-            // },
         ]).then((data) => {
             audio.value.push(...data.map(({ sound }) => sound));
         });
@@ -213,7 +192,6 @@ onMounted(async () => {
 });
 
 const { onBeforeRender } = useLoop();
-
 
 onBeforeRender((ctx) => {
     for (const mixer of mixers) {

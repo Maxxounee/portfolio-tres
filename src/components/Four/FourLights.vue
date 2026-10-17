@@ -21,18 +21,18 @@
         :position="[-3, 3 ,6]"
         :intensity="3"
     />
-    <TresPointLight
-        :position="[-9, 3 ,2]"
-        :intensity="3"
-    />
-    <TresPointLight
-        :position="[3, 3 ,10]"
-        :intensity="3"
-    />
-    <TresPointLight
-        :position="[-6, 3 ,-6]"
-        :intensity="3"
-    />
+    <!--    <TresPointLight-->
+    <!--        :position="[-9, 3 ,2]"-->
+    <!--        :intensity="3"-->
+    <!--    />-->
+    <!--    <TresPointLight-->
+    <!--        :position="[3, 3 ,10]"-->
+    <!--        :intensity="3"-->
+    <!--    />-->
+    <!--    <TresPointLight-->
+    <!--        :position="[-6, 3 ,-6]"-->
+    <!--        :intensity="3"-->
+    <!--    />-->
     <!--        <TresPointLight v-light-helper :intensity="3" />-->
     <!--    <TresPointLight-->
     <!--        ref="target"-->
@@ -53,7 +53,6 @@
         :target="billboardTarget"
         :color="0xfadd07"
         :distance="10"
-        cast-shadow
     />
     <TresObject3D
         ref="breakingTarget"
@@ -67,7 +66,6 @@
         :target="breakingTarget"
         :color="0xfadd07"
         :distance="7"
-        cast-shadow
     />
     <!--    <TresPointLightHelper/>-->
     <!--    <TresDirectionalLight-->
@@ -138,7 +136,10 @@ let tl: gsap.core.Timeline | null = null;
 
 function toggleLight(isDay = false) {
     tl?.kill();
-    tl = gsap.timeline({ ease: 'inOut.quad' });
+    tl?.clear();
+    tl = null;
+
+    tl = gsap.timeline({ ease: 'power2.inOut' });
 
     const day = {
         mainLight: {
