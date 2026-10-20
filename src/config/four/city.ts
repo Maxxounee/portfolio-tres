@@ -100,7 +100,7 @@ export const colors = {
 };
 
 export const links = {
-    resume: getStaticLink('/documents/Resume_Vladimirov.pdf'),
+    resume: getStaticLink('/documents/vladimirov_resume.pdf'),
 };
 
 export const cameraMode = {
@@ -289,7 +289,7 @@ export const cameraMode = {
                 text: `
                 <a href="https://t.me/maxounee" target="_blank">Telegram: maxounee</a>
                 <br/><br/>
-                <a href="https://t.me/maxounee" target="_blank">Резюме SOON</a>
+                <a href="${links.resume}" target="_blank" download>Резюме PDF</a>
 <!--                <a href="tel:+79963441180">Phone: 8 996 344 11 80</a>-->
                 `
             },
