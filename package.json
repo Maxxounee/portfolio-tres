@@ -31,6 +31,7 @@
         "@types/three": "^0.186.0",
         "@vitejs/plugin-vue": "^6.0.8",
         "@vue/tsconfig": "^0.9.1",
+        "@yushijinhun/three-minifier-rollup": "^0.4.0",
         "npm-run-all2": "^9.0.3",
         "sass-embedded": "^1.105.1",
         "typescript": "~6.0.0",

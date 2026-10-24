@@ -6,32 +6,34 @@ import vueDevTools from 'vite-plugin-vue-devtools';
 import { templateCompilerOptions } from '@tresjs/core';
 import tailwindcss from '@tailwindcss/vite';
 import path from 'node:path';
+import { threeMinifier } from '@yushijinhun/three-minifier-rollup';
 
 // https://vite.dev/config/
 export default defineConfig({
-    base: '/portfolio-tres/',
-    plugins: [
-        vue({
-            ...templateCompilerOptions,
-        }),
-        // vueDevTools(),
-        tailwindcss(),
+	base: '/portfolio-tres/',
+	plugins: [
+		vue({
+			...templateCompilerOptions,
+		}),
+		{ ...threeMinifier(), enforce: 'pre' },
+		// vueDevTools(),
+		tailwindcss(),
 
-    ],
-    css: {
-        preprocessorOptions: {
-            scss: {
-                additionalData: `@use "imports" as *;`,
-                loadPaths: [
-                    path.resolve(process.cwd(), 'src/style'),
-                ],
-                quietDeps: true,
-            },
-        },
-    },
-    resolve: {
-        alias: {
-            '@': fileURLToPath(new URL('./src', import.meta.url)),
-        },
-    },
+	],
+	css: {
+		preprocessorOptions: {
+			scss: {
+				additionalData: `@use "imports" as *;`,
+				loadPaths: [
+					path.resolve(process.cwd(), 'src/style'),
+				],
+				quietDeps: true,
+			},
+		},
+	},
+	resolve: {
+		alias: {
+			'@': fileURLToPath(new URL('./src', import.meta.url)),
+		},
+	},
 });
